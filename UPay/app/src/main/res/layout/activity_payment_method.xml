@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PaymentMethod">
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="126dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="255dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton30"
+        app:layout_constraintEnd_toStartOf="@+id/textView12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_credit_card" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="216dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="256dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="28dp"
+        android:fontFamily="@font/sf_ui_display_black"
+        android:text="@string/d_c"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton9"
+        android:layout_width="356dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="257dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="25dp"
+        android:background="@null"
+        android:onClick="payment_Interface"
+        app:layout_constraintBottom_toTopOf="@+id/textView11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/imageView13"
+        android:layout_width="127dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="333dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView11"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView10"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_paypal" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="204dp"
+        android:layout_height="63dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginBottom="332dp"
+        android:fontFamily="@font/sf_ui_display_black"
+        android:text="@string/paypal"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView13"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <ImageButton
+        android:id="@+id/imageButton30"
+        android:layout_width="351dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="325dp"
+        android:background="@null"
+        android:onClick="paypal_payment_Interface"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

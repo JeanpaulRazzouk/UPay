@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frag_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    tools:context=".HomeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".HomePage">
+
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="407dp"
+            android:layout_height="858dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.503">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="232dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="150dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="616dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:gravity="top"
+                android:orientation="vertical"
+                android:text="Analytics"
+                android:textColor="#CB090808"
+                android:textSize="36sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintStart_toStartOf="parent" />
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

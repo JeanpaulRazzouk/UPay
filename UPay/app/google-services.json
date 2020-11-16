@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "68009082651",
+    "firebase_url": "https://upay-7dfe6.firebaseio.com",
+    "project_id": "upay-7dfe6",
+    "storage_bucket": "upay-7dfe6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68009082651:android:9861f66c99f51e33c09dbe",
+        "android_client_info": {
+          "package_name": "com.example.upay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "68009082651-3t8dpa8t4bchtipt4ejf364cmb1bcjqc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAr8I668hwoXJLZby2XJc4gzAj0CjHxs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "68009082651-3t8dpa8t4bchtipt4ejf364cmb1bcjqc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

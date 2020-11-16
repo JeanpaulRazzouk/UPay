@@ -1,0 +1,36 @@
+<resources>
+    <!-- TODO: LoginPage Elements and Components -->
+    <string name="app_name">UPay</string>
+    <string name="Login_pass_hint">Password</string>
+    <string name="Login_create_new_account">Create a new Account</string>
+
+    <string name="txt_create_account">Create New Account</string>
+    <string name="txt_login">UPay</string>
+    <string name="txt_forgot_your_password">"   Forgot your password ?"</string>
+
+    <!-- TODO: The following Strings are Subsets of the CreateNewAccount layout -->
+    <string name="new_username_hint">E-mail</string>
+    <string name="new_password_hint">Password</string>
+
+
+    <string name="tv4">Reset Password</string>
+    <string name="rt6" />
+    <string name="h">E-mail</string>
+    <string name="TV7">Enter your E-mail address and we\'ll send you a link to reset your password</string>
+    <string name="Display_Name">Username</string>
+    <string name="check">I have read and agree to the Terms</string>
+    <string name="d_c">Debit or Credit Card</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="txt_tst">Card Number</string>
+    <string name="exp_date">Exp. Date</string>
+    <string name="tststs">MM/YY</string>
+    <string name="CVV">CVV</string>
+    <string name="Phn">Phone Number</string>
+    <string name="paypal">Proceed with PayPal</string>
+
+    <string name="profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
