@@ -20,7 +20,7 @@
             android:id="@+id/bottom_navigation"
             android:layout_width="374dp"
             android:layout_height="55dp"
-            android:layout_marginBottom="72dp"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/shape_rounded_corners"
             android:elevation="8dp"
             app:itemIconTint="@drawable/color_back"

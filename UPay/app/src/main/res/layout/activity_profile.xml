@@ -2,20 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/prof"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="183dp"
-        android:layout_height="114dp"
-        android:layout_marginEnd="192dp"
-        app:cardCornerRadius="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.432" />
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -73,26 +64,76 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="350dp"
-        android:layout_height="68dp"
-        android:layout_marginEnd="28dp"
-        app:cardCornerRadius="16dp"
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="392dp"
+        android:layout_height="476dp"
+        android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.608">
+        app:layout_constraintVertical_bias="1.0">
 
-        <TextView
-            android:id="@+id/textView8"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:fontFamily="@font/sf_ui_display_black"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textDirection="anyRtl"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:background="?android:windowBackground"
+            android:orientation="vertical">
 
-    </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="183dp"
+                android:layout_height="114dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="192dp"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.432" />
 
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="363dp"
+                android:layout_height="66dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="28dp"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.608">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/sf_ui_display_black"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textDirection="anyRtl"
+                    android:textSize="18sp" />
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/log_out"
+                android:layout_width="217dp"
+                android:layout_height="68dp"
+                android:layout_marginStart="88dp"
+                android:layout_marginTop="250dp"
+                android:layout_marginEnd="182dp"
+                android:layout_marginBottom="10dp"
+                app:cardBackgroundColor="#EC2747"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.432" />
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
