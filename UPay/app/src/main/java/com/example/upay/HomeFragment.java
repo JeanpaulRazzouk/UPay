@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -16,7 +17,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,6 +38,7 @@ import java.io.File;
 
 public class HomeFragment extends Fragment {
     ImageButton imageButton;
+    TextView textView;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseStorage storage;
@@ -46,6 +51,12 @@ public class HomeFragment extends Fragment {
     FragmentTransaction ft;
     Uri link;
     double balance = 102.93;
+    Animation animation;
+    Animation animation2;
+    Animation animation3;
+    CardView cardView;
+    CardView cardView2;
+
     public HomeFragment() {
     }
 
@@ -68,7 +79,25 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         imageButton = view.findViewById(R.id.imageView12);
+        textView = view.findViewById(R.id.textView3);
+        //
         imageButton.setClipToOutline(true);
+        cardView = view.findViewById(R.id.card_view_home);
+        cardView2 = view.findViewById(R.id.card_view_home2);
+        //
+        animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
+        animation.setDuration(1000);
+        cardView.startAnimation(animation);
+        //
+        animation2 = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
+        animation2.setDuration(1100);
+        cardView2.startAnimation(animation2);
+        //
+        animation3 = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
+        animation3.setDuration(1200);
+        imageButton.startAnimation(animation3);
+        textView.startAnimation(animation3);
+        //
         bottomNavigationView = view.findViewById(R.id.bottom_navigation);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
