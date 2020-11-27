@@ -82,11 +82,6 @@ public class HomePage extends AppCompatActivity {
                 }
             };
 
-    public void log_out() {
-        Intent i = new Intent(this, LoginPage.class);
-        startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-    }
-
     public void Add() {
         startActivity(new Intent(this, PaymentMethod.class));
     }

@@ -46,12 +46,23 @@ public class LoginPage extends AppCompatActivity {
     Animation animation;
     //
     VideoView VideoView;
+    FirebaseUser user ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+        //
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                Intent i = new Intent(LoginPage.this, HomePage.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            } else {
+
         }
         //
         setContentView(R.layout.activity_login_page);
@@ -144,13 +155,14 @@ public class LoginPage extends AppCompatActivity {
                         }
                     }
                 });
+
     }
 
     public void intro_vid (){
         VideoView = findViewById(R.id.VideoView);
         Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.vid1);
         VideoView.setVideoURI(uri);
-        VideoView.start();
+       // VideoView.start();
     }
 
 
