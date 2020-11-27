@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -56,7 +58,9 @@ public class LoginPage extends AppCompatActivity {
         pgsBar = findViewById(R.id.progressBar);
         // welcome banner;
         textView = findViewById(R.id.textView3);
-
+        Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),
+                Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
+        textView.getPaint().setShader(shader);
         // FireBase Dta connect;
         mAuth = FirebaseAuth.getInstance();
         // Login button;
@@ -146,7 +150,7 @@ public class LoginPage extends AppCompatActivity {
         VideoView = findViewById(R.id.VideoView);
         Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.vid1);
         VideoView.setVideoURI(uri);
-        //VideoView.start();
+        VideoView.start();
     }
 
 
