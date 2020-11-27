@@ -67,8 +67,8 @@
 
     <ScrollView
         android:id="@+id/scroll"
-        android:layout_width="392dp"
-        android:layout_height="476dp"
+        android:layout_width="411dp"
+        android:layout_height="475dp"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +95,17 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.432" />
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="173dp"
+                android:layout_height="114dp"
+                android:layout_marginStart="210dp"
+                android:layout_marginTop="-115dp"
+                android:layout_marginEnd="192dp"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.432" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="363dp"
@@ -122,8 +133,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/log_out"
-                android:layout_width="217dp"
-                android:layout_height="68dp"
+                android:layout_width="218dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="88dp"
                 android:layout_marginTop="250dp"
                 android:layout_marginEnd="182dp"

@@ -11,4 +11,7 @@
     <color name="colorTextPrimary">#ffffff</color>
     <color name="colorTextSecondary">#A3FFFFFF</color>
     <color name="colorBadge">#f4d415</color>
+
+    <color name="color1">#2196F3</color>
+    <color name="color2">#D267E4</color>
 </resources>

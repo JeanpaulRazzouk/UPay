@@ -10,6 +10,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +42,7 @@ public class Profile extends AppCompatActivity {
   TextView textView2;
   TextView textView3;
   ImageButton imageButton;
-  //
+    //
     Uri link;
     //
     private FirebaseUser user;
@@ -72,6 +75,9 @@ public class Profile extends AppCompatActivity {
             user = FirebaseAuth.getInstance().getCurrentUser();
             textView.setText(" Hello,");
             textView2.setText(user.getDisplayName());
+            Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),
+                   Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
+            textView2.getPaint().setShader(shader);
             textView3.setText("\n"+user.getEmail());
         }
     }
@@ -88,9 +94,7 @@ public class Profile extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
                 link = data.getData();
-                InputStream is;
                 try {
-                    is = getContentResolver().openInputStream(link); // Streaming Image from gallery;
                     uploadImage();
                     GetImage();
                 }
@@ -138,10 +142,8 @@ public class Profile extends AppCompatActivity {
 
     public void GetImage() throws Exception {
         StorageReference storageRef = storageReference.child("images/" +user.getUid());
-
         final File localFile = File.createTempFile("images", "jpg");
         localFile.mkdir();
-
         storageRef.getFile(localFile)
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
