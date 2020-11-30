@@ -43,7 +43,6 @@ import java.util.ArrayList;
 public class Profile extends AppCompatActivity {
   TextView textView;
   TextView textView2;
-  TextView textView3;
   ImageButton imageButton;
     //
     Uri link;
@@ -59,7 +58,6 @@ public class Profile extends AppCompatActivity {
         //
         textView = findViewById(R.id.textView);
         textView2 = findViewById(R.id.textView7);
-        textView3 = findViewById(R.id.textView8);
         imageButton = findViewById(R.id.imageButton);
         imageButton.setClipToOutline(true);
         //
@@ -81,7 +79,6 @@ public class Profile extends AppCompatActivity {
             Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),
                    Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
             textView2.getPaint().setShader(shader);
-            textView3.setText("\n"+user.getEmail());
         }
     }
 
@@ -149,6 +146,10 @@ public class Profile extends AppCompatActivity {
         //
         Intent i = new Intent(this, LoginPage.class);
         startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+    }
+
+    public void Pers_info(View view){
+
     }
 
     public void GetImage() throws Exception {
