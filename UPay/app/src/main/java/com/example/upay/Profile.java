@@ -43,6 +43,7 @@ import java.util.ArrayList;
 public class Profile extends AppCompatActivity {
   TextView textView;
   TextView textView2;
+  TextView textview3;
   ImageButton imageButton;
     //
     Uri link;
@@ -58,6 +59,7 @@ public class Profile extends AppCompatActivity {
         //
         textView = findViewById(R.id.textView);
         textView2 = findViewById(R.id.textView7);
+        textview3 = findViewById(R.id.textView101);
         imageButton = findViewById(R.id.imageButton);
         imageButton.setClipToOutline(true);
         //
@@ -76,6 +78,7 @@ public class Profile extends AppCompatActivity {
             user = FirebaseAuth.getInstance().getCurrentUser();
             textView.setText(" Hello,");
             textView2.setText(user.getDisplayName());
+            textview3.setText("How UPay"+"\n"+"Works");
             Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),
                    Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
             textView2.getPaint().setShader(shader);
@@ -149,6 +152,25 @@ public class Profile extends AppCompatActivity {
     }
 
     public void Pers_info(View view){
+
+    }
+    public void Pay_info(View view){
+
+    }
+
+    public void upay_work(View view){
+
+    }
+
+    public void get_help(View view){
+
+    }
+
+    public void feedback(View view){
+
+    }
+
+    public void terms_service(View view){
 
     }
 
