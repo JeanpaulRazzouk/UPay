@@ -304,7 +304,7 @@
                 android:layout_width="99dp"
                 android:layout_height="52dp"
                 android:layout_marginStart="150dp"
-                android:layout_marginTop="250dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="102dp"
                 android:layout_marginBottom="10dp"
                 app:cardBackgroundColor="#DC3333"

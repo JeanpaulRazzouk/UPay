@@ -28,6 +28,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -43,6 +45,7 @@ public class HomeFragment extends Fragment {
     private FirebaseUser user;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private DatabaseReference mDatabase;
     //
     String name;
     BottomNavigationView bottomNavigationView;
@@ -63,6 +66,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         //
         access_Dta();
         try {
@@ -71,6 +76,7 @@ public class HomeFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Add(user.getUid(),user.getDisplayName(),user.getEmail());
     }
 
     @Override
@@ -108,6 +114,11 @@ public class HomeFragment extends Fragment {
             }
         });
         return view;
+    }
+    private void Add(String userId, String name, String email) {
+        User user = new User(name, email);
+
+        mDatabase.child("Users").child(userId).setValue(user);
     }
 
     public void access_Dta() {
