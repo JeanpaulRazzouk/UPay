@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -41,6 +43,7 @@ import java.io.File;
 public class HomeFragment extends Fragment {
     ImageButton imageButton;
     TextView textView;
+    //
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseStorage storage;
@@ -53,12 +56,15 @@ public class HomeFragment extends Fragment {
     //
     FragmentTransaction ft;
     Uri link;
-    double balance = 102.93;
+    //
     Animation animation;
     Animation animation2;
     Animation animation3;
     CardView cardView;
     CardView cardView2;
+    //
+    boolean visa = true;
+    boolean master_card;
 
     public HomeFragment() {
     }
@@ -130,6 +136,7 @@ public class HomeFragment extends Fragment {
             //boolean emailVerified = user.isEmailVerified();
         }
     }
+
     public void uploadImage() {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
