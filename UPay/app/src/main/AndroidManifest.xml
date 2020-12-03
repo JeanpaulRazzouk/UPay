@@ -23,10 +23,10 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".Profile"></activity>
         <activity android:name=".PaymentMethod" />
-        <activity android:name=".ForgotPassword" />
+        <activity android:name="com.example.External.ForgotPassword" />
         <activity android:name=".HomePage" />
-        <activity android:name=".CreateNewAccount" />
-        <activity android:name=".LoginPage">
+        <activity android:name="com.example.External.CreateNewAccount" />
+        <activity android:name="com.example.External.LoginPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

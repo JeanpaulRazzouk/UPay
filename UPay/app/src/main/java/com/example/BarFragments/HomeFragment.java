@@ -1,4 +1,4 @@
-package com.example.upay;
+package com.example.BarFragments;
 
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +27,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.upay.BottomSheetPayPal;
+import com.example.upay.Profile;
+import com.example.upay.R;
+import com.example.upay.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -42,6 +48,7 @@ import java.io.File;
 
 public class HomeFragment extends Fragment {
     ImageButton imageButton;
+    ImageButton imageButton2;
     TextView textView;
     //
     private FirebaseAuth mAuth;
@@ -91,7 +98,12 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         imageButton = view.findViewById(R.id.imageView12);
+        imageButton2 = view.findViewById(R.id.paymentCard);
         textView = view.findViewById(R.id.textView3);
+        textView.setText("Home");
+        Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),
+                Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
+        textView.getPaint().setShader(shader);
         //
         imageButton.setClipToOutline(true);
         cardView = view.findViewById(R.id.card_view_home);
@@ -115,8 +127,17 @@ public class HomeFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             Intent i = new Intent(getContext(),Profile.class);
+             Intent i = new Intent(getContext(), Profile.class);
              startActivity(i);
+            }
+        });
+
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // THIS IS JUST A TEST;
+                BottomSheetPayPal bottomSheet = new BottomSheetPayPal();
+                bottomSheet.show(getFragmentManager(),"TAG");
             }
         });
         return view;
@@ -126,6 +147,7 @@ public class HomeFragment extends Fragment {
 
         mDatabase.child("Users").child(userId).setValue(user);
     }
+
 
     public void access_Dta() {
         user = FirebaseAuth.getInstance().getCurrentUser();

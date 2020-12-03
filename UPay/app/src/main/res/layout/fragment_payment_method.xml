@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    tools:context="com.example.BarFragments.HomeFragment">
+    tools:context=".PaymentMethod">
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
-        android:layout_height="199dp"
-        app:srcCompat="@null" />
+        android:layout_height="199dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,8 +19,8 @@
 
         <ScrollView
             android:id="@+id/scroll"
-            android:layout_width="397dp"
-            android:layout_height="782dp"
+            android:layout_width="410dp"
+            android:layout_height="740dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,19 +31,33 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="60dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="616dp"
                 android:fontFamily="@font/sf_ui_display_black"
                 android:gravity="top"
                 android:orientation="vertical"
-                android:text="Analytics"
-                android:textColor="#0B0A0A"
+                android:text="Payment Method"
+                android:textColor="#070707"
                 android:textSize="36sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton"
                 app:layout_constraintStart_toStartOf="parent" />
         </ScrollView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="6dp"
+        android:fontFamily="@font/sf_ui_display_black"
+        android:gravity="center"
+        android:textSize="20sp" />
+
 </RelativeLayout>

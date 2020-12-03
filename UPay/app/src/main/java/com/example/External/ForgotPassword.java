@@ -1,4 +1,4 @@
-package com.example.upay;
+package com.example.External;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.example.upay.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
