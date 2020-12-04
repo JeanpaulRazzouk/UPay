@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.BarFragments.HomeFragment;
 import com.example.External.LoginPage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -144,7 +145,11 @@ public class Profile extends AppCompatActivity {
     }
 
     public void Pers_info(View view){
-
+      Intent i = new Intent(this, Profile2.class);
+    personal_info_frag selectedFragment = new personal_info_frag();
+    getSupportFragmentManager().beginTransaction().replace(R.id.framec,
+                selectedFragment).commit();
+      startActivity(i);
     }
     public void Pay_info(View view){
 
