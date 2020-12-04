@@ -1,4 +1,4 @@
-package com.example.upay;
+package com.example.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,8 +19,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.BarFragments.HomeFragment;
 import com.example.External.LoginPage;
+import com.example.upay.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -145,11 +145,9 @@ public class Profile extends AppCompatActivity {
     }
 
     public void Pers_info(View view){
-        // This is Number 1
-      Intent i = new Intent(this, Profile2.class);
-      int val = Integer.parseInt("1");
-      i.putExtra("message", val);
-      startActivity(i);
+       PersonalInfoFragment selectedFragment =  new PersonalInfoFragment();;
+        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container,
+                selectedFragment).commit();
     }
     public void Pay_info(View view){
 
@@ -190,4 +188,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
+
+
 }

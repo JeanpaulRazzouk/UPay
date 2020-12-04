@@ -6,13 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <FrameLayout
+        android:id="@+id/frag_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="106dp"
         android:layout_height="106dp"
-        android:layout_marginEnd="44dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/round_outline"
         android:onClick="Gallery"
         android:scaleType="centerCrop"
@@ -25,8 +31,9 @@
         android:id="@+id/textView"
         android:layout_width="138dp"
         android:layout_height="29dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="512dp"
+        android:layout_marginTop="135dp"
         android:fontFamily="@font/sf_ui_display_black"
         android:text="TextView"
         android:textSize="18dp"
@@ -39,7 +46,7 @@
         android:layout_width="235dp"
         android:layout_height="62dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="150dp"
         android:fontFamily="@font/sf_ui_display_black"
         android:text="TextView"
         android:textColor="#225E8C"
@@ -66,315 +73,316 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
-        android:id="@+id/scroll"
-        android:layout_width="396dp"
-        android:layout_height="443dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
-
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?android:windowBackground"
-            android:orientation="vertical">
+            android:layout_marginTop="275dp"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="205dp"
-                app:cardBackgroundColor="#E8EBEC"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.432" >
+                android:layout_height="match_parent"
+                android:background="?android:windowBackground"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/sf_ui_display_black"
-                    android:gravity="center"
-                    android:text="@string/pers_info"
-                    android:textSize="18sp" />
-
-                <ImageButton
-                    android:id="@+id/pers_info_btn"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="115dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@null"
-                    android:onClick="Pers_info" />
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="205dp"
+                    app:cardBackgroundColor="#E8EBEC"
+                    app:cardCornerRadius="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.432">
 
-            </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:gravity="center"
+                        android:text="@string/pers_info"
+                        android:textSize="18sp" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:layout_marginStart="205dp"
-                android:layout_marginTop="-115dp"
-                android:layout_marginEnd="25dp"
-                app:cardBackgroundColor="#E8EBEC"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.432" >
+                    <ImageButton
+                        android:id="@+id/pers_info_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="115dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@null"
+                        android:onClick="Pers_info" />
 
-                <TextView
-                    android:id="@+id/textView100"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/sf_ui_display_black"
-                    android:gravity="center"
-                    android:text="@string/pay_info"
-                    android:textSize="18sp" />
+                </androidx.cardview.widget.CardView>
 
-                <ImageButton
-                    android:id="@+id/pay_info_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="115dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@null"
-                    android:onClick="Pay_info" />
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="205dp"
-                app:cardBackgroundColor="#E8EBEC"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.432" >
-
-                <TextView
-                    android:id="@+id/textView101"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/sf_ui_display_black"
-                    android:gravity="center"
-                    android:text="@string/upay_work"
-                    android:textSize="18sp" />
-
-                <ImageButton
-                    android:id="@+id/upay_work_btn"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="115dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@null"
-                    android:onClick="upay_work" />
+                    android:layout_marginStart="205dp"
+                    android:layout_marginTop="-115dp"
+                    android:layout_marginEnd="25dp"
+                    app:cardBackgroundColor="#E8EBEC"
+                    app:cardCornerRadius="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.432">
 
-            </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/textView100"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:gravity="center"
+                        android:text="@string/pay_info"
+                        android:textSize="18sp" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:layout_marginStart="205dp"
-                android:layout_marginTop="-115dp"
-                android:layout_marginEnd="25dp"
-                app:cardBackgroundColor="#E8EBEC"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.432" >
+                    <ImageButton
+                        android:id="@+id/pay_info_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="115dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@null"
+                        android:onClick="Pay_info" />
 
-                <TextView
-                    android:id="@+id/textView102"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/sf_ui_display_black"
-                    android:gravity="center"
-                    android:text="@string/get_help"
-                    android:textSize="18sp" />
+                </androidx.cardview.widget.CardView>
 
-                <ImageButton
-                    android:id="@+id/get_help_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="115dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@null"
-                    android:onClick="get_help" />
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="205dp"
-                app:cardBackgroundColor="#E8EBEC"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.432" >
-
-                <TextView
-                    android:id="@+id/textView103"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/sf_ui_display_black"
-                    android:gravity="center"
-                    android:text="@string/feedback"
-                    android:textSize="18sp" />
-
-                <ImageButton
-                    android:id="@+id/feedback_btn"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="115dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@null"
-                    android:onClick="feedback" />
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="205dp"
+                    app:cardBackgroundColor="#E8EBEC"
+                    app:cardCornerRadius="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.432">
 
-            </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/textView101"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:gravity="center"
+                        android:text="@string/upay_work"
+                        android:textSize="18sp" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:layout_marginStart="205dp"
-                android:layout_marginTop="-115dp"
-                android:layout_marginEnd="25dp"
-                app:cardBackgroundColor="#E8EBEC"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.432" >
+                    <ImageButton
+                        android:id="@+id/upay_work_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="115dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@null"
+                        android:onClick="upay_work" />
 
-                <TextView
-                    android:id="@+id/textView104"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/sf_ui_display_black"
-                    android:gravity="center"
-                    android:text="@string/terms_of_service"
-                    android:textSize="18sp" />
+                </androidx.cardview.widget.CardView>
 
-                <ImageButton
-                    android:id="@+id/terms_of_service_btn"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="115dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@null"
-                    android:onClick="terms_service" />
+                    android:layout_marginStart="205dp"
+                    android:layout_marginTop="-115dp"
+                    android:layout_marginEnd="25dp"
+                    app:cardBackgroundColor="#E8EBEC"
+                    app:cardCornerRadius="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.432">
 
-            </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/textView102"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:gravity="center"
+                        android:text="@string/get_help"
+                        android:textSize="18sp" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/log_out"
-                android:layout_width="99dp"
-                android:layout_height="52dp"
-                android:layout_marginStart="150dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="102dp"
-                android:layout_marginBottom="10dp"
-                app:cardBackgroundColor="#DC3333"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.432">
+                    <ImageButton
+                        android:id="@+id/get_help_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="115dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@null"
+                        android:onClick="get_help" />
 
-                <ImageButton
-                    android:id="@+id/log_out_btn"
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
+                    android:layout_height="115dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="205dp"
+                    app:cardBackgroundColor="#E8EBEC"
+                    app:cardCornerRadius="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.432">
+
+                    <TextView
+                        android:id="@+id/textView103"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:gravity="center"
+                        android:text="@string/feedback"
+                        android:textSize="18sp" />
+
+                    <ImageButton
+                        android:id="@+id/feedback_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="115dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@null"
+                        android:onClick="feedback" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="115dp"
+                    android:layout_marginStart="205dp"
+                    android:layout_marginTop="-115dp"
+                    android:layout_marginEnd="25dp"
+                    app:cardBackgroundColor="#E8EBEC"
+                    app:cardCornerRadius="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.432">
+
+                    <TextView
+                        android:id="@+id/textView104"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:gravity="center"
+                        android:text="@string/terms_of_service"
+                        android:textSize="18sp" />
+
+                    <ImageButton
+                        android:id="@+id/terms_of_service_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="115dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@null"
+                        android:onClick="terms_service" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/log_out"
+                    android:layout_width="99dp"
                     android:layout_height="52dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@null"
-                    android:onClick="logout" />
+                    android:layout_marginStart="150dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="102dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardBackgroundColor="#DC3333"
+                    app:cardCornerRadius="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.432">
 
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="101dp"
-                    android:layout_height="51dp"
-                    android:fontFamily="@font/sf_ui_display_black"
-                    android:gravity="center"
-                    android:text="Logout"
-                    android:textColor="#FAF1F1"
-                    android:textSize="18sp" />
+                    <ImageButton
+                        android:id="@+id/log_out_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@null"
+                        android:onClick="logout" />
 
-            </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="101dp"
+                        android:layout_height="51dp"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:gravity="center"
+                        android:text="Logout"
+                        android:textColor="#FAF1F1"
+                        android:textSize="18sp" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-        </LinearLayout>
-    </ScrollView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
