@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.External.LoginPage;
+import com.example.upay.BottomSheetPayPal;
 import com.example.upay.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -145,9 +146,8 @@ public class Profile extends AppCompatActivity {
     }
 
     public void Pers_info(View view){
-       PersonalInfoFragment selectedFragment =  new PersonalInfoFragment();;
-        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container,
-                selectedFragment).commit();
+        PersonalInfoFragment bottomSheet = new PersonalInfoFragment();
+        bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
     public void Pay_info(View view){
 
@@ -189,5 +189,8 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

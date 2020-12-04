@@ -5,16 +5,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context="com.example.Profile.PersonalInfoFragment">
-
-
-    <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
-        android:background="@null"
-        android:onClick="onBackProfile"
-        android:src="@drawable/ic_back__new" />
-</FrameLayout>
+    tools:context="com.example.Profile.PersonalInfoFragment"/>
