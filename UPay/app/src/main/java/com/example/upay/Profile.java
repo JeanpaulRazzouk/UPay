@@ -145,10 +145,10 @@ public class Profile extends AppCompatActivity {
     }
 
     public void Pers_info(View view){
+        // This is Number 1
       Intent i = new Intent(this, Profile2.class);
-    personal_info_frag selectedFragment = new personal_info_frag();
-    getSupportFragmentManager().beginTransaction().replace(R.id.framec,
-                selectedFragment).commit();
+      int val = Integer.parseInt("1");
+      i.putExtra("message", val);
       startActivity(i);
     }
     public void Pay_info(View view){
