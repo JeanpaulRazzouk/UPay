@@ -11,6 +11,13 @@
 
     <style name="AppModalStyle"
         parent="Widget.Design.BottomSheet.Modal">
+        <item name="colorAccent">@color/color3</item>/>
         <item name="android:background">@drawable/rounded_dialog</item>
     </style>
+
+    <style name="AppTheme.Design"
+        parent="Widget.AppCompat.ProgressBar">
+        <item name="colorAccent">@color/color3</item>/>
+    </style>
+
 </resources>

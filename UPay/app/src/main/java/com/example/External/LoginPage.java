@@ -163,7 +163,7 @@ public class LoginPage extends AppCompatActivity {
         VideoView = findViewById(R.id.VideoView);
         Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.vid1);
         VideoView.setVideoURI(uri);
-       // VideoView.start();
+        VideoView.start();
     }
 
 
@@ -171,5 +171,12 @@ public class LoginPage extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+    }
+    @Override
+    public void onBackPressed() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 }
