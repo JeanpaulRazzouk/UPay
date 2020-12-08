@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     ImageButton imageButton;
@@ -86,6 +89,7 @@ public class HomeFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         Add(user.getUid(),user.getDisplayName(),user.getEmail());
     }
 
@@ -120,7 +124,7 @@ public class HomeFragment extends Fragment {
         textView.startAnimation(animation3);
         //
         bottomNavigationView = view.findViewById(R.id.bottom_navigation);
-
+        //
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +132,7 @@ public class HomeFragment extends Fragment {
              startActivity(i);
             }
         });
-
+        //
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -212,4 +216,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+
 }
