@@ -21,7 +21,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-
         <activity android:name="com.example.Profile.Profile" />
         <activity android:name=".PaymentMethod" />
         <activity android:name="com.example.External.ForgotPassword" />

@@ -50,4 +50,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.3'
+
 }
