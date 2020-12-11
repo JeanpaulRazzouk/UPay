@@ -150,23 +150,28 @@ public class Profile extends AppCompatActivity {
         bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
     public void Pay_info(View view){
-
+        Payment_info_frag bottomSheet = new Payment_info_frag();
+        bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
     public void upay_work(View view){
-
+        upay_works bottomSheet = new upay_works();
+        bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
     public void get_help(View view){
-
+        gethelp bottomSheet = new gethelp();
+        bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
     public void feedback(View view){
-
+        feed_back bottomSheet = new feed_back();
+        bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
     public void terms_service(View view){
-
+        term_serv bottomSheet = new term_serv();
+        bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
     public void GetImage() throws Exception {
