@@ -12,9 +12,18 @@
         android:layout_height="match_parent"
         tools:context=".HomePage">
 
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="199dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@null" />
+
         <ScrollView
             android:id="@+id/scroll"
-            android:layout_width="397dp"
+            android:layout_width="match_parent"
             android:layout_height="782dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

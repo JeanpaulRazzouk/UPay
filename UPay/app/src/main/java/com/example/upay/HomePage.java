@@ -16,8 +16,10 @@ import com.example.BarFragments.HomeFragment;
 import com.example.BarFragments.PaymentMethodFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import me.ibrahimsn.lib.SmoothBottomBar;
+
 public class HomePage extends AppCompatActivity {
-    BottomNavigationView bottomNavigationView;
+    SmoothBottomBar smoothBottomBar;
     FrameLayout frameLayout;
     Fragment selectedFragment;
 
@@ -32,30 +34,24 @@ public class HomePage extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 selectedFragment).commit();
         //
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+        smoothBottomBar = findViewById(R.id.bottom_navigation);
+        smoothBottomBar.setOnItemSelectedListener(i -> {
+            selectedFragment = new HomeFragment();
+            switch (i) {
+                case 0:
+                    selectedFragment = new HomeFragment();
+                    break;
+                case 1:
+                    selectedFragment = new AnalyticsFrag();
+                    break;
+                case 2:
+                    selectedFragment = new PaymentMethodFragment();
+                    break;
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    selectedFragment).commit();
+        });
     }
-    public BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                     selectedFragment =  new HomeFragment();;
-                    switch (item.getItemId()) {
-                        case R.id.page_1:
-                                selectedFragment = new HomeFragment();
-                          break;
-                        case R.id.page_2:
-                            selectedFragment = new AnalyticsFrag();
-                            break;
-                        case R.id.page_3:
-                            selectedFragment = new PaymentMethodFragment();
-                            break;
-                    }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            selectedFragment).commit();
-                    return true;
-                }
-            };
 
     public void Add() {
         startActivity(new Intent(this, PaymentMethod.class));

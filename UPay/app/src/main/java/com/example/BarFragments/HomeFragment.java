@@ -16,18 +16,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.upay.Adapter;
 import com.example.upay.BottomSheetPayPal;
 import com.example.Profile.Profile;
+import com.example.upay.PurchaseItems;
 import com.example.upay.R;
 import com.example.upay.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,14 +47,23 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.io.File;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
+
+
+    public float income = 20000;
+    //
     ImageButton imageButton;
     ImageButton imageButton2;
     TextView textView;
+    TextView textView2;
+    TextView textView3;
+    //
+    RelativeLayout relativeLayout;
     //
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -65,13 +79,19 @@ public class HomeFragment extends Fragment {
     Uri link;
     //
     Animation animation;
-    Animation animation2;
-    Animation animation3;
     CardView cardView;
     CardView cardView2;
+    CircularProgressBar circularProgressBar;
     //
-    boolean visa = true;
-    boolean master_card;
+    private RecyclerView recyclerView;
+    private Adapter adapter;
+    private ArrayList<PurchaseItems> itemsArrayListt;
+    //
+    // Adding Data;
+    PurchaseItems [] p;
+    public ArrayList<String> Names = new ArrayList<>();
+    public ArrayList<String> Location = new ArrayList<>();
+    public ArrayList<String> Amount = new ArrayList<>();
 
     public HomeFragment() {
     }
@@ -91,40 +111,46 @@ public class HomeFragment extends Fragment {
         }
 
         Add(user.getUid(),user.getDisplayName(),user.getEmail());
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        //
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        //
         imageButton = view.findViewById(R.id.imageView12);
-        imageButton2 = view.findViewById(R.id.paymentCard);
+        imageButton.setClipToOutline(true);
+
+        imageButton2 = view.findViewById(R.id.pay_btn);
+
+        cardView = view.findViewById(R.id.income);
+        cardView2 = view.findViewById(R.id.Pay);
+        //
+        textView2 = view.findViewById(R.id.exp_val);
+        textView3 = view.findViewById(R.id.percentage);
+        //
         textView = view.findViewById(R.id.textView3);
         textView.setText("Home");
         Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),
                 Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
         textView.getPaint().setShader(shader);
         //
-        imageButton.setClipToOutline(true);
-        cardView = view.findViewById(R.id.card_view_home);
-        cardView2 = view.findViewById(R.id.card_view_home2);
+        relativeLayout = view.findViewById(R.id.frag_home);
         //
+
+        // first row;
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
         animation.setDuration(1000);
-        cardView.startAnimation(animation);
-        //
-        animation2 = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
-        animation2.setDuration(1100);
-        cardView2.startAnimation(animation2);
-        //
-        animation3 = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
-        animation3.setDuration(1200);
-        imageButton.startAnimation(animation3);
-        textView.startAnimation(animation3);
+        cardView.setAnimation(animation);;
+        cardView2.setAnimation(animation);
         //
         bottomNavigationView = view.findViewById(R.id.bottom_navigation);
         //
+         circularProgressBar =view.findViewById(R.id.pb_one);
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,7 +158,7 @@ public class HomeFragment extends Fragment {
              startActivity(i);
             }
         });
-        //
+
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,6 +167,14 @@ public class HomeFragment extends Fragment {
                 bottomSheet.show(getFragmentManager(),"TAG");
             }
         });
+        //
+        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        itemsArrayListt = new ArrayList<>();
+        adapter = new Adapter(getContext(), itemsArrayListt);
+        recyclerView.setAdapter(adapter);
+        // this is the list;
+        Activity();
         return view;
     }
     private void Add(String userId, String name, String email) {
@@ -148,7 +182,6 @@ public class HomeFragment extends Fragment {
 
         mDatabase.child("Users").child(userId).setValue(user);
     }
-
 
     public void access_Dta() {
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -216,6 +249,48 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+    public void Activity (){
+        // TEST
+        Names.add(0,"McDonald's");
+        Names.add(1,"Apple Store");
+        Names.add(2,"Starbucks");
+        Names.add(3,"iShop");
+        //
+        Location.add(0,"Beirut,LB");
+        Location.add(1,"San Francisco,CA");
+        Location.add(2,"San Francisco,CA");
+        Location.add(3,"NY,NY");
+        //
+        Amount.add(0,"10.34");
+        Amount.add(1,"9899.99");
+        Amount.add(2,"7.89");
+        Amount.add(3,"100.00");
+        //
+        p = new PurchaseItems[Names.size()];
+        //
+        float val = 0;
+        float val1 = 0;
+
+        for (int i =0 ; i<p.length;i++) {
+        val1 = Float.parseFloat(Amount.get(i));
+        val = val + val1;
+        }
+
+        textView2.setText("$"+val);
+        //
+        float perc_res = (val/income)*100;
+        textView3.setText((int) Math.floor(perc_res)+"%");
+        circularProgressBar.setProgressWithAnimation((float) perc_res, Long.valueOf(3000)); // =3s
+        //
+        for (int i =0 ; i<p.length;i++) {
+             p[i] = new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i));
+            itemsArrayListt.add(p[i]);
+        }
+    }
+
+
+
 
 
 }

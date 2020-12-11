@@ -16,4 +16,10 @@
     <color name="color2">#D267E4</color>
 
     <color name="color3">#A440B5</color>
+    <color name="color4">#BF64C8</color>
+
+    <color name="add_manual_account_completed_activity_add_account_button_gradient_stop_color_2">#2DC897</color>
+    <color name="add_manual_account_completed_activity_add_account_button_gradient_stop_color_1">#7EF192</color>
+
+
 </resources>

@@ -163,7 +163,7 @@ public class LoginPage extends AppCompatActivity {
         VideoView = findViewById(R.id.VideoView);
         Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.vid1);
         VideoView.setVideoURI(uri);
-        VideoView.start();
+       // VideoView.start();
     }
 
 

@@ -15,24 +15,27 @@
         </FrameLayout>
 
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
+        <me.ibrahimsn.lib.SmoothBottomBar
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginBottom="50dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/shape_rounded_corners"
-            android:elevation="8dp"
-            app:itemIconTint="@drawable/color_back"
-            app:labelVisibilityMode="unlabeled"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="20dp"
+            app:backgroundColor="@color/color4"
+            app:cornerRadius="14dp"
+            app:iconSize="24dp"
+            app:iconTint="#C8FFFFFF"
+            app:iconTintActive="#FFFFFF"
+            app:indicatorColor="#2DFFFFFF"
+            app:indicatorRadius="10dp"
+            app:itemPadding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.473"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/bottom_navigation_menu" />
+            app:menu="@menu/bottom_navigation_menu"
+            app:sideMargins="10dp"
+            app:textColor="#ffffff"
+            app:textSize="14sp" />
 
 
 
