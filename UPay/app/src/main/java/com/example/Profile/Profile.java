@@ -3,6 +3,8 @@ package com.example.Profile;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ActivityOptions;
 import android.app.ProgressDialog;
@@ -19,8 +21,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.Adapters.Adapter;
+import com.example.Adapters.Adapter2;
 import com.example.External.LoginPage;
-import com.example.upay.BottomSheetPayPal;
+import com.example.upay.PersInfoData;
+import com.example.upay.PurchaseItems;
 import com.example.upay.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +38,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Profile extends AppCompatActivity {
   TextView textView;
@@ -150,27 +157,27 @@ public class Profile extends AppCompatActivity {
         bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
     public void Pay_info(View view){
-        Payment_info_frag bottomSheet = new Payment_info_frag();
+        PaymentInfoFrag bottomSheet = new PaymentInfoFrag();
         bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
     public void upay_work(View view){
-        upay_works bottomSheet = new upay_works();
+        UPayWorks bottomSheet = new UPayWorks();
         bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
     public void get_help(View view){
-        gethelp bottomSheet = new gethelp();
+        GetHelp bottomSheet = new GetHelp();
         bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
     public void feedback(View view){
-        feed_back bottomSheet = new feed_back();
+        FeedBack bottomSheet = new FeedBack();
         bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
     public void terms_service(View view){
-        term_serv bottomSheet = new term_serv();
+        TermsService bottomSheet = new TermsService();
         bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 
@@ -193,7 +200,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();

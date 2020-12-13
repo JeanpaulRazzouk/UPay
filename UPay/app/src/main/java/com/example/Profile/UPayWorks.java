@@ -19,12 +19,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Objects;
 
-public class Payment_info_frag  extends BottomSheetDialogFragment {
+public class UPayWorks extends BottomSheetDialogFragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_payment_info_frag, container, false);
+        final View view = inflater.inflate(R.layout.fragment_upay_works, container, false);
 
         return  view;
     }

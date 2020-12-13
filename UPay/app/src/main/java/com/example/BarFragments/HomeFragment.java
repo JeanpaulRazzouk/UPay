@@ -16,9 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.upay.Adapter;
+import com.example.Adapters.Adapter;
 import com.example.upay.BottomSheetPayPal;
 import com.example.Profile.Profile;
 import com.example.upay.PurchaseItems;
@@ -84,7 +82,7 @@ public class HomeFragment extends Fragment {
     CircularProgressBar circularProgressBar;
     //
     private RecyclerView recyclerView;
-    private Adapter adapter;
+    private com.example.Adapters.Adapter adapter;
     private ArrayList<PurchaseItems> itemsArrayListt;
     //
     // Adding Data;

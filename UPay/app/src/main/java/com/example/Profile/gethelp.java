@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Objects;
 
-public class gethelp  extends BottomSheetDialogFragment {
+public class GetHelp extends BottomSheetDialogFragment {
 
     @Nullable
     @Override

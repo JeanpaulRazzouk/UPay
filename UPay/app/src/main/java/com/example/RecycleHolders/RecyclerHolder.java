@@ -1,15 +1,15 @@
-package com.example.upay;
+package com.example.RecycleHolders;
 
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Locale;
+import com.example.upay.PurchaseItems;
+import com.example.upay.R;
 
 public class RecyclerHolder extends RecyclerView.ViewHolder {
 

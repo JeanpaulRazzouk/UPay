@@ -1,4 +1,4 @@
-package com.example.upay;
+package com.example.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.RecycleHolders.RecyclerHolder;
+import com.example.upay.PurchaseItems;
+import com.example.upay.R;
 
 import java.util.ArrayList;
 
