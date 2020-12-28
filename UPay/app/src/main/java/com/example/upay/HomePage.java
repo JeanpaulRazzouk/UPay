@@ -21,7 +21,7 @@ public class HomePage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         frameLayout = findViewById(R.id.fragment_container);

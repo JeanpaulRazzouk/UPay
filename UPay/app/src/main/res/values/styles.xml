@@ -20,4 +20,6 @@
         <item name="colorAccent">@color/color3</item>/>
     </style>
 
+    <style name="Widget.CalendarView.Custom" parent="android:Widget.Holo.CalendarView">
+    </style>
 </resources>

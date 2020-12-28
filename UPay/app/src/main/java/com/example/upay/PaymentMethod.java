@@ -2,12 +2,8 @@ package com.example.upay;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
 
 public class PaymentMethod extends AppCompatActivity {
     @Override
@@ -16,7 +12,7 @@ public class PaymentMethod extends AppCompatActivity {
         setContentView(R.layout.activity_payment_method);
         BottomSheet bottomSheet = new BottomSheet();
         //
-        BottomSheetPayPal bottomSheetPayPal = new BottomSheetPayPal();
+        BottomSheetNFC bottomSheetNFC = new BottomSheetNFC();
     }
     public  void payment_Interface(View view){
         BottomSheet bottomSheet = new BottomSheet();
@@ -24,8 +20,8 @@ public class PaymentMethod extends AppCompatActivity {
     }
 
     public void paypal_payment_Interface(View view){
-        BottomSheetPayPal bottomSheetPayPal = new BottomSheetPayPal();
-        bottomSheetPayPal.show(getSupportFragmentManager(),"TAG");
+        BottomSheetNFC bottomSheetNFC = new BottomSheetNFC();
+        bottomSheetNFC.show(getSupportFragmentManager(),"TAG");
     }
 
     @Override

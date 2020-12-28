@@ -4,11 +4,13 @@ public class PurchaseItems {
     public String Name;
     public String location;
     public String amount;
+//    private int imageUrl;
 
-    public PurchaseItems (String Name, String Location, String amount) {
+  public PurchaseItems (String Name, String Location, String amount) {
         this.Name = Name;
         this.location = Location;
         this.amount = amount;
+//        this.imageUrl = imageUrl;
     }
     public String getName() {
         return Name;
@@ -29,5 +31,7 @@ public class PurchaseItems {
         this.amount = amount;
     }
 
-
-}
+//    public void setImageUrl(int imageUrl) { this.imageUrl = imageUrl;}
+//    public int getImageUrl() {
+//        return imageUrl;
+    }

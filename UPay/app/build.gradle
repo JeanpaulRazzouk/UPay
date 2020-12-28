@@ -50,5 +50,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.3'
+    compile 'com.github.blackfizz:eazegraph:1.2.2@aar'
+    compile 'com.nineoldandroids:library:2.4.0'
 
 }

@@ -14,39 +14,263 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="199dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@null" />
+            app:srcCompat="@drawable/blue_round_top" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/Spree"
+            android:layout_width="170dp"
+            android:layout_height="103dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="160dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/color1"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/pb_one"
+                        android:layout_width="66dp"
+                        android:layout_height="66dp"
+                        app:cpb_background_progressbar_color="#b6bbd8"
+                        app:cpb_background_progressbar_width="5dp"
+                        app:cpb_progress_direction="to_right"
+                        app:cpb_progressbar_color="#44D7B6"
+                        app:cpb_progressbar_width="5dp"
+                        app:cpb_round_border="false" />
+
+                    <TextView
+                        android:id="@+id/percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:gravity="center"
+                        android:lineSpacingExtra="10sp"
+                        android:text="50%"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/expense_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:lineSpacingExtra="10sp"
+                        android:text="Spree"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/exp_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:lineSpacingExtra="3sp"
+                        android:text="$17,000"
+                        android:textColor="#ffffff"
+                        android:textSize="17sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/income"
+            android:layout_width="match_parent"
+            android:layout_height="103dp"
+            android:layout_marginStart="200dp"
+            android:layout_marginTop="160dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/color2"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/income_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:lineSpacingExtra="10sp"
+                        android:text="Income"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/income_val"
+                        android:layout_width="116dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sf_ui_display_black"
+                        android:gravity="left"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="#ffffff"
+                        android:textSize="17sp" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/editTextTextPersonName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-90dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginTop="-15dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/imageButton5"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@null"
+                android:src="@drawable/red_fill__rounded_color" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="70dp"
+                android:layout_marginEnd="70dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:gravity="center"
+                android:text="Done"
+                android:textColor="#ffff"
+                android:textSize="10dp" />
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="600dp"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ScrollView
             android:id="@+id/scroll"
-            android:layout_width="match_parent"
-            android:layout_height="782dp"
+            android:layout_width="401dp"
+            android:layout_height="513dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.503">
+            app:layout_constraintVertical_bias="1.0">
 
-            <TextView
-                android:id="@+id/textView3"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="55dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="616dp"
-                android:fontFamily="@font/sf_ui_display_black"
-                android:gravity="top"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="80dp"
+                android:background="?android:windowBackground"
                 android:orientation="vertical"
-                android:textColor="#373333"
-                android:textSize="36sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:theme="@style/AppTheme.NoActionBar">
+
+                <org.eazegraph.lib.charts.ValueLineChart xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/cubiclinechart2"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="30dp"
+                    app:egCurveSmoothness="0.4"
+                    app:egIndicatorLineColor="#DF0719"
+                    app:egLegendHeight="40dp"
+                    app:egShowStandardValue="true"
+                    app:egUseCubic="true"
+                    app:egUseOverlapFill="true" />
+
+                <org.eazegraph.lib.charts.ValueLineChart xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/cubiclinechart"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="30dp"
+                    app:egCurveSmoothness="0.4"
+                    app:egIndicatorLineColor="#DF0719"
+                    app:egLegendHeight="40dp"
+                    app:egShowStandardValue="true"
+                    app:egUseCubic="true"
+                    app:egUseOverlapFill="true" />
+
+                <CalendarView
+                    android:id="@+id/calendarView"
+                    style="@android:style/Widget.DeviceDefault.CalendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="395dp"
+                    android:layout_marginBottom="200dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/cal_back"
+                    android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/imageView2" />
+            </LinearLayout>
+
+
         </ScrollView>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

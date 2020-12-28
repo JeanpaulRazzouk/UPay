@@ -38,5 +38,7 @@
     <string name="get_help">Get Help</string>
     <string name="feedback">Feedback</string>
     <string name="terms_of_service">Terms of Service</string>
+    <string name="servicedesc">serviceDescp</string>
+    <string name="aiddescription">serviceDescp</string>
 
 </resources>

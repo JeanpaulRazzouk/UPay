@@ -48,4 +48,12 @@ public class PaymentMethodFragment extends Fragment {
         //
         return view;
     }
+
+    public void AddCard(){
+
+
+    }
+
+
+
 }

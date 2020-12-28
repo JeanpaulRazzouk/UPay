@@ -1,5 +1,6 @@
 package com.example.BarFragments;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,16 +23,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Adapters.Adapter;
-import com.example.upay.BottomSheetPayPal;
+import com.example.upay.BottomSheetNFC;
 import com.example.Profile.Profile;
+import com.example.upay.HomePage;
 import com.example.upay.PurchaseItems;
 import com.example.upay.R;
 import com.example.upay.User;
@@ -57,6 +64,7 @@ public class HomeFragment extends Fragment {
     //
     ImageButton imageButton;
     ImageButton imageButton2;
+    ImageView imageView;
     TextView textView;
     TextView textView2;
     TextView textView3;
@@ -77,6 +85,7 @@ public class HomeFragment extends Fragment {
     Uri link;
     //
     Animation animation;
+    Animation animation2;
     CardView cardView;
     CardView cardView2;
     CircularProgressBar circularProgressBar;
@@ -97,6 +106,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         //
@@ -117,13 +127,16 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         //
-        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        if (Build.VERSION.SDK_INT >= 21) {
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
         //
         imageButton = view.findViewById(R.id.imageView12);
         imageButton.setClipToOutline(true);
 
         imageButton2 = view.findViewById(R.id.pay_btn);
-
+        imageView = view.findViewById(R.id.imageView2);
+        //
         cardView = view.findViewById(R.id.income);
         cardView2 = view.findViewById(R.id.Pay);
         //
@@ -132,16 +145,18 @@ public class HomeFragment extends Fragment {
         //
         textView = view.findViewById(R.id.textView3);
         textView.setText("Home");
-        Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),
-                Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
+        Shader shader = new LinearGradient(350,0,0,textView.getLineHeight(),
+                Color.parseColor("#ffffff"), Color.parseColor("#D267E4"), Shader.TileMode.MIRROR);
         textView.getPaint().setShader(shader);
         //
         relativeLayout = view.findViewById(R.id.frag_home);
-        //
-
         // first row;
+        animation2 = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
+        animation2.setDuration(1000);
+        imageView.setAnimation(animation2);
+        // second  row;
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
-        animation.setDuration(1000);
+        animation.setDuration(1100);
         cardView.setAnimation(animation);;
         cardView2.setAnimation(animation);
         //
@@ -161,7 +176,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // THIS IS JUST A TEST;
-                BottomSheetPayPal bottomSheet = new BottomSheetPayPal();
+                BottomSheetNFC bottomSheet = new BottomSheetNFC();
                 bottomSheet.show(getFragmentManager(),"TAG");
             }
         });
@@ -249,6 +264,11 @@ public class HomeFragment extends Fragment {
     }
 
     public void Activity (){
+        // TEST;
+        ArrayList<Integer> myImageList = new ArrayList<>();
+        myImageList.add(R.drawable.ic_french_fries);
+        myImageList.add(R.drawable.ic_atom);
+        myImageList.add(R.drawable.ic_french_fries);
         // TEST
         Names.add(0,"McDonald's");
         Names.add(1,"Apple Store");
@@ -286,9 +306,4 @@ public class HomeFragment extends Fragment {
             itemsArrayListt.add(p[i]);
         }
     }
-
-
-
-
-
 }

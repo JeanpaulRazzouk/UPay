@@ -1,0 +1,34 @@
+
+<host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/servicedesc"
+    android:requireDeviceUnlock="true" >
+    <aid-group
+        android:category="payment"
+        android:description="@string/aiddescription" >
+
+        <!-- Visa Proximity Payment System Environment - PPSE (2PAY.SYS.DDF01) -->
+        <aid-filter android:name="325041592E5359532E4444463031" />
+        <!-- VISA Debit/Credit (Classic)  -->
+        <aid-filter android:name="A0000000031010" />
+        <!-- VISA Credit -->
+        <aid-filter android:name="A000000003101001" />
+        <!-- VISA Debit -->
+        <aid-filter android:name="A000000003101002" />
+        <!-- VISA Electron (Debit) -->
+        <aid-filter android:name="A0000000032010" />
+        <!-- V PAY -->
+        <aid-filter android:name="A0000000032020" />
+        <!-- VISA Interlink -->
+        <aid-filter android:name="A0000000033010" />
+        <!-- MasterCard PayPass -->
+        <aid-filter android:name="A00000000401" />
+        <!-- MasterCard Credit -->
+        <aid-filter android:name="A0000000041010" />
+        <!-- American Express -->
+        <aid-filter android:name="A000000025" />
+        <!-- BRADESCO -->
+        <aid-filter android:name="F0000000030001" />
+
+    </aid-group>
+
+</host-apdu-service> 

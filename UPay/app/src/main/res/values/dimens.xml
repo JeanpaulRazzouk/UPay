@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="ic_clear_margin">56dp</dimen>
     <dimen name="add_account_activity_add_abank_account_constraint_layout_radius">10dp</dimen>
+    <dimen name="cal_rad">30dp</dimen>
 </resources>
