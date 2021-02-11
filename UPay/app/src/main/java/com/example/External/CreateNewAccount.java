@@ -85,42 +85,17 @@ private FirebaseAuth mAuth;
 
             if (new_val_username.isEmpty() == false && new_val_password.isEmpty() == false && new_name.isEmpty() == false){
                 pgsBar.setVisibility(View.VISIBLE);
-                mAuth.createUserWithEmailAndPassword(new_val_username, new_val_password)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
 
-                                    Toast.makeText(CreateNewAccount.this, " Account Successfully created ",
-                                            Toast.LENGTH_SHORT).show();
-
-                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                                    CreateNewAccount c = new CreateNewAccount();
-
-                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().
-                                            setDisplayName(" " + new_name).build();
-
-                                    user.updateProfile(profileUpdates);
-                                    //
-                                    pgsBar.setVisibility(View.INVISIBLE);
-                                    //
-                                    Intent i = new Intent(getApplicationContext(), LoginPage.class);
-                                    startActivity(i);
-                                } else  {
-                                    // If sign in fails, display a message to the user.
-                                        Toast.makeText(CreateNewAccount.this, " Account Already exists ",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                    pgsBar.setVisibility(View.INVISIBLE);
-                            }
-                        });
+                Intent i = new Intent(this.getApplicationContext(),CreateNewAccountPhoneAuth.class);
+                i.putExtra("Email",new_val_username);
+                i.putExtra("Password",new_val_password);
+                i.putExtra("Username",new_name);
+                startActivity(i);
             }
             else {
 
                 Toast.makeText(CreateNewAccount.this, " please fill out empty fields ",
                         Toast.LENGTH_SHORT).show();
-
             }
         }
         else{

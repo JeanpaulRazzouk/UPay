@@ -193,7 +193,7 @@ public class HomeFragment extends Fragment {
     private void Add(String userId, String name, String email) {
         User user = new User(name, email);
 
-        mDatabase.child("Users").child(userId).setValue(user);
+        mDatabase.child("Users").child(userId).child("Personal Info").setValue(user);
     }
 
     public void access_Dta() {

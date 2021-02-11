@@ -40,5 +40,8 @@
     <string name="terms_of_service">Terms of Service</string>
     <string name="servicedesc">serviceDescp</string>
     <string name="aiddescription">serviceDescp</string>
+    <string name="Phone">Phone Number</string>
+    <string name="PhoneNumTXT">Verification</string>
+    <string name="donetxt">Done</string>
 
 </resources>

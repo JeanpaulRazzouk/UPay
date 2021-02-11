@@ -3,9 +3,6 @@ package com.example.BarFragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,10 +23,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.upay.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
+
+import java.util.HashMap;
 
 public class AnalyticsFrag extends Fragment {
 TextView textView;
@@ -42,13 +48,18 @@ CalendarView calendarView;
 ValueLineChart mCubicValueLineChart;
 ValueLineChart mCubicValueLineChart2;
 CardView cardView;
-int income;
 //
+double income;
+//
+    private DatabaseReference mDatabase;
+    private FirebaseUser user;
+
     public AnalyticsFrag() {
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -87,13 +98,39 @@ int income;
                     Toast.makeText(getContext(),"Please fill Fields",Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    income = Integer.parseInt(editText.getText().toString());
+                    income = Double.parseDouble(editText.getText().toString());
                     textViewIncome.setText("$" + income);
+                    //
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    Add(user.getUid(),income);
+                    //
                     Flip2();
-                    editText.setText(null);
+                    editText.setText("");
                 }
             }
         });
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        //
+        // This if Statement is used for those who haven't had any previously added income;
+        if (FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").child("income") != null) {
+
+            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String val;
+                    try {
+                        val = dataSnapshot.child("income").getValue().toString();
+                        textViewIncome.setText("$" + val);
+                    }catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+
+                }
+            });
+        }
         return view;
     }
 
@@ -192,5 +229,13 @@ int income;
                 Toast.makeText(getContext(), ""+ i2, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void Add(String userId,double income) {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        //
+        HashMap<String, Object> values = new HashMap<>();
+        values.put("income", income);
+        mDatabase.child("Users").child(userId).child("User Data").updateChildren(values);
     }
 }

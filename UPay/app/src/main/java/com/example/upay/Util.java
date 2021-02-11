@@ -1,5 +1,7 @@
 package com.example.upay;
 
+import android.util.Log;
+
 public class Util {
 
     public static String byteArrayToHex(byte[] bytes) {

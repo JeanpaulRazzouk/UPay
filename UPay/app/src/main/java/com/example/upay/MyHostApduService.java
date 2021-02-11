@@ -239,9 +239,12 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
 
     @Override
     public void onDeactivated(int reason) {
-        Intent intent = new Intent(getApplicationContext(), BottomSheetNFC.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        // ERROR AFTER
+
+
+//        Intent intent = new Intent(getApplicationContext(), BottomSheetNFC.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
     }
 
 }
