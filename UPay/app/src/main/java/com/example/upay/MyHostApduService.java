@@ -23,7 +23,6 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
     };
     /*
      *  PPSE (Proximity Payment System Environment)
-     *
      *  This is the first select that a point of sale device will send to the payment device.
      */
     private static final byte[] PPSE_APDU_SELECT = {
@@ -38,7 +37,6 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
             '2', 'P', 'A', 'Y', '.', 'S', 'Y', 'S', '.', 'D', 'D', 'F', '0', '1',
             (byte)0x00 // LE   (max length of expected result, 0 implies 256)
     };
-
     private static final byte[] PPSE_APDU_SELECT_RESP = {
             (byte)0x6F,  // FCI Template
             (byte)0x23,  // length = 35
@@ -55,12 +53,8 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
             (byte)0x0C, // Entry length = 12
             (byte)0x4F, // ADF Name
             (byte)0x07, // ADF Length = 7
-            // Tell the POS (point of sale terminal) that we support the standard
-            // Visa credit or debit applet: A0000000031010
-            // Visa's RID (Registered application provider IDentifier) is 5 bytes:
-            (byte)0xA0, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x03,
-            // PIX (Proprietary application Identifier eXtension) is the last 2 bytes.
-            // 10 10 (means visa credit or debit)
+            (byte)0xA0, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x03, // VISA;
+
             (byte)0x10, (byte)0x10,
             (byte)0x87,  // Application Priority Indicator
             (byte)0x01,  // length = 1
@@ -82,17 +76,13 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
             (byte)0xA0, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x03, (byte)0x10, (byte)0x10,
             (byte)0x00   // LE
     };
-
-
     private static final byte[] VISA_MSD_SELECT_RESPONSE = {
             (byte) 0x6F,  // File Control Information (FCI) Template
             (byte) 0x1E,  // length = 30 (0x1E)
             (byte) 0x84,  // Dedicated File (DF) Name
             (byte) 0x07,  // DF length = 7
-
             // A0000000031010  (Visa debit or credit AID)
             (byte)0xA0, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x03, (byte)0x10, (byte)0x10,
-
             (byte) 0xA5,  // File Control Information (FCI) Proprietary Template
             (byte) 0x13,  // length = 19 (0x13)
             (byte) 0x50,  // Application Label
@@ -113,17 +103,14 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
             (byte) 0x00,  // P1
             (byte) 0x00,  // P2
             (byte) 0x04,  // LC (length)
-            // data
+            // Data
             (byte) 0x83,  // tag
             (byte) 0x02,  // length
             (byte) 0x80,    //  { These 2 bytes can vary, so we'll only        }
             (byte) 0x00,    //  { compare the header of this GPO command below }
-            (byte) 0x00   // Le
+            (byte) 0x00
     };
-    /*
-     *  The data in the request can vary, but it won't affect our response. This method
-     *  checks the initial 4 bytes of an APDU to see if it's a GPO command.
-     */
+
     private boolean isGpoCommand(byte[] apdu) {
         return (apdu.length > 4 &&
                 apdu[0] == GPO_COMMAND[0] &&
@@ -132,10 +119,6 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
                 apdu[3] == GPO_COMMAND[3]
         );
     }
-    /*
-     *  SwipeYours only emulates Visa MSD, so our response is not dependant on the GPO command
-     *  data.
-     */
     private static final byte[] GPO_COMMAND_RESPONSE = {
             (byte) 0x80,
             (byte) 0x06,  // length
@@ -148,7 +131,6 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
             (byte) 0x90,  // SW1
             (byte) 0x00   // SW2
     };
-
     private static final byte[] READ_REC_COMMAND = {
             (byte) 0x00,  // CLA
             (byte) 0xB2,  // INS
@@ -156,19 +138,13 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
             (byte) 0x0C,  // P2
             (byte) 0x00   // length
     };
-
     private static final Pattern TRACK_2_PATTERN = Pattern.compile(".*;(\\d{12,19}=\\d{1,128})\\?.*");
 
-    /*
-     *  Unlike the upper case commands above, the Read REC response changes depending on the track 2
-     *  portion of the user's magnetic stripe data.
-     */
     private static byte[] readRecResponse = {};
 
     private static void configureReadRecResponse(String swipeData) {
         Matcher matcher = TRACK_2_PATTERN.matcher(swipeData);
         if (matcher.matches()) {
-
             String track2EquivData = matcher.group(1);
             // convert the track 2 data into the required byte representation
             track2EquivData = track2EquivData.replace('=', 'D');
@@ -176,7 +152,6 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
                 // add an 'F' to make the hex string a whole number of bytes wide
                 track2EquivData += "F";
             }
-
             // Each binary byte is represented by 2 4-bit hex characters
             int track2EquivByteLen = track2EquivData.length()/2;
 
@@ -194,7 +169,6 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
         }
 
     }
-
     @Override
     public byte[] processCommandApdu(byte[] commandApdu, Bundle bundle) {
         String inboundApduDescription;
@@ -227,7 +201,6 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
         }
     }
 
-
     public void onCreate() {
         super.onCreate();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -236,15 +209,11 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
         prefs.registerOnSharedPreferenceChangeListener(this);
     }
 
-
     @Override
     public void onDeactivated(int reason) {
-        // ERROR AFTER
-
-
+        // Error;
 //        Intent intent = new Intent(getApplicationContext(), BottomSheetNFC.class);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
 //        startActivity(intent);
     }
-
 }

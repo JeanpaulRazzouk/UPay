@@ -110,7 +110,7 @@
                                 android:fontFamily="@font/sf_ui_display_black"
                                 android:gravity="center"
                                 android:lineSpacingExtra="10sp"
-                                android:text="50%"
+                                android:text=""
                                 android:textColor="#ffffff"
                                 android:textSize="15sp" />
                         </FrameLayout>

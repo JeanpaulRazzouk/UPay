@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginPage extends AppCompatActivity {
@@ -57,11 +58,14 @@ public class LoginPage extends AppCompatActivity {
         }
         //
             user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                // User is signed in
-                Intent i = new Intent(LoginPage.this, HomePage.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
+            if (user != null ) {
+                boolean emailVerified = user.isEmailVerified();
+                if (emailVerified == true) {
+                    // User is signed in
+                    Intent i = new Intent(LoginPage.this, HomePage.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
             } else {
 
         }
@@ -122,11 +126,12 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser account) {
+        Exception e = null;
         if (account != null) {
             Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show();
         } else {
             pgsBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Something went wrong.Please try again", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -143,17 +148,30 @@ public class LoginPage extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                            //
-                            pgsBar.setVisibility(View.INVISIBLE);
-                            //
-                            Intent i = new Intent(getApplicationContext(), HomePage.class);
-                            startActivity(i);
-                        } else {
-                            updateUI(null);
+                        FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
+                         try {
+                             boolean emailVerified = u.isEmailVerified();
+                             if (emailVerified == true) {
+                                 if (task.isSuccessful()) {
+                                     FirebaseUser user = mAuth.getCurrentUser();
+                                     updateUI(user);
+                                     //
+                                     pgsBar.setVisibility(View.INVISIBLE);
+                                     //
+                                     Intent i = new Intent(getApplicationContext(), HomePage.class);
+                                     startActivity(i);
+                                 } else {
+                                     updateUI(null);
+                                 }
+                             } else {
+                                 Toast.makeText(getApplicationContext(), "Email Not Verified.Please try again", Toast.LENGTH_LONG).show();
+                                 pgsBar.setVisibility(View.INVISIBLE);
+                             }
+                         }catch(Exception e){
+                             Toast.makeText(getApplicationContext(), "Account non-existent.Please try again", Toast.LENGTH_LONG).show();
+                             pgsBar.setVisibility(View.INVISIBLE);
                         }
+
                     }
                 });
 
@@ -163,7 +181,7 @@ public class LoginPage extends AppCompatActivity {
         VideoView = findViewById(R.id.VideoView);
         Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.vid1);
         VideoView.setVideoURI(uri);
-       // VideoView.start();
+        VideoView.start();
     }
 
 

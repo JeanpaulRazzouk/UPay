@@ -9,16 +9,17 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/income"
-        android:layout_width="match_parent"
-        android:layout_height="108dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="89dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
         android:layout_weight="1"
-        app:cardElevation="5dp"
         app:cardBackgroundColor="@color/colorTextPrimary"
-        app:cardCornerRadius="20dp">
+        app:cardCornerRadius="20dp"
+        app:cardElevation="5dp">
 
         <TextView
             android:id="@+id/txtName"
@@ -28,6 +29,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="135dp"
             android:fontFamily="@font/sf_ui_display_black"
+            android:textColor="@color/design_default_color_on_secondary"
             android:padding="1dp"
             android:textSize="20sp" />
 
@@ -38,6 +40,7 @@
             android:layout_marginStart="220dp"
             android:layout_marginTop="25dp"
             android:fontFamily="@font/sf_ui_display_black"
+            android:textColor="@color/design_default_color_on_secondary"
             android:gravity="center_vertical"
             android:padding="1dp"
             android:textSize="23dp" />
@@ -47,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="35dp"
             android:fontFamily="@font/sf_ui_display_black"
             android:padding="1dp"
             android:textSize="16dp" />
@@ -59,6 +62,14 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             app:srcCompat="@drawable/ic_atom" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="60dp"
+            android:text="" />
 
     </androidx.cardview.widget.CardView>
 

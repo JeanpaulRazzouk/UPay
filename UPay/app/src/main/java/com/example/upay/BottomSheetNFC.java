@@ -6,14 +6,18 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.cardemulation.CardEmulation;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +26,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.io.ByteArrayInputStream;
 import java.util.logging.Logger;
 
 public class BottomSheetNFC extends BottomSheetDialogFragment {
@@ -53,6 +58,8 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
             componentName = new ComponentName(getContext(), MyHostApduService.class);
             boolean isDefault = cardEmulation.isDefaultServiceForCategory(componentName, CardEmulation.CATEGORY_PAYMENT);
             if (!isDefault) {
+                //
+                //
                 Intent intent = new Intent(CardEmulation.ACTION_CHANGE_DEFAULT);
                 intent.putExtra(CardEmulation.EXTRA_CATEGORY, CardEmulation.CATEGORY_PAYMENT);
                 intent.putExtra(CardEmulation.EXTRA_SERVICE_COMPONENT, componentName);
@@ -61,62 +68,27 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
         }
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        //
-//       // setAsPreferredHceService();
-//        IntentFilter paymentSentIntentFilter = new IntentFilter(MyHostApduService.PAYMENT_SENT);
-//        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
-//        lbm.registerReceiver(animationBroadcastReceiver, paymentSentIntentFilter);
-//      //  creditCardView.updateValues();
-//
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        //
-//        //unsetAsPreferredHceService();
-//        IntentFilter paymentSentIntentFilter = new IntentFilter(MyHostApduService.PAYMENT_SENT);
-//        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getActivity());
-//        lbm.unregisterReceiver(animationBroadcastReceiver);
-//
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
 
-//    BroadcastReceiver animationBroadcastReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    BroadcastReceiver animationBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 //            String action = intent.getAction();
 //            if (action.equals(MyHostApduService.PAYMENT_SENT)) {
 //                Toast.makeText(getContext(), "Payment Sent Broadcast Received", Toast.LENGTH_LONG).show();
 //                // payView.start();
 //            }
-//        }
-//    };
-
-//    public void setAsPreferredHceService() {
-//        if (mNfcAdapter != null) {
-//            boolean allowsForeground = cardEmulation.categoryAllowsForegroundPreference(CardEmulation.CATEGORY_PAYMENT);
-//            if (allowsForeground) {
-//                ComponentName hceComponentName = new ComponentName(getContext(), MyHostApduService.class);
-//                cardEmulation.setPreferredService(getActivity(), hceComponentName);
-//            }
-//        }
-//    }
-//    public void unsetAsPreferredHceService() {
-//        if (mNfcAdapter != null) {
-//            boolean allowsForeground = cardEmulation.categoryAllowsForegroundPreference(CardEmulation.CATEGORY_PAYMENT);
-//            if (allowsForeground) {
-//                ComponentName hceComponentName = new ComponentName(getContext(), MyHostApduService.class);
-//                cardEmulation.unsetPreferredService(getActivity());
-//            }
-//        }
-//    }
-
-//    private void startEditMagstripeActivity() {
-//        Intent dialogIntent = new Intent(getContext(), EditMagstripeActivity.class);
-//        dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(dialogIntent);
-//    }
+        }
+    };
 }

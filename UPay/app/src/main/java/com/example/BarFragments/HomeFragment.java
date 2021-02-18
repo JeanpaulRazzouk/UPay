@@ -1,6 +1,5 @@
 package com.example.BarFragments;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.net.Uri;
-import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -19,24 +17,21 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Adapters.Adapter;
 import com.example.upay.BottomSheetNFC;
 import com.example.Profile.Profile;
-import com.example.upay.HomePage;
 import com.example.upay.PurchaseItems;
 import com.example.upay.R;
 import com.example.upay.User;
@@ -45,8 +40,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -56,11 +54,7 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.io.File;
 import java.util.ArrayList;
-
 public class HomeFragment extends Fragment {
-
-
-    public float income = 20000;
     //
     ImageButton imageButton;
     ImageButton imageButton2;
@@ -68,10 +62,10 @@ public class HomeFragment extends Fragment {
     TextView textView;
     TextView textView2;
     TextView textView3;
+    ScrollView scrollView;
     //
     RelativeLayout relativeLayout;
     //
-    private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseStorage storage;
     private StorageReference storageReference;
@@ -79,9 +73,6 @@ public class HomeFragment extends Fragment {
     //
     String name;
     BottomNavigationView bottomNavigationView;
-    Fragment fragment;
-    //
-    FragmentTransaction ft;
     Uri link;
     //
     Animation animation;
@@ -92,13 +83,13 @@ public class HomeFragment extends Fragment {
     //
     private RecyclerView recyclerView;
     private com.example.Adapters.Adapter adapter;
-    private ArrayList<PurchaseItems> itemsArrayListt;
-    //
+    private ArrayList<PurchaseItems> itemsArrayList;
     // Adding Data;
     PurchaseItems [] p;
     public ArrayList<String> Names = new ArrayList<>();
     public ArrayList<String> Location = new ArrayList<>();
     public ArrayList<String> Amount = new ArrayList<>();
+    public ArrayList<String> Date = new ArrayList<>();
 
     public HomeFragment() {
     }
@@ -130,6 +121,8 @@ public class HomeFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= 21) {
             getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
+        scrollView = view.findViewById(R.id.scroll);
+        scrollView.smoothScrollTo(0,0);
         //
         imageButton = view.findViewById(R.id.imageView12);
         imageButton.setClipToOutline(true);
@@ -183,8 +176,8 @@ public class HomeFragment extends Fragment {
         //
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        itemsArrayListt = new ArrayList<>();
-        adapter = new Adapter(getContext(), itemsArrayListt);
+        itemsArrayList = new ArrayList<>();
+        adapter = new Adapter(getContext(), itemsArrayList);
         recyclerView.setAdapter(adapter);
         // this is the list;
         Activity();
@@ -271,19 +264,12 @@ public class HomeFragment extends Fragment {
         myImageList.add(R.drawable.ic_french_fries);
         // TEST
         Names.add(0,"McDonald's");
-        Names.add(1,"Apple Store");
-        Names.add(2,"Starbucks");
-        Names.add(3,"iShop");
         //
         Location.add(0,"Beirut,LB");
-        Location.add(1,"San Francisco,CA");
-        Location.add(2,"San Francisco,CA");
-        Location.add(3,"NY,NY");
         //
-        Amount.add(0,"10.34");
-        Amount.add(1,"9899.99");
-        Amount.add(2,"7.89");
-        Amount.add(3,"100.00");
+        Amount.add(0,"1120.34");
+        //
+        Date.add(0,"03/11/2020");
         //
         p = new PurchaseItems[Names.size()];
         //
@@ -291,19 +277,40 @@ public class HomeFragment extends Fragment {
         float val1 = 0;
 
         for (int i =0 ; i<p.length;i++) {
-        val1 = Float.parseFloat(Amount.get(i));
-        val = val + val1;
+            val1 = Float.parseFloat(Amount.get(i));
+            val = val + val1;
         }
 
         textView2.setText("$"+val);
-        //
-        float perc_res = (val/income)*100;
-        textView3.setText((int) Math.floor(perc_res)+"%");
-        circularProgressBar.setProgressWithAnimation((float) perc_res, Long.valueOf(3000)); // =3s
-        //
+
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        Float finalVal = val;
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String x;
+                try {
+                    x = dataSnapshot.child("income").getValue().toString();
+                    int income = Integer.parseInt(x);
+                    int perc_res = (int) ((finalVal /income)*100);
+                    textView3.setText(perc_res+"%");
+                    circularProgressBar.setProgressWithAnimation((float) perc_res, Long.valueOf(3000));
+                    // =3s
+
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
+
         for (int i =0 ; i<p.length;i++) {
-             p[i] = new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i));
-            itemsArrayListt.add(p[i]);
+             p[i] = new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i),Date.get(i));
+            itemsArrayList.add(p[i]);
         }
     }
 }

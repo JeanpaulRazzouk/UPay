@@ -4,13 +4,13 @@ public class PurchaseItems {
     public String Name;
     public String location;
     public String amount;
-//    private int imageUrl;
+    public  String Date;
 
-  public PurchaseItems (String Name, String Location, String amount) {
+  public PurchaseItems (String Name, String Location, String amount,String Date) {
         this.Name = Name;
         this.location = Location;
         this.amount = amount;
-//        this.imageUrl = imageUrl;
+        this.Date = Date;
     }
     public String getName() {
         return Name;
@@ -30,8 +30,10 @@ public class PurchaseItems {
     public void setAmount(String amount) {
         this.amount = amount;
     }
-
-//    public void setImageUrl(int imageUrl) { this.imageUrl = imageUrl;}
-//    public int getImageUrl() {
-//        return imageUrl;
+    public String getDate() {
+        return Date;
+    }
+    public void setDate(String Date) {
+        this.Date = Date;
+    }
     }

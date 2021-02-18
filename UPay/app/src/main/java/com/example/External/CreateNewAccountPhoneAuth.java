@@ -2,12 +2,14 @@ package com.example.External;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
+import android.se.omapi.Session;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,24 +17,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 import com.example.upay.R;
+import com.google.android.datatransport.Transport;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskExecutors;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
+
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 
 public class CreateNewAccountPhoneAuth extends AppCompatActivity {
     VideoView VideoView;
-    EditText editTextPhone2;
     //
     TextView textView;
     ImageButton imageButton;
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    int PIN;
+    private String mVerificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +59,19 @@ public class CreateNewAccountPhoneAuth extends AppCompatActivity {
                 mp.setLooping(true);
             }
         });
-        PIN = (int) (Math.random() * 9000) + 1000;
         //
-        editTextPhone2 = findViewById(R.id.editTextPhone2);// pin code;
         textView = findViewById(R.id.textView19); // done;
 
-        textView.setText("Done");
+        textView.setText("Send");
 
         imageButton = findViewById(R.id.imageButtonxx);
-
-        send_code();
+        mAuth = FirebaseAuth.getInstance();
+        //
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editTextPhone2.getText().toString() != null) {
-                    valid();
-                }
+                create_account();
             }
         });
         intro_vid();
@@ -76,6 +82,7 @@ public class CreateNewAccountPhoneAuth extends AppCompatActivity {
         String Email = i.getStringExtra("Email");
         String Password = i.getStringExtra("Password");
         String Username = i.getStringExtra("Username");
+
         mAuth.createUserWithEmailAndPassword(Email, Password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -84,14 +91,10 @@ public class CreateNewAccountPhoneAuth extends AppCompatActivity {
 
                             Toast.makeText(CreateNewAccountPhoneAuth.this, " Account Successfully created ",
                                     Toast.LENGTH_SHORT).show();
-
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                            CreateNewAccount c = new CreateNewAccount();
-
+                            user.sendEmailVerification();
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().
                                     setDisplayName(" " + Username).build();
-
                             user.updateProfile(profileUpdates);
                             //
                             Intent i = new Intent(getApplicationContext(), LoginPage.class);
@@ -104,31 +107,18 @@ public class CreateNewAccountPhoneAuth extends AppCompatActivity {
                     }
                 });
     }
-
-
-    public void send_code() {
-        //
-        Intent i = getIntent();
-        String Email = i.getStringExtra("Email");
-        //
-        Intent it = new Intent(Intent.ACTION_SEND);
-        it.putExtra(Intent.EXTRA_EMAIL, new String[]{Email});
-        it.putExtra(Intent.EXTRA_SUBJECT, "Welcome to UPay");
-        it.putExtra(Intent.EXTRA_TEXT, PIN);
-        it.setType("message/rfc822");
-    }
-
-
-    public void valid() {
-        if (Integer.parseInt(editTextPhone2.getText().toString()) == PIN) {
-            create_account();
-        }
-    }
-
     public void intro_vid() {
         VideoView = findViewById(R.id.VideoView2);
         Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.vid2);
         VideoView.setVideoURI(uri);
         VideoView.start();
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
 }
+
+

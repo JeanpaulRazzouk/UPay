@@ -42,6 +42,7 @@ TextView textView;
 TextView textView2;
 TextView textViewIncome;
 ImageButton imageButton;
+ImageButton imageButton2;
 EditText editText;
 Animation animation;
 CalendarView calendarView;
@@ -74,6 +75,7 @@ double income;
         //
         editText = view.findViewById(R.id.editTextTextPersonName);
         imageButton = view.findViewById(R.id.imageButton5);
+        imageButton2 = view.findViewById(R.id.imageButtonREC);
         textView2 = view.findViewById(R.id.textView13);
         //
         editText.setVisibility(View.INVISIBLE);
@@ -84,7 +86,7 @@ double income;
         calendarView = view.findViewById(R.id.calendarView);
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
         animation.setDuration(1100);
-        textView.setText("\n$1982.20");
+        textView.setText("$1982.20");
         textView.startAnimation(animation);
         //
         setCalendarView();
@@ -131,6 +133,13 @@ double income;
                 }
             });
         }
+        // recommenation button;
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Toast.makeText(getContext(),"TIPPY TEST",Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
@@ -142,7 +151,7 @@ double income;
     public void LineChart(){
         ValueLineSeries series = new ValueLineSeries();
         series.setColor(0xFF2196F3);
-
+        series.addPoint(new ValueLinePoint("", 0));
         series.addPoint(new ValueLinePoint("Jan", 2.4f));
         series.addPoint(new ValueLinePoint("Feb", 3.4f));
         series.addPoint(new ValueLinePoint("Mar", .4f));
@@ -155,6 +164,7 @@ double income;
         series.addPoint(new ValueLinePoint("Oct", 3.4f));
         series.addPoint(new ValueLinePoint("Nov", .4f));
         series.addPoint(new ValueLinePoint("Dec", 1.3f));
+        series.addPoint(new ValueLinePoint("", 0));
 
         mCubicValueLineChart.addSeries(series);
         mCubicValueLineChart.startAnimation();
@@ -163,7 +173,7 @@ double income;
     public void LineChart2(){
         ValueLineSeries series = new ValueLineSeries();
         series.setColor(0xFFD267E4);
-
+        series.addPoint(new ValueLinePoint("", 0));
         series.addPoint(new ValueLinePoint("M", 2.4f));
         series.addPoint(new ValueLinePoint("T", 3.4f));
         series.addPoint(new ValueLinePoint("W", .4f));
@@ -171,6 +181,7 @@ double income;
         series.addPoint(new ValueLinePoint("F", 2.6f));
         series.addPoint(new ValueLinePoint("S", 1.0f));
         series.addPoint(new ValueLinePoint("S", 3.5f));
+        series.addPoint(new ValueLinePoint("", 0));
 
         mCubicValueLineChart2.addSeries(series);
         mCubicValueLineChart2.startAnimation();
@@ -230,10 +241,8 @@ double income;
             }
         });
     }
-
     private void Add(String userId,double income) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        //
         HashMap<String, Object> values = new HashMap<>();
         values.put("income", income);
         mDatabase.child("Users").child(userId).child("User Data").updateChildren(values);

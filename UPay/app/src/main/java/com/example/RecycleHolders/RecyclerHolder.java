@@ -15,7 +15,7 @@ import com.example.upay.R;
 
 public class RecyclerHolder extends RecyclerView.ViewHolder {
 
-    private TextView Name,location,amount;
+    private TextView Name,location,amount,Date;
     ImageView imageView;
     private CardView cardView;
     Animation animation;
@@ -26,6 +26,7 @@ public class RecyclerHolder extends RecyclerView.ViewHolder {
         location = itemView.findViewById(R.id.txtLocation);
         amount = itemView.findViewById(R.id.txtAmount);
         imageView = itemView.findViewById(R.id.imageView3);
+        Date = itemView.findViewById(R.id.textView22);
         //
         cardView = itemView.findViewById(R.id.income);
         animation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.open_animation);
@@ -37,6 +38,7 @@ public class RecyclerHolder extends RecyclerView.ViewHolder {
         Name.setText(items.getName());
         amount.setText(items.getAmount());
         location.setText(items.getLocation());
+        Date.setText(items.getDate());
     }
 
 }
