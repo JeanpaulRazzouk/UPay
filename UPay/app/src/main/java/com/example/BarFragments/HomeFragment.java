@@ -53,7 +53,12 @@ import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
 public class HomeFragment extends Fragment {
     //
     ImageButton imageButton;
@@ -256,6 +261,21 @@ public class HomeFragment extends Fragment {
         });
     }
 
+//    public Date StringToDate(String s){
+//
+//        Date result = null;
+//        try{
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//            result  = dateFormat.parse(s);
+//        }
+//
+//        catch(ParseException e){
+//            e.printStackTrace();
+//
+//        }
+//        return result ;
+//    }
+
     public void Activity (){
         // TEST;
         ArrayList<Integer> myImageList = new ArrayList<>();
@@ -264,12 +284,32 @@ public class HomeFragment extends Fragment {
         myImageList.add(R.drawable.ic_french_fries);
         // TEST
         Names.add(0,"McDonald's");
-        //
         Location.add(0,"Beirut,LB");
+        Amount.add(0,"10.54");
+        Date.add(0,"03/12/2020");
         //
-        Amount.add(0,"1120.34");
+        Names.add(0,"Starbucks");
+        Location.add(0,"Byblos,LB");
+        Amount.add(0,"20.62");
+        Date.add(0,"04/2/2021");
         //
-        Date.add(0,"03/11/2020");
+        Names.add(0,"Duty Free");
+        Location.add(0,"Beirut,LB");
+        Amount.add(0,"20.62");
+        Date.add(0,"05/2/2021");
+        //
+        for (int i = 0 ; i< Names.size();i++) {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            HashMap<String, Object> values = new HashMap<>();
+            values.put("Name", Names.get(i));
+            values.put("Location", Location.get(i));
+            values.put("Amount", Amount.get(i));
+            values.put("Date", Date.get(i));
+            mDatabase.child("Users").child(user.getUid()).child("Transactions").child(""+i).updateChildren(values);
+        }
+        HashMap<String, Object> values2 = new HashMap<>();
+        values2.put("Transaction count",Names.size());
+        mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values2);
         //
         p = new PurchaseItems[Names.size()];
         //
