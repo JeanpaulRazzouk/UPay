@@ -283,20 +283,30 @@ public class HomeFragment extends Fragment {
         myImageList.add(R.drawable.ic_atom);
         myImageList.add(R.drawable.ic_french_fries);
         // TEST
-        Names.add(0,"McDonald's");
-        Location.add(0,"Beirut,LB");
-        Amount.add(0,"10.54");
-        Date.add(0,"03/12/2020");
+//        Names.add(0,"McDonald's");
+//        Location.add(0,"Beirut,LB");
+//        Amount.add(0,"10.54");
+//        Date.add(0,"03/12/2020");
         //
         Names.add(0,"Starbucks");
         Location.add(0,"Byblos,LB");
         Amount.add(0,"20.62");
-        Date.add(0,"04/2/2021");
+        Date.add(0,"07/01/2021");
+        //
+        Names.add(0,"Zaatar w Zeit");
+        Location.add(0,"Zalka,LB");
+        Amount.add(0,"9.43");
+        Date.add(0,"12/02/2021");
+        //
+        Names.add(0,"Wrangler");
+        Location.add(0,"Dbayeh,LB");
+        Amount.add(0,"67.34");
+        Date.add(0,"14/02/2021");
         //
         Names.add(0,"Duty Free");
         Location.add(0,"Beirut,LB");
         Amount.add(0,"20.62");
-        Date.add(0,"05/2/2021");
+        Date.add(0,"18/02/2021");
         //
         for (int i = 0 ; i< Names.size();i++) {
             user = FirebaseAuth.getInstance().getCurrentUser();

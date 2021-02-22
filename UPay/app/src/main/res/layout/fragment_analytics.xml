@@ -208,7 +208,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:windowBackground"
                 android:orientation="vertical"
@@ -226,7 +226,7 @@
                     app:egUseCubic="true"
                     app:egUseOverlapFill="true" />
 
-                <org.eazegraph.lib.charts.ValueLineChart xmlns:app="http://schemas.android.com/apk/res-auto"
+                <org.eazegraph.lib.charts.ValueLineChart
                     android:id="@+id/cubiclinechart"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
@@ -236,24 +236,20 @@
                     app:egLegendHeight="40dp"
                     app:egShowStandardValue="true"
                     app:egUseCubic="true"
-                    app:egUseOverlapFill="true" />
+                    app:egUseOverlapFill="true" >
+                </org.eazegraph.lib.charts.ValueLineChart>
 
-                <CalendarView
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/calendarView"
-                    style="@android:style/Widget.DeviceDefault.CalendarView"
                     android:layout_width="match_parent"
                     android:layout_height="395dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginBottom="200dp"
-                    android:background="@drawable/cal_back"
-                    android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Body1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/imageView2" />
+                    app:mcv_showOtherDates="all"
+                    app:mcv_selectionColor="@color/color4"
+                    />
             </LinearLayout>
-
 
         </ScrollView>
 

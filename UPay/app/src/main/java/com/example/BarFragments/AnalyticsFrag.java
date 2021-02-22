@@ -5,12 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +21,13 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.EventDay;
 import com.example.upay.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,19 +36,24 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
 
 import java.text.DateFormat;
-import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 public class AnalyticsFrag extends Fragment {
@@ -56,26 +64,18 @@ ImageButton imageButton;
 ImageButton imageButton2;
 EditText editText;
 Animation animation;
-CalendarView calendarView;
 ValueLineChart mCubicValueLineChart;
 ValueLineChart mCubicValueLineChart2;
 CardView cardView;
-//
+MaterialCalendarView materialCalendarView;
 double income;
-//
 SharedPreferences sharedPreferences;
-    SharedPreferences sharedPreferences2;
-    //
-    private DatabaseReference mDatabase;
-    private FirebaseUser user;
-    // Graphs;
-    // For week;
-    //
-   ArrayList <String> Date;
-   ArrayList <String>  amount;
+private DatabaseReference mDatabase;
+private FirebaseUser user;
+ArrayList <String> Date;
+ArrayList <String>  amount;
 
-
-    public AnalyticsFrag() {
+ public AnalyticsFrag() {
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,20 +99,18 @@ SharedPreferences sharedPreferences;
         imageButton2 = view.findViewById(R.id.imageButtonREC);
         textView2 = view.findViewById(R.id.textView13);
         //
+       materialCalendarView = view.findViewById(R.id.calendarView);
+        //
         editText.setVisibility(View.INVISIBLE);
         imageButton.setVisibility(View.INVISIBLE);
         textView2.setVisibility(View.INVISIBLE);
         //
         cardView = view.findViewById(R.id.income);
-        calendarView = view.findViewById(R.id.calendarView);
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
         animation.setDuration(1100);
         textView.setText("$1982.20");
         textView.startAnimation(animation);
         //
-        setCalendarView();
-        LineChart();
-       // LineChart2();
         Flip();
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +131,6 @@ SharedPreferences sharedPreferences;
             }
         });
         user = FirebaseAuth.getInstance().getCurrentUser();
-        //
         // This if Statement is used for those who haven't had any previously added income;
         if (FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").child("income") != null) {
 
@@ -154,7 +151,7 @@ SharedPreferences sharedPreferences;
                 }
             });
         }
-        // recommendation button;
+        // Recommendation button;
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,19 +194,19 @@ SharedPreferences sharedPreferences;
 
        sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
        x = sharedPreferences.getString(TransCount, null);
-
+       //
        Date = new ArrayList<>();
        amount = new ArrayList<>();
-
-
-
+       //
        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+           @RequiresApi(api = Build.VERSION_CODES.O)
            @Override
            public void onDataChange(DataSnapshot dataSnapshot) {
                    for (int i = 0; i < Integer.parseInt(x); i++) {
                        amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
                        Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
                    }
+               // First Graph;
                Float a1 = 0.0f;;
                Float a2 = 0.0f;;
                Float a3 = 0.0f;;
@@ -217,61 +214,75 @@ SharedPreferences sharedPreferences;
                Float a5 = 0.0f;;
                Float a6 = 0.0f;;
                Float a7 = 0.0f;
+
                for (int i = 0; i < Integer.parseInt(x); i++) {
-//                   Toast.makeText(getContext(), Date.get(i), Toast.LENGTH_SHORT).show();
                    String date = Date.get(i);
                    String[] dateParts = date.split("/");
                    String day = dateParts[0];
                    String month = dateParts[1];
                    String year = dateParts[2];
-                   // First convert to Date. This is one of the many ways.
+
                    String dateString = String.format("%s-%s-%s", year, month, day);
-                   Date d = null;
-                   try {
-                       d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
-                       Log.d("TEST1",d.toString());
-                   } catch (ParseException e) {
-                       e.printStackTrace();
-                   }
-                   // Then get the day of week from the Date based on specific locale.
-                   String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(d);
-                   Log.d("TEST2",dayOfWeek);
-                   //
-                   switch (dayOfWeek){
 
-                       case "Monday":
-                           a1 = a1 + Float.parseFloat(amount.get(i));
-                           break;
-                       case "Tuesday":
-                           a2 = a2 + Float.parseFloat(amount.get(i));
-                           break;
-                       case "Wednesday":
-                           a3 = a3 + Float.parseFloat(amount.get(i));
-                           break;
-                       case "Thursday":
-                           a4 = a4 + Float.parseFloat(amount.get(i));
-                           break;
-                       case "Friday" :
-                           try {
-                               a5 = a5 + Float.parseFloat(amount.get(i));
-                           }catch(Exception e){
-                               Toast.makeText(getContext(), "a5"+a5+"\n=>amount"+amount.get(i), Toast.LENGTH_SHORT).show();
+                   // Calendar DTA;
+                       materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+                           @Override
+                           public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                               DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                               // TODO Code has not been implemented;
+                               
+
+
+
+                               Toast.makeText(getContext(), "TEST", Toast.LENGTH_SHORT).show();
+
                            }
-                           break;
-                       case "Saturday":
-                           a6 = a6 + Float.parseFloat(amount.get(i));
-                           break;
-                       case "Sunday":
-                           a7 = a7 + Float.parseFloat(amount.get(i));
-                           break;
+                       });
+                   //
+                   // First convert to Date. This is one of the many ways.
+                   LocalDate from = LocalDate.parse(dateString); // Date from payments;
+                   LocalDate to = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())); // current date; (moving)
 
+                   long days = ChronoUnit.DAYS.between(from, to);
+
+                   if (days <= 7) {
+                       Date d = null;
+                       try {
+                           d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+                       } catch (ParseException e) {
+                           e.printStackTrace();
+                       }
+                       // Then get the day of week from the Date based on specific locale.
+                       String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(d);
+                       //
+                       switch (dayOfWeek) {
+                           case "Monday":
+                               a1 = a1 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "Tuesday":
+                               a2 = a2 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "Wednesday":
+                               a3 = a3 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "Thursday":
+                               a4 = a4 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "Friday":
+                                   a5 = a5 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "Saturday":
+                               a6 = a6 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "Sunday":
+                               a7 = a7 + Float.parseFloat(amount.get(i));
+                               break;
+                       }
                    }
                }
-
                ValueLineSeries series = new ValueLineSeries();
                series.setColor(0xFFD267E4);
                series.addPoint(new ValueLinePoint("", 0));
-
                series.addPoint(new ValueLinePoint("M", a1));
                series.addPoint(new ValueLinePoint("T", a2));
                series.addPoint(new ValueLinePoint("W", a3));
@@ -280,39 +291,118 @@ SharedPreferences sharedPreferences;
                series.addPoint(new ValueLinePoint("S", a6));
                series.addPoint(new ValueLinePoint("S", a7));
                series.addPoint(new ValueLinePoint("", 0));
-
                mCubicValueLineChart2.addSeries(series);
                mCubicValueLineChart2.startAnimation();
+
+               // Second Graph;
+               Float m1 = 0.0f;;
+               Float m2 = 0.0f;;
+               Float m3 = 0.0f;;
+               Float m4 = 0.0f;;
+               Float m5 = 0.0f;;
+               Float m6 = 0.0f;;
+               Float m7 = 0.0f;
+               Float m8 = 0.0f;
+               Float m9 = 0.0f;
+               Float m10 = 0.0f;
+               Float m11 = 0.0f;
+               Float m12 = 0.0f;
+
+               for (int i = 0; i < Integer.parseInt(x); i++) {
+
+                   String date = Date.get(i);
+                   String[] dateParts = date.split("/");
+                   String day = dateParts[0];
+                   String month = dateParts[1];
+                   String year = dateParts[2];
+
+                   // First convert to Date. This is one of the many ways.
+                   String dateString = String.format("%s-%s-%s", year, month, day);
+
+                   LocalDate from = LocalDate.parse(dateString); // Date from payments;
+                   LocalDate to = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())); // current date; (moving)
+
+                   long y = ChronoUnit.YEARS.between(from, to);
+
+                   Log.d("TEST1", ""+y);
+
+                   int yo = Calendar.getInstance().get(Calendar.YEAR);
+
+                   if (y < 1 && Integer.parseInt(year) == yo) {
+                       Date d = null;
+                       try {
+                           d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+                       } catch (ParseException e) {
+                           e.printStackTrace();
+                       }
+                       // Then get the month of the year from the Date based on specific locale.
+                       String month_of_year = new SimpleDateFormat("M", Locale.ENGLISH).format(d);
+
+                       switch (month_of_year) {
+
+                           case "1":
+                               m1 = m1 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "2":
+                               m2 = m2 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "3":
+                               m3 = m3 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "4":
+                               m4 = m4 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "5":
+                               m5 = m5 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "6":
+                               m6 = m6 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "7":
+                               m7 = m7 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "8":
+                               m8 = m8 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "9":
+                               m9 = m9 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "10":
+                               m10 = m10 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "11":
+                               m11 = m11 + Float.parseFloat(amount.get(i));
+                               break;
+                           case "12":
+                               m12 = m12 + Float.parseFloat(amount.get(i));
+                               break;
+                       }
+                   }
+               }
+               ValueLineSeries se = new ValueLineSeries();
+               se.setColor(0xFF2196F3);
+               se.addPoint(new ValueLinePoint("", 0));
+               se.addPoint(new ValueLinePoint("Jan", m1));
+               se.addPoint(new ValueLinePoint("Feb", m2));
+               se.addPoint(new ValueLinePoint("Mar", m3));
+               se.addPoint(new ValueLinePoint("Apr", m4));
+               se.addPoint(new ValueLinePoint("Mai", m5));
+               se.addPoint(new ValueLinePoint("Jun", m6));
+               se.addPoint(new ValueLinePoint("Jul", m7));
+               se.addPoint(new ValueLinePoint("Aug", m8));
+               se.addPoint(new ValueLinePoint("Sep", m9));
+               se.addPoint(new ValueLinePoint("Oct", m10));
+               se.addPoint(new ValueLinePoint("Nov", m11));
+               se.addPoint(new ValueLinePoint("Dec", m12));
+               se.addPoint(new ValueLinePoint("", 0));
+               mCubicValueLineChart.addSeries(se);
+               mCubicValueLineChart.startAnimation();
            }
            @Override
            public void onCancelled(DatabaseError error) {
            }
        });
    }
-
-
-    public void LineChart(){
-        ValueLineSeries series = new ValueLineSeries();
-        series.setColor(0xFF2196F3);
-        series.addPoint(new ValueLinePoint("", 0));
-        series.addPoint(new ValueLinePoint("Jan", 2f));
-        series.addPoint(new ValueLinePoint("Feb", 3.4f));
-        series.addPoint(new ValueLinePoint("Mar", .4f));
-        series.addPoint(new ValueLinePoint("Apr", 1.2f));
-        series.addPoint(new ValueLinePoint("Mai", 2.6f));
-        series.addPoint(new ValueLinePoint("Jun", 1.0f));
-        series.addPoint(new ValueLinePoint("Jul", 3.5f));
-        series.addPoint(new ValueLinePoint("Aug", 1250.43f));
-        series.addPoint(new ValueLinePoint("Sep", 2.4f));
-        series.addPoint(new ValueLinePoint("Oct", 3.4f));
-        series.addPoint(new ValueLinePoint("Nov", .4f));
-        series.addPoint(new ValueLinePoint("Dec", 1.3f));
-        series.addPoint(new ValueLinePoint("", 0));
-
-        mCubicValueLineChart.addSeries(series);
-        mCubicValueLineChart.startAnimation();
-    }
-
 
     public void Flip(){
        cardView.setOnClickListener(new View.OnClickListener() {
@@ -357,16 +447,6 @@ SharedPreferences sharedPreferences;
         oa1.start();
     }
 
-    public void setCalendarView() {
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                // i is the year;
-                // i2 the day;
-                Toast.makeText(getContext(), ""+ i2, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     private void Add(String userId,double income) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> values = new HashMap<>();
