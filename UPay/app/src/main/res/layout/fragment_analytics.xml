@@ -65,7 +65,7 @@
                         android:fontFamily="@font/sf_ui_display_black"
                         android:gravity="center"
                         android:lineSpacingExtra="10sp"
-                        android:text="50%"
+                        android:text="0%"
                         android:textColor="#ffffff"
                         android:textSize="15sp" />
                 </FrameLayout>
@@ -92,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/sf_ui_display_black"
                         android:lineSpacingExtra="3sp"
-                        android:text="$17,000"
+                        android:text="$0"
                         android:textColor="#ffffff"
                         android:textSize="17sp" />
                 </LinearLayout>
@@ -148,6 +148,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/sf_ui_display_black"
                         android:gravity="left"
+                        android:text="Press to add"
                         android:lineSpacingExtra="3sp"
                         android:textColor="#ffffff"
                         android:textSize="17sp" />
@@ -196,7 +197,7 @@
             android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="280dp"
+            android:layout_marginTop="270dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -214,23 +215,42 @@
                 android:orientation="vertical"
                 android:theme="@style/AppTheme.NoActionBar">
 
+                <TextView
+                    android:id="@+id/textViewgraph1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_ui_display_black"
+                    android:layout_marginTop="10dp"
+                    android:text="This Week"
+                    android:layout_marginStart="20dp"
+                    android:textSize="17dp"/>
+
                 <org.eazegraph.lib.charts.ValueLineChart xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/cubiclinechart2"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     app:egCurveSmoothness="0.4"
                     app:egIndicatorLineColor="#DF0719"
                     app:egLegendHeight="40dp"
                     app:egShowStandardValue="true"
                     app:egUseCubic="true"
                     app:egUseOverlapFill="true" />
+                <TextView
+                    android:id="@+id/textViewgraph2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/sf_ui_display_black"
+                    android:text="This Month"
+                    android:layout_marginStart="20dp"
+                    android:textSize="17dp"/>
 
                 <org.eazegraph.lib.charts.ValueLineChart
                     android:id="@+id/cubiclinechart"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     app:egCurveSmoothness="0.4"
                     app:egIndicatorLineColor="#DF0719"
                     app:egLegendHeight="40dp"
@@ -260,7 +280,7 @@
             android:layout_marginTop="70dp"
             android:layout_marginEnd="250dp"
             android:fontFamily="@font/sf_ui_display_black"
-            android:text="Next month :"
+            android:text="Next Month :"
             android:textColor="@color/cardview_light_background"
             android:textSize="15dp"
             app:layout_constraintBottom_toTopOf="@+id/textView3"

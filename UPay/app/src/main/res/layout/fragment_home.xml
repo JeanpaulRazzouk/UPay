@@ -112,7 +112,7 @@
                                 android:fontFamily="@font/sf_ui_display_black"
                                 android:gravity="center"
                                 android:lineSpacingExtra="10sp"
-                                android:text=""
+                                android:text="0%"
                                 android:textColor="#ffffff"
                                 android:textSize="15sp" />
                         </FrameLayout>
@@ -137,7 +137,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:lineSpacingExtra="3sp"
-                                android:text="$17,000"
+                                android:text="$0"
                                 android:textColor="#ffffff"
                                 android:textSize="17sp" />
                         </LinearLayout>

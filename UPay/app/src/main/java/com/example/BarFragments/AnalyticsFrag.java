@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
+import com.example.upay.EventDeco;
 import com.example.upay.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +38,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -44,10 +47,12 @@ import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
 
+import java.nio.channels.FileLock;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,28 +65,37 @@ public class AnalyticsFrag extends Fragment {
 TextView textView;
 TextView textView2;
 TextView textViewIncome;
+TextView percentage;
+TextView textView3;
 ImageButton imageButton;
 ImageButton imageButton2;
 EditText editText;
 Animation animation;
 ValueLineChart mCubicValueLineChart;
 ValueLineChart mCubicValueLineChart2;
+CircularProgressBar circularProgressBar;
 CardView cardView;
 MaterialCalendarView materialCalendarView;
 double income;
+DataSnapshot dataSnapshot;
 SharedPreferences sharedPreferences;
 private DatabaseReference mDatabase;
 private FirebaseUser user;
 ArrayList <String> Date;
 ArrayList <String>  amount;
+ArrayList <String> Date2;
+ArrayList <String>  amount2;
+    ArrayList <String> Date3;
+    ArrayList <String>  amount3;
+
+    public String x; // number of transactions;
+    public String TransCount;
 
  public AnalyticsFrag() {
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDataFromHome();
-
     }
 
     @Override
@@ -90,9 +104,12 @@ ArrayList <String>  amount;
         View view = inflater.inflate(R.layout.fragment_analytics, container, false);
         textView = view.findViewById(R.id.textView3);
         textViewIncome = view.findViewById(R.id.income_val);
+        percentage = view.findViewById(R.id.percentage);
+        textView3 = view.findViewById(R.id.exp_val);
         //
         mCubicValueLineChart = view.findViewById(R.id.cubiclinechart);
         mCubicValueLineChart2 = view .findViewById(R.id.cubiclinechart2);
+        circularProgressBar = view.findViewById(R.id.pb_one);
         //
         editText = view.findViewById(R.id.editTextTextPersonName);
         imageButton = view.findViewById(R.id.imageButton5);
@@ -158,23 +175,94 @@ ArrayList <String>  amount;
                     Toast.makeText(getContext(),"TIPPY TEST",Toast.LENGTH_SHORT).show();
             }
         });
+
+        // methods();
+        getDataFromHome();
+        calendar();
+        Spree();
+
         return view;
     }
 
-    public void Spree(){
-       // Spree is Increase or Decrease in Spending;
 
+    public void Spree(){
+
+        Date3 = new ArrayList<>();
+        amount3 = new ArrayList<>();
+       // Spree is Increase or Decrease in Spending
+        String formattedString;
+        LocalDate localDate = null;//For reference
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            localDate = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM");
+            formattedString = localDate.format(formatter); // present month string;
+            int p_mo = Integer.parseInt(formattedString) - 1; // past month
+
+            String  past_month = ""+(p_mo<10?("0"+p_mo):(p_mo)); // past month string;
+
+            for (int i = 0; i < 5; i++) {
+                Log.d("TESTX",""+x);
+                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Float current_month_val = 0.0f;
+                        Float past_month_val = 0.0f;
+                        //
+                        for (int i = 0; i < Integer.parseInt(x); i++) {
+                            amount3.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
+                            Date3.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                        }
+                        //
+                        for (int j = 0; j < Integer.parseInt(x); j++) {
+                            String date = Date3.get(j);
+                            String[] dateParts = date.split("/");
+                            String month = dateParts[1];
+                            String dateString = String.format("%s", month);
+
+                            if (dateString.equals(formattedString)) {
+                                current_month_val = current_month_val + Float.parseFloat(amount3.get(j));
+                            } else if (dateString.equals(past_month)) {
+                                past_month_val = past_month_val + Float.parseFloat(amount3.get(j));
+                            }
+                        }
+                        Float perc = (1-(current_month_val/past_month_val))*100;
+                        int perc_final = Math.round(perc);
+
+                        Float perc2 = ((past_month_val/current_month_val)-1)*100;
+                        int perc_final_2 = Math.round(perc2);
+
+                            if (current_month_val > past_month_val){
+                                float fin = current_month_val - past_month_val;
+
+                                textView3.setText("+"+"$"+fin);
+                                percentage.setText(perc_final+"%");
+                                circularProgressBar.setProgressWithAnimation((int) perc_final, Long.valueOf(3000)); // 3 sec;
+                                circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
+                            }
+                            else if(current_month_val < past_month_val) {
+                                float fin = past_month_val - current_month_val;
+                                textView3.setText("-"+"$"+fin);
+                                percentage.setText(perc_final_2+"%");
+                                circularProgressBar.setProgressWithAnimation((int)perc_final_2, Long.valueOf(3000)); // 3 sec;
+                            }
+
+                        }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        }
     }
 
-    public String x; // number of transactions;
-    public String TransCount;
    public void getDataFromHome() {
        user = FirebaseAuth.getInstance().getCurrentUser();
        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(DataSnapshot dataSnapshot) {
                try {
-                   // => to local DATABASE;
                    String x = dataSnapshot.child("Transaction count").getValue().toString();
                    //
                    sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
@@ -223,21 +311,6 @@ ArrayList <String>  amount;
                    String year = dateParts[2];
 
                    String dateString = String.format("%s-%s-%s", year, month, day);
-
-                   // Calendar DTA;
-                       materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-                           @Override
-                           public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                               DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                               // TODO Code has not been implemented;
-                               
-
-
-
-                               Toast.makeText(getContext(), "TEST", Toast.LENGTH_SHORT).show();
-
-                           }
-                       });
                    //
                    // First convert to Date. This is one of the many ways.
                    LocalDate from = LocalDate.parse(dateString); // Date from payments;
@@ -324,7 +397,6 @@ ArrayList <String>  amount;
 
                    long y = ChronoUnit.YEARS.between(from, to);
 
-                   Log.d("TEST1", ""+y);
 
                    int yo = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -445,6 +517,67 @@ ArrayList <String>  amount;
             }
         });
         oa1.start();
+    }
+
+    public void calendar (){
+        Date2 = new ArrayList<>();
+        amount2 = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (int i = 0; i < Integer.parseInt(x); i++) {
+                    amount2.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
+                    Date2.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                }
+                String dateSX2[] = new String[Integer.parseInt(x)];
+                // The following is to add dots on the transaction dates;
+                ArrayList<CalendarDay> calendarDays = new ArrayList<>();
+                for (int j = 0; j < Integer.parseInt(x); j++) {
+                    String r = Date2.get(j);
+                    String[] dateP = r.split("/");
+                    String da = dateP[0];
+                    String mo = dateP[1];
+                    String ye = dateP[2];
+
+                    dateSX2[j] = String.format("%s-%s-%s", ye, mo, da);
+
+                    CalendarDay calendarDay = CalendarDay.from(Integer.parseInt(ye), Integer.parseInt(mo)-1, Integer.parseInt(da));
+                    calendarDays.add(calendarDay);
+                }
+
+                for (int i = 0; i < Integer.parseInt(x); i++) {
+                    materialCalendarView.addDecorator(new EventDeco(calendarDays));
+                }
+
+        materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date.getDate());
+                int year = calendar.get(Calendar.YEAR);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH)+1;
+
+                String FIN = year + "-" +(month<10?("0"+month):(month)) + "-" + (day<10?("0"+day):(day));
+
+                for (int j = 0; j < Integer.parseInt(x); j++) {
+                    Log.d("TESTEXTRA", "" + dateSX2[j]);
+                    if (dateSX2[j].equals(FIN)){
+                        //TODO code for days details goes here => :)
+                        Toast.makeText(getContext(),"Test Message",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+        });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void Add(String userId,double income) {

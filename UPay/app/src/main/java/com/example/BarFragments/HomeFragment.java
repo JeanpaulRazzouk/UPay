@@ -290,24 +290,29 @@ public class HomeFragment extends Fragment {
         //
         Names.add(0,"Starbucks");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"20.62");
+        Amount.add(0,"20");
         Date.add(0,"07/01/2021");
         //
         Names.add(0,"Zaatar w Zeit");
         Location.add(0,"Zalka,LB");
-        Amount.add(0,"9.43");
-        Date.add(0,"12/02/2021");
+        Amount.add(0,"50");
+        Date.add(0,"12/01/2021");
         //
         Names.add(0,"Wrangler");
         Location.add(0,"Dbayeh,LB");
-        Amount.add(0,"67.34");
-        Date.add(0,"14/02/2021");
+        Amount.add(0,"15.50");
+        Date.add(0,"17/02/2021");
         //
         Names.add(0,"Duty Free");
         Location.add(0,"Beirut,LB");
-        Amount.add(0,"20.62");
+        Amount.add(0,"20.50");
         Date.add(0,"18/02/2021");
         //
+        Names.add(0,"Burger King");
+        Location.add(0,"Beirut,LB");
+        Amount.add(0,"41.5");
+        Date.add(0,"25/02/2021");
+
         for (int i = 0 ; i< Names.size();i++) {
             user = FirebaseAuth.getInstance().getCurrentUser();
             HashMap<String, Object> values = new HashMap<>();
@@ -345,8 +350,14 @@ public class HomeFragment extends Fragment {
                     int income = Integer.parseInt(x);
                     int perc_res = (int) ((finalVal /income)*100);
                     textView3.setText(perc_res+"%");
-                    circularProgressBar.setProgressWithAnimation((float) perc_res, Long.valueOf(3000));
-                    // =3s
+                    circularProgressBar.setProgressWithAnimation((float) perc_res, Long.valueOf(3000)); // 3 sec;
+                    if (income < perc_res){
+                        circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
+                    }
+                    else if (perc_res > 0.60*income && perc_res < income){
+                        circularProgressBar.setProgressBarColor(Color.parseColor("#FF9847"));
+                    }
+                    else {}
 
                 }catch(Exception e) {
                     e.printStackTrace();
