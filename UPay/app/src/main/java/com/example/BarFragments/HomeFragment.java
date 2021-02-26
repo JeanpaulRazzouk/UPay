@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -128,6 +129,7 @@ public class HomeFragment extends Fragment {
         }
         scrollView = view.findViewById(R.id.scroll);
         scrollView.smoothScrollTo(0,0);
+        //
         //
         imageButton = view.findViewById(R.id.imageView12);
         imageButton.setClipToOutline(true);
@@ -307,11 +309,6 @@ public class HomeFragment extends Fragment {
         Location.add(0,"Beirut,LB");
         Amount.add(0,"20.50");
         Date.add(0,"18/02/2021");
-        //
-        Names.add(0,"Burger King");
-        Location.add(0,"Beirut,LB");
-        Amount.add(0,"41.5");
-        Date.add(0,"25/02/2021");
 
         for (int i = 0 ; i< Names.size();i++) {
             user = FirebaseAuth.getInstance().getCurrentUser();

@@ -31,8 +31,10 @@ public class PersonalInfoFragment  extends BottomSheetDialogFragment {
         final View view = inflater.inflate(R.layout.fragment_personal_info_frag, container, false);
 //
         recyclerView = view.findViewById(R.id.recycle2);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         PersArray = new ArrayList<>();
+
         adapter = new Adapter2(getContext(), PersArray);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),

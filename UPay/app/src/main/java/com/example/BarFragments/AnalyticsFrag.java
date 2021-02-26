@@ -13,7 +13,6 @@ import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +26,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.applandeo.materialcalendarview.CalendarView;
-import com.applandeo.materialcalendarview.EventDay;
+import com.example.upay.BottomSheetCal;
 import com.example.upay.EventDeco;
 import com.example.upay.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,8 +45,6 @@ import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
 
-import java.nio.channels.FileLock;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -58,7 +54,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 public class AnalyticsFrag extends Fragment {
@@ -564,10 +559,11 @@ ArrayList <String>  amount2;
                 for (int j = 0; j < Integer.parseInt(x); j++) {
                     Log.d("TESTEXTRA", "" + dateSX2[j]);
                     if (dateSX2[j].equals(FIN)){
-                        //TODO code for days details goes here => :)
-                        Toast.makeText(getContext(),"Test Message",Toast.LENGTH_SHORT).show();
+                        //
+                        BottomSheetCal bottomSheet = new BottomSheetCal();
+                        bottomSheet.show(getFragmentManager(),"TAG");
+                        //
                     }
-
                 }
             }
         });

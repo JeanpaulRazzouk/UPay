@@ -49,13 +49,6 @@ public class HomePage extends AppCompatActivity {
         });
     }
 
-    public void Add() {
-        startActivity(new Intent(this, PaymentMethod.class));
-    }
-
-    public void PaymentMethod (View view){
-        startActivity(new Intent(this, PaymentMethod.class));
-    }
 
 
     @Override

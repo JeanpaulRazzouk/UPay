@@ -35,7 +35,6 @@
                 android:resource="@xml/apduservice" />
         </service>
         <activity android:name="com.example.Profile.Profile" />
-        <activity android:name=".PaymentMethod" />
         <activity android:name="com.example.External.ForgotPassword" />
         <activity android:name=".HomePage" />
         <activity android:name="com.example.External.CreateNewAccount" />
