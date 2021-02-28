@@ -1,6 +1,9 @@
 package com.example.upay;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +13,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.Adapters.AdapterCal;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.util.ArrayList;
 
@@ -30,7 +36,8 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
 
     RecyclerView recyclerView;
     public ArrayList<CalData>  calData;
-    CalData [] c;
+//    CalData [] c;
+    ArrayList<CalData> c;
     public AdapterCal adapter;
     private FirebaseUser user;
     //
@@ -42,6 +49,7 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
     SharedPreferences sharedPreferences;
     public String x; // number of transactions;
     public String TransCount;
+    public static final String SOME_INTENT_FILTER_NAME = "SOME_INTENT_FILTER_NAME";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,7 +57,6 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
         recyclerView = view1.findViewById(R.id.recyclerView);
 
         calData = new ArrayList<>();
-        adapter = new AdapterCal(getContext(),calData);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         Activity();
@@ -86,10 +93,10 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
         x = sharedPreferences.getString(TransCount, null);
 
 
-        c = new CalData[Integer.parseInt(x)];
+        c = new ArrayList<>();
         String [] t1 = new String[Integer.parseInt(x)]; // names;
 
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -98,17 +105,12 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
                     location.add(dataSnapshot.child("" + i).child("Location").getValue().toString());
                     amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
                     Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+
+//                    if (Date.get(i).equals(value)) {
+                        c.add(new CalData(names.get(i), location.get(i), "$" + amount.get(i), Date.get(i)));
+                        recyclerView.setAdapter(new AdapterCal(getContext(), c));
+//                    }
                 }
-
-
-                // location;
-                for (int i = 0; i < Integer.parseInt(x); i++) {
-                    sharedPreferences = getContext().getSharedPreferences(t1[i], Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(t1[i], location.get(i));
-                    editor.apply();
-                }
-
             }
 
             @Override
@@ -117,16 +119,6 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
             }
 
         });
-
-        for (int i =0 ; i<c.length;i++) {
-            sharedPreferences = getContext().getSharedPreferences(t1[i], Context.MODE_PRIVATE);
-            location.add(sharedPreferences.getString(t1[i], null));
-        }
-
-        for (int i =0 ; i<c.length;i++) {
-            c[i] = new CalData("Names", "Location", "$" +"Amount","Date");
-            calData.add(c[i]);
-        }
-
     }
+
 }

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -226,15 +228,16 @@ ArrayList <String>  amount2;
                         Float perc2 = ((past_month_val/current_month_val)-1)*100;
                         int perc_final_2 = Math.round(perc2);
 
-                            if (current_month_val > past_month_val){
+                            if (current_month_val > past_month_val && current_month_val != null && past_month_val !=null){
                                 float fin = current_month_val - past_month_val;
 
-                                textView3.setText("+"+"$"+fin);
-                                percentage.setText(perc_final+"%");
-                                circularProgressBar.setProgressWithAnimation((int) perc_final, Long.valueOf(3000)); // 3 sec;
-                                circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
+                                    textView3.setText("+"+"$"+fin);
+                                    percentage.setText(perc_final + "%");
+                                    circularProgressBar.setProgressWithAnimation((int) perc_final, Long.valueOf(3000)); // 3 sec;
+                                    circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
+                                    percentage.setText(0 + "%");
                             }
-                            else if(current_month_val < past_month_val) {
+                            else if(current_month_val < past_month_val && current_month_val != null && past_month_val !=null) {
                                 float fin = past_month_val - current_month_val;
                                 textView3.setText("-"+"$"+fin);
                                 percentage.setText(perc_final_2+"%");
