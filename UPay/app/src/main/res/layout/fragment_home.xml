@@ -11,6 +11,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
         tools:context=".HomePage">
 
 
@@ -64,7 +70,7 @@
                     android:fontFamily="@font/sf_ui_display_black"
                     android:gravity="top"
                     android:orientation="vertical"
-                    android:textColor="#373333"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="36sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/imageButton"

@@ -87,7 +87,8 @@ ArrayList <String>  amount2;
 
     public String x; // number of transactions;
     public String TransCount;
-
+//
+String value ; // to avoid bottom sheet loop
  public AnalyticsFrag() {
     }
     @Override
@@ -232,18 +233,24 @@ ArrayList <String>  amount2;
                                 float fin = current_month_val - past_month_val;
 
                                     textView3.setText("+"+"$"+fin);
+                                if (current_month_val == 0.0f || past_month_val == 0.0f ){
+                                    percentage.setText("0%");
+                                }else {
                                     percentage.setText(perc_final + "%");
                                     circularProgressBar.setProgressWithAnimation((int) perc_final, Long.valueOf(3000)); // 3 sec;
                                     circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
-                                    percentage.setText(0 + "%");
+                                }
                             }
                             else if(current_month_val < past_month_val && current_month_val != null && past_month_val !=null) {
                                 float fin = past_month_val - current_month_val;
                                 textView3.setText("-"+"$"+fin);
-                                percentage.setText(perc_final_2+"%");
-                                circularProgressBar.setProgressWithAnimation((int)perc_final_2, Long.valueOf(3000)); // 3 sec;
+                                if (current_month_val == 0.0f || past_month_val == 0.0f ){
+                                    percentage.setText("0%");
+                                }else {
+                                    percentage.setText(perc_final_2 + "%");
+                                    circularProgressBar.setProgressWithAnimation((int) perc_final_2, Long.valueOf(3000)); // 3 sec;
+                                }
                             }
-
                         }
 
                     @Override
@@ -316,7 +323,10 @@ ArrayList <String>  amount2;
 
                    long days = ChronoUnit.DAYS.between(from, to);
 
-                   if (days <= 7) {
+                   int mo = Calendar.getInstance().get(Calendar.MONTH)+1;
+                   // TODO all analytics frame drops;
+                   //
+                   if (days <= 7 && Integer.parseInt(month) == mo) {
                        Date d = null;
                        try {
                            d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
@@ -548,6 +558,7 @@ ArrayList <String>  amount2;
                     materialCalendarView.addDecorator(new EventDeco(calendarDays));
                 }
 
+
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -560,13 +571,13 @@ ArrayList <String>  amount2;
                 String FIN = year + "-" +(month<10?("0"+month):(month)) + "-" + (day<10?("0"+day):(day));
 
                 for (int j = 0; j < Integer.parseInt(x); j++) {
-                    Log.d("TESTEXTRA", "" + dateSX2[j]);
                     if (dateSX2[j].equals(FIN)){
-                        //
-                        BottomSheetCal bottomSheet = new BottomSheetCal();
-                        bottomSheet.show(getFragmentManager(),"TAG");
-                        //
+                        value = dateSX2[j];
                     }
+                }
+                if (value.equals(FIN)){
+                    BottomSheetCal bottomSheet = new BottomSheetCal(FIN);
+                    bottomSheet.show(getFragmentManager(),"TAG");
                 }
             }
         });

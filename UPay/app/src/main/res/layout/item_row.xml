@@ -43,7 +43,7 @@
             android:textColor="@color/design_default_color_on_secondary"
             android:gravity="center_vertical"
             android:padding="1dp"
-            android:textSize="23dp" />
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/txtLocation"
@@ -60,8 +60,8 @@
             android:layout_width="66dp"
             android:layout_height="70dp"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_atom" />
+            android:background="@drawable/ic_loop"
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:id="@+id/textView22"

@@ -47,9 +47,18 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
     public ArrayList<String> Date = new ArrayList<>();
     //
     SharedPreferences sharedPreferences;
+    SharedPreferences sharedPreferences2;
     public String x; // number of transactions;
     public String TransCount;
+    public String op;
+    public String  Click;
     public static final String SOME_INTENT_FILTER_NAME = "SOME_INTENT_FILTER_NAME";
+
+    String LIMIT;
+    public BottomSheetCal(String fin) {
+        LIMIT = fin;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -92,10 +101,9 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
         sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
         x = sharedPreferences.getString(TransCount, null);
 
-
         c = new ArrayList<>();
-        String [] t1 = new String[Integer.parseInt(x)]; // names;
 
+ArrayList<String> new_date = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -106,10 +114,22 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
                     amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
                     Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
 
-//                    if (Date.get(i).equals(value)) {
+
+                    String r = Date.get(i);
+                    String[] dateP = r.split("/");
+                    String da = dateP[0];
+                    String mo = dateP[1];
+                    String ye = dateP[2];
+
+                    new_date.add(String.format("%s-%s-%s", ye, mo, da));
+
+                    Log.d("Apple1",""+LIMIT);
+                    Log.d("Apple2",""+new_date.get(i));;
+
+                    if (new_date.get(i).equals(LIMIT)) {
                         c.add(new CalData(names.get(i), location.get(i), "$" + amount.get(i), Date.get(i)));
                         recyclerView.setAdapter(new AdapterCal(getContext(), c));
-//                    }
+                    }
                 }
             }
 

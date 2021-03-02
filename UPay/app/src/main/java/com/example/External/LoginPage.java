@@ -3,7 +3,9 @@ package com.example.External;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
@@ -11,6 +13,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,6 +32,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginPage extends AppCompatActivity {
     ImageButton imageButton;
@@ -46,9 +54,14 @@ public class LoginPage extends AppCompatActivity {
     private FirebaseAuth mAuth;
     //
     Animation animation;
+    SharedPreferences sharedPreferences;
     //
     VideoView VideoView;
     FirebaseUser user ;
+    //
+    public LoginPage() {
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +106,15 @@ public class LoginPage extends AppCompatActivity {
         textView.startAnimation(animation);
         //
         intro_vid();
+        //
+        
+        VideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                VideoView.setBackgroundColor(Color.TRANSPARENT);
+            }
+        });
+
         //
         VideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -157,8 +179,15 @@ public class LoginPage extends AppCompatActivity {
                                      updateUI(user);
                                      //
                                      pgsBar.setVisibility(View.INVISIBLE);
-                                     //
-                                     Intent i = new Intent(getApplicationContext(), HomePage.class);
+
+                                     Intent i;
+                                     FirebaseUserMetadata metadata = mAuth.getCurrentUser().getMetadata();
+                                     if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+                                         // The user is new, show them a fancy intro screen!
+                                         i = new Intent(getApplicationContext(), FirstTimeActivity.class);
+                                     } else {
+                                         i = new Intent(getApplicationContext(), HomePage.class);
+                                     }
                                      startActivity(i);
                                  } else {
                                      updateUI(null);

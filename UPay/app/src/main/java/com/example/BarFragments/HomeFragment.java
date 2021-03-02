@@ -82,7 +82,6 @@ public class HomeFragment extends Fragment {
     Uri link;
     //
     Animation animation;
-    Animation animation2;
     CardView cardView;
     CardView cardView2;
     CircularProgressBar circularProgressBar;
@@ -145,15 +144,8 @@ public class HomeFragment extends Fragment {
         //
         textView = view.findViewById(R.id.textView3);
         textView.setText("Home");
-        Shader shader = new LinearGradient(350,0,0,textView.getLineHeight(),
-                Color.parseColor("#ffffff"), Color.parseColor("#D267E4"), Shader.TileMode.MIRROR);
-        textView.getPaint().setShader(shader);
         //
         relativeLayout = view.findViewById(R.id.frag_home);
-        // first row;
-        animation2 = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
-        animation2.setDuration(1000);
-        imageView.setAnimation(animation2);
         // second  row;
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
         animation.setDuration(1100);
@@ -263,21 +255,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-//    public Date StringToDate(String s){
-//
-//        Date result = null;
-//        try{
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-//            result  = dateFormat.parse(s);
-//        }
-//
-//        catch(ParseException e){
-//            e.printStackTrace();
-//
-//        }
-//        return result ;
-//    }
-
     public void Activity (){
         // TEST;
         ArrayList<Integer> myImageList = new ArrayList<>();
@@ -304,8 +281,14 @@ public class HomeFragment extends Fragment {
 
         Names.add(0,"Apple Store");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"10.50");
-        Date.add(0,"27/02/2021");
+        Amount.add(0,"8.50");
+        Date.add(0,"01/03/2021");
+
+        //
+        Names.add(0,"Book Store");
+        Location.add(0,"Tyre,LB");
+        Amount.add(0,"13.40");
+        Date.add(0,"01/03/2021");
 
         for (int i = 0 ; i< Names.size();i++) {
             user = FirebaseAuth.getInstance().getCurrentUser();
