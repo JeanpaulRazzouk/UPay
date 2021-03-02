@@ -107,7 +107,7 @@ public class LoginPage extends AppCompatActivity {
         //
         intro_vid();
         //
-        
+
         VideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {

@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 public class BottomSheetNFC extends BottomSheetDialogFragment {
     public NfcAdapter mNfcAdapter;
     public CardEmulation cardEmulation;
+    VideoView videoView;
 
 
     public static final int REQUEST_CODE_DEFAULT_PAYMENT_APP = 1;
@@ -39,7 +40,10 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.activity_bottom_sheet_nfc, container, false);
+        //
         mNfcAdapter = NfcAdapter.getDefaultAdapter(getContext());
+        videoView = view.findViewById(R.id.videoView);
+        videoView.setVisibility(View.INVISIBLE);
         if (mNfcAdapter != null) {
             cardEmulation = CardEmulation.getInstance(mNfcAdapter);
         }
@@ -71,8 +75,6 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-
     }
 
     @Override
@@ -81,14 +83,12 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
 
     }
 
-    BroadcastReceiver animationBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getAction();
-//            if (action.equals(MyHostApduService.PAYMENT_SENT)) {
-//                Toast.makeText(getContext(), "Payment Sent Broadcast Received", Toast.LENGTH_LONG).show();
-//                // payView.start();
-//            }
-        }
-    };
+
+    public  void intro_vid(){
+        videoView.setVisibility(View.VISIBLE);
+        Uri uri = Uri.parse("android.resource://"+ getContext().getPackageName()+"/"+R.raw.vid4);
+        videoView.setVideoURI(uri);
+        videoView.setZOrderOnTop(true);
+        videoView.start();
+    }
 }
