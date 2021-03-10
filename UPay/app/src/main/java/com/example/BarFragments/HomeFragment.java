@@ -290,6 +290,7 @@ public class HomeFragment extends Fragment {
         Amount.add(0,"13.40");
         Date.add(0,"01/03/2021");
 
+
         for (int i = 0 ; i< Names.size();i++) {
             user = FirebaseAuth.getInstance().getCurrentUser();
             HashMap<String, Object> values = new HashMap<>();

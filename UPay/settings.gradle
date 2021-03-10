@@ -1,2 +1,3 @@
+include ':weka-3.7.0'
 include ':app'
 rootProject.name='UPay'

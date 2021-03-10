@@ -55,9 +55,10 @@
         android:id="@+id/imageButton6"
         android:layout_width="152dp"
         android:layout_height="62dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="48dp"
         android:background="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton4"
         app:srcCompat="@drawable/butto_bg_2" />

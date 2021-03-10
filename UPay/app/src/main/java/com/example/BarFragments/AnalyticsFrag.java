@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -13,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,44 +51,49 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class AnalyticsFrag extends Fragment {
-TextView textView;
-TextView textView2;
-TextView textViewIncome;
-TextView percentage;
-TextView textView3;
-ImageButton imageButton;
-ImageButton imageButton2;
-EditText editText;
-Animation animation;
-ValueLineChart mCubicValueLineChart;
-ValueLineChart mCubicValueLineChart2;
-CircularProgressBar circularProgressBar;
-CardView cardView;
-MaterialCalendarView materialCalendarView;
-double income;
-DataSnapshot dataSnapshot;
-SharedPreferences sharedPreferences;
-private DatabaseReference mDatabase;
-private FirebaseUser user;
-ArrayList <String> Date;
-ArrayList <String>  amount;
-ArrayList <String> Date2;
-ArrayList <String>  amount2;
-    ArrayList <String> Date3;
-    ArrayList <String>  amount3;
+    TextView textView;
+    TextView textView2;
+    TextView textViewIncome;
+    TextView percentage;
+    TextView textView3;
+    ImageButton imageButton;
+    ImageButton imageButton2;
+    EditText editText;
+    Animation animation;
+    ValueLineChart mCubicValueLineChart;
+    ValueLineChart mCubicValueLineChart2;
+    CircularProgressBar circularProgressBar;
+    CardView cardView;
+    MaterialCalendarView materialCalendarView;
+    double income;
+    SharedPreferences sharedPreferences;
+    private DatabaseReference mDatabase;
+    private FirebaseUser user;
+    ArrayList<String> Date;
+    ArrayList<String> amount;
+    ArrayList<String> Date2;
+    ArrayList<String> amount2;
+    ArrayList<String> Date3;
+    ArrayList<String> amount3;
 
     public String x; // number of transactions;
     public String TransCount;
-//
-String value ; // to avoid bottom sheet loop
- public AnalyticsFrag() {
+    //
+    String value; // to avoid bottom sheet loop
+
+    public AnalyticsFrag() {
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +109,7 @@ String value ; // to avoid bottom sheet loop
         textView3 = view.findViewById(R.id.exp_val);
         //
         mCubicValueLineChart = view.findViewById(R.id.cubiclinechart);
-        mCubicValueLineChart2 = view .findViewById(R.id.cubiclinechart2);
+        mCubicValueLineChart2 = view.findViewById(R.id.cubiclinechart2);
         circularProgressBar = view.findViewById(R.id.pb_one);
         //
         editText = view.findViewById(R.id.editTextTextPersonName);
@@ -114,7 +117,7 @@ String value ; // to avoid bottom sheet loop
         imageButton2 = view.findViewById(R.id.imageButtonREC);
         textView2 = view.findViewById(R.id.textView13);
         //
-       materialCalendarView = view.findViewById(R.id.calendarView);
+        materialCalendarView = view.findViewById(R.id.calendarView);
         //
         editText.setVisibility(View.INVISIBLE);
         imageButton.setVisibility(View.INVISIBLE);
@@ -123,22 +126,21 @@ String value ; // to avoid bottom sheet loop
         cardView = view.findViewById(R.id.income);
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
         animation.setDuration(1100);
-        textView.setText("$1982.20");
+        textView.setText("$0");
         textView.startAnimation(animation);
         //
         Flip();
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (editText.getText().toString().isEmpty()){
-                    Toast.makeText(getContext(),"Please fill Fields",Toast.LENGTH_SHORT).show();
-                }
-                else {
+                if (editText.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Please fill Fields", Toast.LENGTH_SHORT).show();
+                } else {
                     income = Double.parseDouble(editText.getText().toString());
                     textViewIncome.setText("$" + income);
                     //
                     user = FirebaseAuth.getInstance().getCurrentUser();
-                    Add(user.getUid(),income);
+                    Add(user.getUid(), income);
                     //
                     Flip2();
                     editText.setText("");
@@ -156,10 +158,11 @@ String value ; // to avoid bottom sheet loop
                     try {
                         val = dataSnapshot.child("income").getValue().toString();
                         textViewIncome.setText("$" + val);
-                    }catch(Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onCancelled(DatabaseError error) {
 
@@ -170,7 +173,7 @@ String value ; // to avoid bottom sheet loop
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Toast.makeText(getContext(),"TIPPY TEST",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "TIPPY TEST", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -178,16 +181,16 @@ String value ; // to avoid bottom sheet loop
         getDataFromHome();
         calendar();
         Spree();
-
+        LRegression();
         return view;
     }
 
 
-    public void Spree(){
+    public void Spree() {
 
         Date3 = new ArrayList<>();
         amount3 = new ArrayList<>();
-       // Spree is Increase or Decrease in Spending
+        // Spree is Increase or Decrease in Spending
         String formattedString;
         LocalDate localDate = null;//For reference
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -196,10 +199,10 @@ String value ; // to avoid bottom sheet loop
             formattedString = localDate.format(formatter); // present month string;
             int p_mo = Integer.parseInt(formattedString) - 1; // past month
 
-            String  past_month = ""+(p_mo<10?("0"+p_mo):(p_mo)); // past month string;
+            String past_month = "" + (p_mo < 10 ? ("0" + p_mo) : (p_mo)); // past month string;
 
             for (int i = 0; i < 5; i++) {
-                Log.d("TESTX",""+x);
+                Log.d("TESTX", "" + x);
                 FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -223,35 +226,34 @@ String value ; // to avoid bottom sheet loop
                                 past_month_val = past_month_val + Float.parseFloat(amount3.get(j));
                             }
                         }
-                        Float perc = (1-(current_month_val/past_month_val))*100;
+                        Float perc = (1 - (current_month_val / past_month_val)) * 100;
                         int perc_final = Math.round(perc);
 
-                        Float perc2 = ((past_month_val/current_month_val)-1)*100;
+                        Float perc2 = ((past_month_val / current_month_val) - 1) * 100;
                         int perc_final_2 = Math.round(perc2);
 
-                            if (current_month_val > past_month_val && current_month_val != null && past_month_val !=null){
-                                float fin = current_month_val - past_month_val;
+                        if (current_month_val > past_month_val && current_month_val != null && past_month_val != null) {
+                            float fin = current_month_val - past_month_val;
 
-                                    textView3.setText("+"+"$"+fin);
-                                if (current_month_val == 0.0f || past_month_val == 0.0f ){
-                                    percentage.setText("0%");
-                                }else {
-                                    percentage.setText(perc_final + "%");
-                                    circularProgressBar.setProgressWithAnimation((int) perc_final, Long.valueOf(3000)); // 3 sec;
-                                    circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
-                                }
+                            textView3.setText("+" + "$" + fin);
+                            if (current_month_val == 0.0f || past_month_val == 0.0f) {
+                                percentage.setText("0%");
+                            } else {
+                                percentage.setText(perc_final + "%");
+                                circularProgressBar.setProgressWithAnimation((int) perc_final, Long.valueOf(3000)); // 3 sec;
+                                circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
                             }
-                            else if(current_month_val < past_month_val && current_month_val != null && past_month_val !=null) {
-                                float fin = past_month_val - current_month_val;
-                                textView3.setText("-"+"$"+fin);
-                                if (current_month_val == 0.0f || past_month_val == 0.0f ){
-                                    percentage.setText("0%");
-                                }else {
-                                    percentage.setText(perc_final_2 + "%");
-                                    circularProgressBar.setProgressWithAnimation((int) perc_final_2, Long.valueOf(3000)); // 3 sec;
-                                }
+                        } else if (current_month_val < past_month_val && current_month_val != null && past_month_val != null) {
+                            float fin = past_month_val - current_month_val;
+                            textView3.setText("-" + "$" + fin);
+                            if (current_month_val == 0.0f || past_month_val == 0.0f) {
+                                percentage.setText("0%");
+                            } else {
+                                percentage.setText(perc_final_2 + "%");
+                                circularProgressBar.setProgressWithAnimation((int) perc_final_2, Long.valueOf(3000)); // 3 sec;
                             }
                         }
+                    }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -262,230 +264,244 @@ String value ; // to avoid bottom sheet loop
         }
     }
 
-   public void getDataFromHome() {
-       user = FirebaseAuth.getInstance().getCurrentUser();
-       FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
-               try {
-                   String x = dataSnapshot.child("Transaction count").getValue().toString();
-                   //
-                   sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
-                   SharedPreferences.Editor editor = sharedPreferences.edit();
-                   editor.putString(TransCount, x);
-                   editor.apply();
+    public void getDataFromHome() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    String x = dataSnapshot.child("Transaction count").getValue().toString();
+                    //
+                    sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(TransCount, x);
+                    editor.apply();
 
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
-           }
-           @Override
-           public void onCancelled(@NonNull DatabaseError error) {
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-           }
-       });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-       sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
-       x = sharedPreferences.getString(TransCount, null);
-       //
-       Date = new ArrayList<>();
-       amount = new ArrayList<>();
-       //
-       FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
-           @RequiresApi(api = Build.VERSION_CODES.O)
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
-                   for (int i = 0; i < Integer.parseInt(x); i++) {
-                       amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
-                       Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
-                   }
-               // First Graph;
-               Float a1 = 0.0f;;
-               Float a2 = 0.0f;;
-               Float a3 = 0.0f;;
-               Float a4 = 0.0f;;
-               Float a5 = 0.0f;;
-               Float a6 = 0.0f;;
-               Float a7 = 0.0f;
+            }
+        });
 
-               for (int i = 0; i < Integer.parseInt(x); i++) {
-                   String date = Date.get(i);
-                   String[] dateParts = date.split("/");
-                   String day = dateParts[0];
-                   String month = dateParts[1];
-                   String year = dateParts[2];
+        sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
+        x = sharedPreferences.getString(TransCount, null);
+        //
+        Date = new ArrayList<>();
+        amount = new ArrayList<>();
+        //
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (int i = 0; i < Integer.parseInt(x); i++) {
+                    amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
+                    Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                }
+                // First Graph;
+                Float a1 = 0.0f;
+                ;
+                Float a2 = 0.0f;
+                ;
+                Float a3 = 0.0f;
+                ;
+                Float a4 = 0.0f;
+                ;
+                Float a5 = 0.0f;
+                ;
+                Float a6 = 0.0f;
+                ;
+                Float a7 = 0.0f;
 
-                   String dateString = String.format("%s-%s-%s", year, month, day);
-                   //
-                   // First convert to Date. This is one of the many ways.
-                   LocalDate from = LocalDate.parse(dateString); // Date from payments;
-                   LocalDate to = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())); // current date; (moving)
+                for (int i = 0; i < Integer.parseInt(x); i++) {
+                    String date = Date.get(i);
+                    String[] dateParts = date.split("/");
+                    String day = dateParts[0];
+                    String month = dateParts[1];
+                    String year = dateParts[2];
 
-                   long days = ChronoUnit.DAYS.between(from, to);
+                    String dateString = String.format("%s-%s-%s", year, month, day);
+                    //
+                    // First convert to Date. This is one of the many ways.
+                    LocalDate from = LocalDate.parse(dateString); // Date from payments;
+                    LocalDate to = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())); // current date; (moving)
 
-                   int mo = Calendar.getInstance().get(Calendar.MONTH)+1;
-                   // TODO all analytics frame drops;
-                   //
-                   if (days <= 7 && Integer.parseInt(month) == mo) {
-                       Date d = null;
-                       try {
-                           d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
-                       } catch (ParseException e) {
-                           e.printStackTrace();
-                       }
-                       // Then get the day of week from the Date based on specific locale.
-                       String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(d);
-                       //
-                       switch (dayOfWeek) {
-                           case "Monday":
-                               a1 = a1 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "Tuesday":
-                               a2 = a2 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "Wednesday":
-                               a3 = a3 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "Thursday":
-                               a4 = a4 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "Friday":
-                                   a5 = a5 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "Saturday":
-                               a6 = a6 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "Sunday":
-                               a7 = a7 + Float.parseFloat(amount.get(i));
-                               break;
-                       }
-                   }
-               }
-               ValueLineSeries series = new ValueLineSeries();
-               series.setColor(0xFFD267E4);
-               series.addPoint(new ValueLinePoint("", 0));
-               series.addPoint(new ValueLinePoint("M", a1));
-               series.addPoint(new ValueLinePoint("T", a2));
-               series.addPoint(new ValueLinePoint("W", a3));
-               series.addPoint(new ValueLinePoint("TH",a4));
-               series.addPoint(new ValueLinePoint("F", a5));
-               series.addPoint(new ValueLinePoint("S", a6));
-               series.addPoint(new ValueLinePoint("S", a7));
-               series.addPoint(new ValueLinePoint("", 0));
-               mCubicValueLineChart2.addSeries(series);
-               mCubicValueLineChart2.startAnimation();
+                    long days = ChronoUnit.DAYS.between(from, to);
 
-               // Second Graph;
-               Float m1 = 0.0f;;
-               Float m2 = 0.0f;;
-               Float m3 = 0.0f;;
-               Float m4 = 0.0f;;
-               Float m5 = 0.0f;;
-               Float m6 = 0.0f;;
-               Float m7 = 0.0f;
-               Float m8 = 0.0f;
-               Float m9 = 0.0f;
-               Float m10 = 0.0f;
-               Float m11 = 0.0f;
-               Float m12 = 0.0f;
+                    int mo = Calendar.getInstance().get(Calendar.MONTH) + 1;
+                    // TODO all analytics frame drops;
+                    //
+                    if (days <= 7 && Integer.parseInt(month) == mo) {
+                        Date d = null;
+                        try {
+                            d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        // Then get the day of week from the Date based on specific locale.
+                        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(d);
+                        //
+                        switch (dayOfWeek) {
+                            case "Monday":
+                                a1 = a1 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "Tuesday":
+                                a2 = a2 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "Wednesday":
+                                a3 = a3 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "Thursday":
+                                a4 = a4 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "Friday":
+                                a5 = a5 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "Saturday":
+                                a6 = a6 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "Sunday":
+                                a7 = a7 + Float.parseFloat(amount.get(i));
+                                break;
+                        }
+                    }
+                }
+                ValueLineSeries series = new ValueLineSeries();
+                series.setColor(0xFFD267E4);
+                series.addPoint(new ValueLinePoint("", 0));
+                series.addPoint(new ValueLinePoint("M", a1));
+                series.addPoint(new ValueLinePoint("T", a2));
+                series.addPoint(new ValueLinePoint("W", a3));
+                series.addPoint(new ValueLinePoint("TH", a4));
+                series.addPoint(new ValueLinePoint("F", a5));
+                series.addPoint(new ValueLinePoint("S", a6));
+                series.addPoint(new ValueLinePoint("S", a7));
+                series.addPoint(new ValueLinePoint("", 0));
+                mCubicValueLineChart2.addSeries(series);
+                mCubicValueLineChart2.startAnimation();
 
-               for (int i = 0; i < Integer.parseInt(x); i++) {
+                // Second Graph;
+                Float m1 = 0.0f;
+                ;
+                Float m2 = 0.0f;
+                ;
+                Float m3 = 0.0f;
+                ;
+                Float m4 = 0.0f;
+                ;
+                Float m5 = 0.0f;
+                ;
+                Float m6 = 0.0f;
+                ;
+                Float m7 = 0.0f;
+                Float m8 = 0.0f;
+                Float m9 = 0.0f;
+                Float m10 = 0.0f;
+                Float m11 = 0.0f;
+                Float m12 = 0.0f;
 
-                   String date = Date.get(i);
-                   String[] dateParts = date.split("/");
-                   String day = dateParts[0];
-                   String month = dateParts[1];
-                   String year = dateParts[2];
+                for (int i = 0; i < Integer.parseInt(x); i++) {
 
-                   // First convert to Date. This is one of the many ways.
-                   String dateString = String.format("%s-%s-%s", year, month, day);
+                    String date = Date.get(i);
+                    String[] dateParts = date.split("/");
+                    String day = dateParts[0];
+                    String month = dateParts[1];
+                    String year = dateParts[2];
 
-                   LocalDate from = LocalDate.parse(dateString); // Date from payments;
-                   LocalDate to = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())); // current date; (moving)
+                    // First convert to Date. This is one of the many ways.
+                    String dateString = String.format("%s-%s-%s", year, month, day);
 
-                   long y = ChronoUnit.YEARS.between(from, to);
+                    LocalDate from = LocalDate.parse(dateString); // Date from payments;
+                    LocalDate to = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())); // current date; (moving)
+
+                    long y = ChronoUnit.YEARS.between(from, to);
 
 
-                   int yo = Calendar.getInstance().get(Calendar.YEAR);
+                    int yo = Calendar.getInstance().get(Calendar.YEAR);
 
-                   if (y < 1 && Integer.parseInt(year) == yo) {
-                       Date d = null;
-                       try {
-                           d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
-                       } catch (ParseException e) {
-                           e.printStackTrace();
-                       }
-                       // Then get the month of the year from the Date based on specific locale.
-                       String month_of_year = new SimpleDateFormat("M", Locale.ENGLISH).format(d);
+                    if (y < 1 && Integer.parseInt(year) == yo) {
+                        Date d = null;
+                        try {
+                            d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        // Then get the month of the year from the Date based on specific locale.
+                        String month_of_year = new SimpleDateFormat("M", Locale.ENGLISH).format(d);
 
-                       switch (month_of_year) {
+                        switch (month_of_year) {
 
-                           case "1":
-                               m1 = m1 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "2":
-                               m2 = m2 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "3":
-                               m3 = m3 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "4":
-                               m4 = m4 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "5":
-                               m5 = m5 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "6":
-                               m6 = m6 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "7":
-                               m7 = m7 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "8":
-                               m8 = m8 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "9":
-                               m9 = m9 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "10":
-                               m10 = m10 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "11":
-                               m11 = m11 + Float.parseFloat(amount.get(i));
-                               break;
-                           case "12":
-                               m12 = m12 + Float.parseFloat(amount.get(i));
-                               break;
-                       }
-                   }
-               }
-               ValueLineSeries se = new ValueLineSeries();
-               se.setColor(0xFF2196F3);
-               se.addPoint(new ValueLinePoint("", 0));
-               se.addPoint(new ValueLinePoint("Jan", m1));
-               se.addPoint(new ValueLinePoint("Feb", m2));
-               se.addPoint(new ValueLinePoint("Mar", m3));
-               se.addPoint(new ValueLinePoint("Apr", m4));
-               se.addPoint(new ValueLinePoint("Mai", m5));
-               se.addPoint(new ValueLinePoint("Jun", m6));
-               se.addPoint(new ValueLinePoint("Jul", m7));
-               se.addPoint(new ValueLinePoint("Aug", m8));
-               se.addPoint(new ValueLinePoint("Sep", m9));
-               se.addPoint(new ValueLinePoint("Oct", m10));
-               se.addPoint(new ValueLinePoint("Nov", m11));
-               se.addPoint(new ValueLinePoint("Dec", m12));
-               se.addPoint(new ValueLinePoint("", 0));
-               mCubicValueLineChart.addSeries(se);
-               mCubicValueLineChart.startAnimation();
-           }
-           @Override
-           public void onCancelled(DatabaseError error) {
-           }
-       });
-   }
+                            case "1":
+                                m1 = m1 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "2":
+                                m2 = m2 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "3":
+                                m3 = m3 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "4":
+                                m4 = m4 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "5":
+                                m5 = m5 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "6":
+                                m6 = m6 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "7":
+                                m7 = m7 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "8":
+                                m8 = m8 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "9":
+                                m9 = m9 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "10":
+                                m10 = m10 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "11":
+                                m11 = m11 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "12":
+                                m12 = m12 + Float.parseFloat(amount.get(i));
+                                break;
+                        }
+                    }
+                }
+                ValueLineSeries se = new ValueLineSeries();
+                se.setColor(0xFF2196F3);
+                se.addPoint(new ValueLinePoint("", 0));
+                se.addPoint(new ValueLinePoint("Jan", m1));
+                se.addPoint(new ValueLinePoint("Feb", m2));
+                se.addPoint(new ValueLinePoint("Mar", m3));
+                se.addPoint(new ValueLinePoint("Apr", m4));
+                se.addPoint(new ValueLinePoint("Mai", m5));
+                se.addPoint(new ValueLinePoint("Jun", m6));
+                se.addPoint(new ValueLinePoint("Jul", m7));
+                se.addPoint(new ValueLinePoint("Aug", m8));
+                se.addPoint(new ValueLinePoint("Sep", m9));
+                se.addPoint(new ValueLinePoint("Oct", m10));
+                se.addPoint(new ValueLinePoint("Nov", m11));
+                se.addPoint(new ValueLinePoint("Dec", m12));
+                se.addPoint(new ValueLinePoint("", 0));
+                mCubicValueLineChart.addSeries(se);
+                mCubicValueLineChart.startAnimation();
+            }
 
-    public void Flip(){
-       cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
+
+    public void Flip() {
+        cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final ObjectAnimator oa1 = ObjectAnimator.ofFloat(cardView, "scaleX", 1f, 0f);
@@ -497,7 +513,7 @@ String value ; // to avoid bottom sheet loop
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         cardView.setCardBackgroundColor(0xFFffffff);
-                       oa2.start();
+                        oa2.start();
                         editText.setVisibility(View.VISIBLE);
                         imageButton.setVisibility(View.VISIBLE);
                         textView2.setVisibility(View.VISIBLE);
@@ -508,7 +524,7 @@ String value ; // to avoid bottom sheet loop
         });
     }
 
-    public void Flip2(){
+    public void Flip2() {
         final ObjectAnimator oa1 = ObjectAnimator.ofFloat(cardView, "scaleX", 1f, 0f);
         final ObjectAnimator oa2 = ObjectAnimator.ofFloat(cardView, "scaleX", 0f, 1f);
         oa1.setInterpolator(new DecelerateInterpolator());
@@ -527,7 +543,7 @@ String value ; // to avoid bottom sheet loop
         oa1.start();
     }
 
-    public void calendar (){
+    public void calendar() {
         Date2 = new ArrayList<>();
         amount2 = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
@@ -550,7 +566,7 @@ String value ; // to avoid bottom sheet loop
 
                     dateSX2[j] = String.format("%s-%s-%s", ye, mo, da);
 
-                    CalendarDay calendarDay = CalendarDay.from(Integer.parseInt(ye), Integer.parseInt(mo)-1, Integer.parseInt(da));
+                    CalendarDay calendarDay = CalendarDay.from(Integer.parseInt(ye), Integer.parseInt(mo) - 1, Integer.parseInt(da));
                     calendarDays.add(calendarDay);
                 }
 
@@ -559,28 +575,28 @@ String value ; // to avoid bottom sheet loop
                 }
 
 
-        materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date.getDate());
-                int year = calendar.get(Calendar.YEAR);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int month = calendar.get(Calendar.MONTH)+1;
+                materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+                    @Override
+                    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date.getDate());
+                        int year = calendar.get(Calendar.YEAR);
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int month = calendar.get(Calendar.MONTH) + 1;
 
-                String FIN = year + "-" +(month<10?("0"+month):(month)) + "-" + (day<10?("0"+day):(day));
+                        String FIN = year + "-" + (month < 10 ? ("0" + month) : (month)) + "-" + (day < 10 ? ("0" + day) : (day));
 
-                for (int j = 0; j < Integer.parseInt(x); j++) {
-                    if (dateSX2[j].equals(FIN)){
-                        value = dateSX2[j];
+                        for (int j = 0; j < Integer.parseInt(x); j++) {
+                            if (dateSX2[j].equals(FIN)) {
+                                value = dateSX2[j];
+                            }
+                        }
+                        if (value.equals(FIN)) {
+                            BottomSheetCal bottomSheet = new BottomSheetCal(FIN);
+                            bottomSheet.show(getFragmentManager(), "TAG");
+                        }
                     }
-                }
-                if (value.equals(FIN)){
-                    BottomSheetCal bottomSheet = new BottomSheetCal(FIN);
-                    bottomSheet.show(getFragmentManager(),"TAG");
-                }
-            }
-        });
+                });
             }
 
             @Override
@@ -590,10 +606,168 @@ String value ; // to avoid bottom sheet loop
         });
     }
 
-    private void Add(String userId,double income) {
+    private void Add(String userId, double income) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> values = new HashMap<>();
         values.put("income", income);
         mDatabase.child("Users").child(userId).child("User Data").updateChildren(values);
+    }
+
+    public void LRegression(){
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (int i = 0; i < Integer.parseInt(x); i++) {
+                    amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
+                    Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                }
+                Float m1 = 0.0f;
+                Float m2 = 0.0f;
+                Float m3 = 0.0f;
+                Float m4 = 0.0f;
+                Float m5 = 0.0f;
+                Float m6 = 0.0f;
+                Float m7 = 0.0f;
+                Float m8 = 0.0f;
+                Float m9 = 0.0f;
+                Float m10 = 0.0f;
+                Float m11 = 0.0f;
+                Float m12 = 0.0f;
+                for (int i = 0; i < Integer.parseInt(x); i++) {
+
+                    String date = Date.get(i);
+                    String[] dateParts = date.split("/");
+                    String day = dateParts[0];
+                    String month = dateParts[1];
+                    String year = dateParts[2];
+
+                    // First convert to Date. This is one of the many ways.
+                    String dateString = String.format("%s-%s-%s", year, month, day);
+                        Date d = null;
+                        try {
+                            d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        // Then get the month of the year from the Date based on specific locale.
+                        String month_of_year = new SimpleDateFormat("M", Locale.ENGLISH).format(d);
+
+                        switch (month_of_year) {
+
+                            case "1":
+                                m1 = m1 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "2":
+                                m2 = m2 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "3":
+                                m3 = m3 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "4":
+                                m4 = m4 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "5":
+                                m5 = m5 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "6":
+                                m6 = m6 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "7":
+                                m7 = m7 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "8":
+                                m8 = m8 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "9":
+                                m9 = m9 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "10":
+                                m10 = m10 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "11":
+                                m11 = m11 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "12":
+                                m12 = m12 + Float.parseFloat(amount.get(i));
+                                break;
+                        }
+
+                }
+                ArrayList<Integer> DateX = new ArrayList<>(Arrays. asList(1,2,3,4,5,6,7,8,9,10,11,12));
+                ArrayList<Float> AmountY = new ArrayList<>();
+                AmountY.add(m1);
+                AmountY.add(m2);
+                AmountY.add(m3);
+                AmountY.add(m4);
+                AmountY.add(m5);
+                AmountY.add(m6);
+                AmountY.add(m7);
+                AmountY.add(m8);
+                AmountY.add(m9);
+                AmountY.add(m10);
+                AmountY.add(m11);
+                AmountY.add(m12);
+
+                textView.setText("$"+predictForValue(4,DateX,AmountY));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private static Double predictForValue(int predictForDependentVariable,ArrayList<Integer> xx,ArrayList<Float> y) {
+        if (xx.size() != y.size())
+            throw new IllegalStateException("Must have equal X and Y data points");
+
+        Integer numberOfDataValues = xx.size();
+
+        List<Double> xSquared = xx
+                .stream()
+                .map(position -> Math.pow(position, 2))
+                .collect(Collectors.toList());
+
+        List<Integer> xMultipliedByY = IntStream.range(0, numberOfDataValues)
+                .map(i -> (int) (xx.get(i) * y.get(i)))
+                .boxed()
+                .collect(Collectors.toList());
+
+        Integer xSummed = xx
+                .stream()
+                .reduce((prev, next) -> prev + next)
+                .get();
+
+        Float ySummed = y
+                .stream()
+                .reduce((prev, next) -> prev + next)
+                .get();
+
+        Double sumOfXSquared = xSquared
+                .stream()
+                .reduce((prev, next) -> prev + next)
+                .get();
+
+        Integer sumOfXMultipliedByY = xMultipliedByY
+                .stream()
+                .reduce((prev, next) -> prev + next)
+                .get();
+
+        int slopeNominator = (int) (numberOfDataValues * sumOfXMultipliedByY - ySummed * xSummed);
+        Double slopeDenominator = numberOfDataValues * sumOfXSquared - Math.pow(xSummed, 2);
+        Double slope = slopeNominator / slopeDenominator;
+
+        double interceptNominator = ySummed - slope * xSummed;
+        double interceptDenominator = numberOfDataValues;
+        Double intercept = interceptNominator / interceptDenominator;
+
+        return Double.valueOf(Math.round((slope * predictForDependentVariable) + intercept));
     }
 }

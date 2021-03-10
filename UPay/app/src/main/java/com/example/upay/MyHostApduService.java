@@ -2,9 +2,13 @@ package com.example.upay;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.VideoView;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -208,10 +212,8 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
         configureReadRecResponse(swipeData);
         prefs.registerOnSharedPreferenceChangeListener(this);
     }
-
+    
     @Override
     public void onDeactivated(int reason) {
-       BottomSheetNFC bottomSheetNFC = new BottomSheetNFC();
-       bottomSheetNFC.intro_vid();
     }
 }

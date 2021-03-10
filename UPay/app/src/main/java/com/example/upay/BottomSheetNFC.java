@@ -41,6 +41,7 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.activity_bottom_sheet_nfc, container, false);
         //
+        intro_vid();
         mNfcAdapter = NfcAdapter.getDefaultAdapter(getContext());
         videoView = view.findViewById(R.id.videoView);
         videoView.setVisibility(View.INVISIBLE);
