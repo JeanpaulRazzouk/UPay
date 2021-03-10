@@ -19,22 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name="com.example.External.FirstTimeActivity"></activity>
+        <activity android:name="com.example.BarFragments.Forecast"></activity>
+        <activity android:name="com.example.External.FirstTimeActivity" />
         <activity android:name="com.example.External.CreateNewAccountPhoneAuth" />
-
-        <service
-            android:name=".MyHostApduService"
-            android:exported="true"
-            android:permission="android.permission.BIND_NFC_SERVICE">
-            <intent-filter>
-                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.nfc.cardemulation.host_apdu_service"
-                android:resource="@xml/apduservice" />
-        </service>
-
         <activity android:name="com.example.Profile.Profile" />
         <activity android:name="com.example.External.ForgotPassword" />
         <activity android:name=".HomePage" />

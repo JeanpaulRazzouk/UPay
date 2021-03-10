@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -173,7 +174,8 @@ public class AnalyticsFrag extends Fragment {
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "TIPPY TEST", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getContext(),Forecast.class);
+                startActivity(i);
             }
         });
 
@@ -634,6 +636,7 @@ public class AnalyticsFrag extends Fragment {
                 Float m10 = 0.0f;
                 Float m11 = 0.0f;
                 Float m12 = 0.0f;
+                int month_num;
                 for (int i = 0; i < Integer.parseInt(x); i++) {
 
                     String date = Date.get(i);

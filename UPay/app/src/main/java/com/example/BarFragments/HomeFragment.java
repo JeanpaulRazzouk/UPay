@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,11 +12,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -31,11 +27,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Adapters.Adapter;
-import com.example.upay.BottomSheetNFC;
 import com.example.Profile.Profile;
+import com.example.payment.BottomSheetNFC;
+import com.example.payment.User;
 import com.example.upay.PurchaseItems;
 import com.example.upay.R;
-import com.example.upay.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -54,10 +50,7 @@ import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
@@ -263,31 +256,31 @@ public class HomeFragment extends Fragment {
         myImageList.add(R.drawable.ic_french_fries);
 
         //
-        Names.add(0,"TEST2");
+        Names.add(0,"Crepaway");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"40.50");
+        Amount.add(0,"100.20");
         Date.add(0,"24/01/2021");
         //
-        Names.add(0,"TEST3");
+        Names.add(0,"Carrefour");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"40.50");
+        Amount.add(0,"140.30");
         Date.add(0,"25/01/2021");
         //
         Names.add(0,"Starbucks");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"10.50");
+        Amount.add(0,"50.50");
         Date.add(0,"26/02/2021");
         //
 
         Names.add(0,"Apple Store");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"8.50");
-        Date.add(0,"01/03/2021");
+        Amount.add(0,"68.50");
+        Date.add(0,"27/02/2021");
 
         //
         Names.add(0,"Book Store");
         Location.add(0,"Tyre,LB");
-        Amount.add(0,"13.40");
+        Amount.add(0,"130.00");
         Date.add(0,"01/03/2021");
 
 

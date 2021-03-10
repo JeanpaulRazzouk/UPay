@@ -1,4 +1,4 @@
-package com.example.upay;
+package com.example.payment;
 
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.upay.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.ByteArrayInputStream;
@@ -41,9 +42,9 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.activity_bottom_sheet_nfc, container, false);
         //
-        intro_vid();
         mNfcAdapter = NfcAdapter.getDefaultAdapter(getContext());
         videoView = view.findViewById(R.id.videoView);
+        intro_vid();
         videoView.setVisibility(View.INVISIBLE);
         if (mNfcAdapter != null) {
             cardEmulation = CardEmulation.getInstance(mNfcAdapter);

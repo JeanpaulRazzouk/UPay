@@ -1,4 +1,4 @@
-package com.example.upay;
+package com.example.payment;
 
 import android.util.Log;
 

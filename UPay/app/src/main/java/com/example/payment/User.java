@@ -1,4 +1,4 @@
-package com.example.upay;
+package com.example.payment;
 
 public class User {
 

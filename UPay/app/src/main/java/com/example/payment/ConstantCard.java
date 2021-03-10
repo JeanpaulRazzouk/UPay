@@ -1,4 +1,4 @@
-package com.example.upay;
+package com.example.payment;
 
 public class ConstantCard {
     public static final String DEFAULT_SWIPE_DATA =
