@@ -208,6 +208,13 @@
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="500dp" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar3"
+                    android:theme="@style/AppTheme.Design"
+                    android:layout_marginTop="-400sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp" />
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

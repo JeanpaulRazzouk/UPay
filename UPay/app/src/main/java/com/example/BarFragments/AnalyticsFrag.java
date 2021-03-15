@@ -110,89 +110,92 @@ public class AnalyticsFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_analytics, container, false);
-        textView = view.findViewById(R.id.textView3);
-        textViewIncome = view.findViewById(R.id.income_val);
-        percentage = view.findViewById(R.id.percentage);
-        textView3 = view.findViewById(R.id.exp_val);
-        //
-        mCubicValueLineChart = view.findViewById(R.id.cubiclinechart);
-        mCubicValueLineChart2 = view.findViewById(R.id.cubiclinechart2);
-        circularProgressBar = view.findViewById(R.id.pb_one);
-        //
-        editText = view.findViewById(R.id.editTextTextPersonName);
-        imageButton = view.findViewById(R.id.imageButton5);
-        imageButton2 = view.findViewById(R.id.imageButtonREC);
-        textView2 = view.findViewById(R.id.textView13);
-        //
-        materialCalendarView = view.findViewById(R.id.calendarView);
-        //
-        editText.setVisibility(View.INVISIBLE);
-        imageButton.setVisibility(View.INVISIBLE);
-        textView2.setVisibility(View.INVISIBLE);
-        //
-        cardView = view.findViewById(R.id.income);
-        animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
-        animation.setDuration(1100);
-        textView.setText("$0");
-        textView.startAnimation(animation);
-        //
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (editText.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Please fill Fields", Toast.LENGTH_SHORT).show();
-                } else {
-                    income = Double.parseDouble(editText.getText().toString());
-                    textViewIncome.setText("$" + income);
-                    //
-                    user = FirebaseAuth.getInstance().getCurrentUser();
-                    Add(user.getUid(), income);
-                    //
-                    Flip2();
-                    editText.setText("");
+        try {
+            textView = view.findViewById(R.id.textView3);
+            textViewIncome = view.findViewById(R.id.income_val);
+            percentage = view.findViewById(R.id.percentage);
+            textView3 = view.findViewById(R.id.exp_val);
+            //
+            mCubicValueLineChart = view.findViewById(R.id.cubiclinechart);
+            mCubicValueLineChart2 = view.findViewById(R.id.cubiclinechart2);
+            circularProgressBar = view.findViewById(R.id.pb_one);
+            //
+            editText = view.findViewById(R.id.editTextTextPersonName);
+            imageButton = view.findViewById(R.id.imageButton5);
+            imageButton2 = view.findViewById(R.id.imageButtonREC);
+            textView2 = view.findViewById(R.id.textView13);
+            //
+            materialCalendarView = view.findViewById(R.id.calendarView);
+            //
+            editText.setVisibility(View.INVISIBLE);
+            imageButton.setVisibility(View.INVISIBLE);
+            textView2.setVisibility(View.INVISIBLE);
+            //
+            cardView = view.findViewById(R.id.income);
+            animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
+            animation.setDuration(1100);
+            textView.setText("$0");
+            textView.startAnimation(animation);
+            //
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (editText.getText().toString().isEmpty()) {
+                        Toast.makeText(getContext(), "Please fill Fields", Toast.LENGTH_SHORT).show();
+                    } else {
+                        income = Double.parseDouble(editText.getText().toString());
+                        textViewIncome.setText("$" + income);
+                        //
+                        user = FirebaseAuth.getInstance().getCurrentUser();
+                        Add(user.getUid(), income);
+                        //
+                        Flip2();
+                        editText.setText("");
+                    }
                 }
-            }
-        });
-        // Recommendation button;
-        imageButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getContext(),Forecast.class);
-                startActivity(i);
-            }
-        });
+            });
+            // Recommendation button;
+            imageButton2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(getContext(), Forecast.class);
+                    startActivity(i);
+                }
+            });
 
-        // methods();
-                user = FirebaseAuth.getInstance().getCurrentUser();
-                // This if Statement is used for those who haven't had any previously added income;
-                if (FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").child("income") != null) {
+            // methods();
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            // This if Statement is used for those who haven't had any previously added income;
+            if (FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").child("income") != null) {
 
-                    FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String val;
-                            try {
-                                val = dataSnapshot.child("income").getValue().toString();
-                                textViewIncome.setText("$" + val);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String val;
+                        try {
+                            val = dataSnapshot.child("income").getValue().toString();
+                            textViewIncome.setText("$" + val);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        @Override
-                        public void onCancelled(DatabaseError error) {
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onCancelled(DatabaseError error) {
 
-                try{
+                    }
+                });
+
+                try {
                     Flip();
                     getDataFromHome();
                     calendar();
                     Spree();
                     CurrentMonth();
-                }catch(Exception e){
+                } catch (Exception e) {
                 }
             }
+        }catch(Exception e){}
         return view;
     }
 
@@ -351,7 +354,6 @@ public class AnalyticsFrag extends Fragment {
 
                     int mo = Calendar.getInstance().get(Calendar.MONTH) + 1;
                     // TODO all analytics frame drops;
-                    //
                     if (days <= 7 && Integer.parseInt(month) == mo) {
                         Date d = null;
                         try {

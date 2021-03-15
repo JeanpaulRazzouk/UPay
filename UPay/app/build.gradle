@@ -61,7 +61,5 @@ dependencies {
     implementation 'com.applandeo:material-calendar-view:1.7.0'
     implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
     implementation 'com.riontech:calendar:1.0'
-    implementation 'nz.ac.waikato.cms.weka:weka-stable:3.6.13'
-    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
 
 }

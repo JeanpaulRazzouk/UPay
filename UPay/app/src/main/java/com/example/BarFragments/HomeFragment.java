@@ -25,6 +25,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -74,6 +75,7 @@ public class HomeFragment extends Fragment {
     TextView textView2;
     TextView textView3;
     ScrollView scrollView;
+    ProgressBar progressBar;
     //
     RelativeLayout relativeLayout;
     //
@@ -135,6 +137,8 @@ public class HomeFragment extends Fragment {
         scrollView = view.findViewById(R.id.scroll);
         scrollView.smoothScrollTo(0,0);
         //
+        progressBar = view.findViewById(R.id.progressBar3);
+        progressBar.setVisibility(View.VISIBLE);
         //
         imageButton = view.findViewById(R.id.imageView12);
         imageButton.setClipToOutline(true);
@@ -439,7 +443,7 @@ public class HomeFragment extends Fragment {
             }catch(Exception e){
 
             }
-
+                progressBar.setVisibility(View.INVISIBLE);
             }
             @Override
             public void onCancelled(DatabaseError error) {

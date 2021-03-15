@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import com.example.upay.R;
@@ -23,6 +24,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +35,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.eazegraph.lib.charts.BarChart;
+import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.BarModel;
+import org.eazegraph.lib.models.PieModel;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
 
@@ -56,6 +61,8 @@ public class Forecast extends AppCompatActivity {
     public String TransCount;
     SharedPreferences sharedPreferences;
     ValueLineChart mCubicValueLineChart;
+    PieChart mPieChart;
+    TextView textView;
     public Forecast() {
     }
 
@@ -67,10 +74,17 @@ public class Forecast extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 21) {
             this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
-        //
         mCubicValueLineChart = (ValueLineChart) findViewById(R.id.cubiclinechart);
-        LRegression();
+        mPieChart = findViewById(R.id.piechart);
+        textView = findViewById(R.id.textView20);
+       // methods;
+       LRegression();
     }
+
+public void Recommendation_Algorithm(){
+
+
+}
 
     public void LRegression(){
         Date = new ArrayList<>();
@@ -248,16 +262,32 @@ public class Forecast extends AppCompatActivity {
                 for(int z = 0; z <= 30;z++){
                         AmountY.add(b[z]);
                 }
-                // setting data in graph;
+                // setting data in first graph;
                 ValueLineSeries series = new ValueLineSeries();
                 series.setColor(0xFF35ef4e);
                 series.addPoint(new ValueLinePoint("", 0));
                 for(int z = 0; z <= 30;z++) {
-                    series.addPoint(new ValueLinePoint(""+z, b[z]));
+                    series.addPoint(new ValueLinePoint(""+z, Float.parseFloat(""+predictForValue(z,DateX,AmountY))));
                 }
                 series.addPoint(new ValueLinePoint("", 0));
                 mCubicValueLineChart.addSeries(series);
                 mCubicValueLineChart.startAnimation();
+
+                // cumdata
+                float  vl_set_tot =0;
+                for(int z = 0; z <= 30;z++) {
+                    vl_set_tot+= Float.parseFloat(""+predictForValue(z,DateX,AmountY));
+                }
+                textView.setText("$"+vl_set_tot);
+
+                // data to piechart
+                //TODO this is just a test;
+                mPieChart.addPieSlice(new PieModel("Mc'Donalds", 15, Color.parseColor("#FE6DA8")));
+                mPieChart.addPieSlice(new PieModel("Crepaway", 25, Color.parseColor("#56B7F1")));
+                mPieChart.addPieSlice(new PieModel("Carrefour", 65, Color.parseColor("#CDA67F")));
+                mPieChart.addPieSlice(new PieModel("Duty Free", 19, Color.parseColor("#FED70E")));
+
+                mPieChart.startAnimation();
 
             }
             @Override
