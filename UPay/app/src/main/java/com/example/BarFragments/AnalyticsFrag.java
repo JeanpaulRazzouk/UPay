@@ -3,6 +3,8 @@ package com.example.BarFragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +16,9 @@ import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +54,7 @@ import org.eazegraph.lib.models.ValueLineSeries;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -130,7 +136,6 @@ public class AnalyticsFrag extends Fragment {
         textView.setText("$0");
         textView.startAnimation(animation);
         //
-        Flip();
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,28 +153,6 @@ public class AnalyticsFrag extends Fragment {
                 }
             }
         });
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        // This if Statement is used for those who haven't had any previously added income;
-        if (FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").child("income") != null) {
-
-            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String val;
-                    try {
-                        val = dataSnapshot.child("income").getValue().toString();
-                        textViewIncome.setText("$" + val);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-
-                }
-            });
-        }
         // Recommendation button;
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,10 +163,36 @@ public class AnalyticsFrag extends Fragment {
         });
 
         // methods();
-        getDataFromHome();
-        calendar();
-        Spree();
-        LRegression();
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                // This if Statement is used for those who haven't had any previously added income;
+                if (FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").child("income") != null) {
+
+                    FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String val;
+                            try {
+                                val = dataSnapshot.child("income").getValue().toString();
+                                textViewIncome.setText("$" + val);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+
+                        }
+                    });
+
+                try{
+                    Flip();
+                    getDataFromHome();
+                    calendar();
+                    Spree();
+                    CurrentMonth();
+                }catch(Exception e){
+                }
+            }
         return view;
     }
 
@@ -266,7 +275,11 @@ public class AnalyticsFrag extends Fragment {
         }
     }
 
-    public void getDataFromHome() {
+    public void getDataFromHome()
+    {
+        ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading one more thing...");
+        pd.show();
         user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
             @Override
@@ -300,10 +313,12 @@ public class AnalyticsFrag extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (int i = 0; i < Integer.parseInt(x); i++) {
-                    amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
-                    Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
-                }
+                try {
+                    for (int i = 0; i < Integer.parseInt(x); i++) {
+                        amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
+                        Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                    }
+                }catch(Exception e){}
                 // First Graph;
                 Float a1 = 0.0f;
                 ;
@@ -494,6 +509,8 @@ public class AnalyticsFrag extends Fragment {
                 se.addPoint(new ValueLinePoint("", 0));
                 mCubicValueLineChart.addSeries(se);
                 mCubicValueLineChart.startAnimation();
+                //
+                pd.hide();
             }
 
             @Override
@@ -593,10 +610,10 @@ public class AnalyticsFrag extends Fragment {
                                 value = dateSX2[j];
                             }
                         }
-                        if (value.equals(FIN)) {
-                            BottomSheetCal bottomSheet = new BottomSheetCal(FIN);
-                            bottomSheet.show(getFragmentManager(), "TAG");
-                        }
+                            if (value.equals(FIN)) {
+                                BottomSheetCal bottomSheet = new BottomSheetCal(FIN);
+                                bottomSheet.show(getFragmentManager(), "TAG");
+                            }
                     }
                 });
             }
@@ -615,7 +632,7 @@ public class AnalyticsFrag extends Fragment {
         mDatabase.child("Users").child(userId).child("User Data").updateChildren(values);
     }
 
-    public void LRegression(){
+    public void CurrentMonth(){
         FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -624,95 +641,33 @@ public class AnalyticsFrag extends Fragment {
                     amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
                     Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
                 }
-                Float m1 = 0.0f;
-                Float m2 = 0.0f;
-                Float m3 = 0.0f;
-                Float m4 = 0.0f;
-                Float m5 = 0.0f;
-                Float m6 = 0.0f;
-                Float m7 = 0.0f;
-                Float m8 = 0.0f;
-                Float m9 = 0.0f;
-                Float m10 = 0.0f;
-                Float m11 = 0.0f;
-                Float m12 = 0.0f;
-                int month_num;
+                float fin_val = 0.0f;
                 for (int i = 0; i < Integer.parseInt(x); i++) {
-
                     String date = Date.get(i);
                     String[] dateParts = date.split("/");
-                    String day = dateParts[0];
                     String month = dateParts[1];
                     String year = dateParts[2];
 
                     // First convert to Date. This is one of the many ways.
-                    String dateString = String.format("%s-%s-%s", year, month, day);
-                        Date d = null;
-                        try {
-                            d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        // Then get the month of the year from the Date based on specific locale.
-                        String month_of_year = new SimpleDateFormat("M", Locale.ENGLISH).format(d);
+                    String dateString = String.format("%s-%s", year, month);
+                    Date d = null;
+                    try {
+                        d = new SimpleDateFormat("yyyy-MM").parse(dateString);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
-                        switch (month_of_year) {
+                    String month_of_year = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).format(d);
 
-                            case "1":
-                                m1 = m1 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "2":
-                                m2 = m2 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "3":
-                                m3 = m3 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "4":
-                                m4 = m4 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "5":
-                                m5 = m5 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "6":
-                                m6 = m6 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "7":
-                                m7 = m7 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "8":
-                                m8 = m8 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "9":
-                                m9 = m9 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "10":
-                                m10 = m10 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "11":
-                                m11 = m11 + Float.parseFloat(amount.get(i));
-                                break;
-                            case "12":
-                                m12 = m12 + Float.parseFloat(amount.get(i));
-                                break;
-                        }
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
+                    LocalDateTime now = LocalDateTime.now();
+                    String month_2 = dtf.format(now);
 
+                    if (month_of_year.equals(month_2)){
+                        fin_val = fin_val + Float.parseFloat(amount.get(i));
+                    }
                 }
-                ArrayList<Integer> DateX = new ArrayList<>(Arrays. asList(1,2,3,4,5,6,7,8,9,10,11,12));
-                ArrayList<Float> AmountY = new ArrayList<>();
-                AmountY.add(m1);
-                AmountY.add(m2);
-                AmountY.add(m3);
-                AmountY.add(m4);
-                AmountY.add(m5);
-                AmountY.add(m6);
-                AmountY.add(m7);
-                AmountY.add(m8);
-                AmountY.add(m9);
-                AmountY.add(m10);
-                AmountY.add(m11);
-                AmountY.add(m12);
-
-                textView.setText("$"+predictForValue(4,DateX,AmountY));
+                textView.setText("$"+fin_val);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -720,57 +675,5 @@ public class AnalyticsFrag extends Fragment {
             }
         });
 
-    }
-
-
-
-
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private static Double predictForValue(int predictForDependentVariable,ArrayList<Integer> xx,ArrayList<Float> y) {
-        if (xx.size() != y.size())
-            throw new IllegalStateException("Must have equal X and Y data points");
-
-        Integer numberOfDataValues = xx.size();
-
-        List<Double> xSquared = xx
-                .stream()
-                .map(position -> Math.pow(position, 2))
-                .collect(Collectors.toList());
-
-        List<Integer> xMultipliedByY = IntStream.range(0, numberOfDataValues)
-                .map(i -> (int) (xx.get(i) * y.get(i)))
-                .boxed()
-                .collect(Collectors.toList());
-
-        Integer xSummed = xx
-                .stream()
-                .reduce((prev, next) -> prev + next)
-                .get();
-
-        Float ySummed = y
-                .stream()
-                .reduce((prev, next) -> prev + next)
-                .get();
-
-        Double sumOfXSquared = xSquared
-                .stream()
-                .reduce((prev, next) -> prev + next)
-                .get();
-
-        Integer sumOfXMultipliedByY = xMultipliedByY
-                .stream()
-                .reduce((prev, next) -> prev + next)
-                .get();
-
-        int slopeNominator = (int) (numberOfDataValues * sumOfXMultipliedByY - ySummed * xSummed);
-        Double slopeDenominator = numberOfDataValues * sumOfXSquared - Math.pow(xSummed, 2);
-        Double slope = slopeNominator / slopeDenominator;
-
-        double interceptNominator = ySummed - slope * xSummed;
-        double interceptDenominator = numberOfDataValues;
-        Double intercept = interceptNominator / interceptDenominator;
-
-        return Double.valueOf(Math.round((slope * predictForDependentVariable) + intercept));
     }
 }

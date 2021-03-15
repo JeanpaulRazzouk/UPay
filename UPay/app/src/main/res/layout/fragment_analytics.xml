@@ -242,7 +242,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/sf_ui_display_black"
-                    android:text="This Month"
+                    android:text="This Year"
                     android:layout_marginStart="20dp"
                     android:textSize="17dp"/>
 
@@ -280,7 +280,7 @@
             android:layout_marginTop="70dp"
             android:layout_marginEnd="250dp"
             android:fontFamily="@font/sf_ui_display_black"
-            android:text="Next Month :"
+            android:text="This Month :"
             android:textColor="@color/cardview_light_background"
             android:textSize="15dp"
             app:layout_constraintBottom_toTopOf="@+id/textView3"

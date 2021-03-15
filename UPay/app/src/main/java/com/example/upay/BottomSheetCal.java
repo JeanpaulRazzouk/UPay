@@ -50,10 +50,6 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
     SharedPreferences sharedPreferences2;
     public String x; // number of transactions;
     public String TransCount;
-    public String op;
-    public String  Click;
-    public static final String SOME_INTENT_FILTER_NAME = "SOME_INTENT_FILTER_NAME";
-
     String LIMIT;
     public BottomSheetCal(String fin) {
         LIMIT = fin;

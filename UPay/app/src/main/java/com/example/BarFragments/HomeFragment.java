@@ -14,6 +14,10 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +31,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Adapters.Adapter;
+import com.example.Adapters.AdapterCal;
 import com.example.Profile.Profile;
 import com.example.payment.BottomSheetNFC;
 import com.example.payment.User;
+import com.example.upay.CalData;
 import com.example.upay.PurchaseItems;
 import com.example.upay.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,8 +56,14 @@ import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.io.File;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class HomeFragment extends Fragment {
     //
@@ -83,7 +95,8 @@ public class HomeFragment extends Fragment {
     private com.example.Adapters.Adapter adapter;
     private ArrayList<PurchaseItems> itemsArrayList;
     // Adding Data;
-    PurchaseItems [] p;
+    ArrayList<PurchaseItems> p;
+    //
     public ArrayList<String> Names = new ArrayList<>();
     public ArrayList<String> Location = new ArrayList<>();
     public ArrayList<String> Amount = new ArrayList<>();
@@ -172,9 +185,21 @@ public class HomeFragment extends Fragment {
         adapter = new Adapter(getContext(), itemsArrayList);
         recyclerView.setAdapter(adapter);
         // this is the list;
-        Activity();
+        HandlerThread handlerThread = new HandlerThread("MyHandlerThread");
+        handlerThread.start();
+        Looper looper = handlerThread.getLooper();
+        Handler handler = new Handler(looper);
+        handler.post(new Runnable()
+        {
+            @Override
+            public void run() {
+                Activity();
+            }
+        });
         return view;
     }
+
+
     private void Add(String userId, String name, String email) {
         User user = new User(name, email);
 
@@ -249,100 +274,177 @@ public class HomeFragment extends Fragment {
     }
 
     public void Activity (){
-        // TEST;
-        ArrayList<Integer> myImageList = new ArrayList<>();
-        myImageList.add(R.drawable.ic_french_fries);
-        myImageList.add(R.drawable.ic_atom);
-        myImageList.add(R.drawable.ic_french_fries);
-
-        //
+//        // TODO Data Injection;
         Names.add(0,"Crepaway");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"100.20");
+        Amount.add(0,"25.00");
         Date.add(0,"24/01/2021");
         //
         Names.add(0,"Carrefour");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"140.30");
+        Location.add(0,"Hazmieh,LB");
+        Amount.add(0,"98.00");
         Date.add(0,"25/01/2021");
         //
         Names.add(0,"Starbucks");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"50.50");
+        Amount.add(0,"20.00");
         Date.add(0,"26/02/2021");
         //
 
         Names.add(0,"Apple Store");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"68.50");
+        Amount.add(0,"68.00");
         Date.add(0,"27/02/2021");
 
         //
         Names.add(0,"Book Store");
         Location.add(0,"Tyre,LB");
-        Amount.add(0,"130.00");
+        Amount.add(0,"100.00");
         Date.add(0,"01/03/2021");
 
+        Names.add(0,"Crepaway");
+        Location.add(0,"Byblos,LB");
+        Amount.add(0,"30.00");
+        Date.add(0,"24/11/2020");
 
-        for (int i = 0 ; i< Names.size();i++) {
-            user = FirebaseAuth.getInstance().getCurrentUser();
-            HashMap<String, Object> values = new HashMap<>();
-            values.put("Name", Names.get(i));
-            values.put("Location", Location.get(i));
-            values.put("Amount", Amount.get(i));
-            values.put("Date", Date.get(i));
-            mDatabase.child("Users").child(user.getUid()).child("Transactions").child(""+i).updateChildren(values);
-        }
-        HashMap<String, Object> values2 = new HashMap<>();
-        values2.put("Transaction count",Names.size());
-        mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values2);
+        Names.add(0,"Starbucks");
+        Location.add(0,"Beirut,LB");
+        Amount.add(0,"12.00");
+        Date.add(0,"04/02/2021");
+
+        Names.add(0,"Library");
+        Location.add(0,"Tyr,LB");
+        Amount.add(0,"23.00");
+        Date.add(0,"06/03/2021");
+
+        Names.add(0,"Mac Donald");
+        Location.add(0,"Jdeideh,LB");
+        Amount.add(0,"31.00");
+        Date.add(0,"09/01/2021");
+
+        Names.add(0,"Roadster");
+        Location.add(0,"Ashrafieh,LB");
+        Amount.add(0,"27.00");
+        Date.add(0,"11/03/2021");
+
+        Names.add(0,"Crepaway");
+        Location.add(0,"Byblos,LB");
+        Amount.add(0,"36.00");
+        Date.add(0,"24/12/2020");
+
+        Names.add(0,"Virgin Store");
+        Location.add(0,"DownTown,LB");
+        Amount.add(0,"52.00");
+        Date.add(0,"17/02/2021");
+
+        Names.add(0,"Mac Donald");
+        Location.add(0,"Zahle,LB");
+        Amount.add(0,"19.00");
+        Date.add(0,"09/03/2021");
+
+        Names.add(0,"Roadster");
+        Location.add(0,"Byblos,LB");
+        Amount.add(0,"16.00");
+        Date.add(0,"15/01/2021");
+
+        Names.add(0,"Starbucks");
+        Location.add(0,"Khaldeh,LB");
+        Amount.add(0,"9.00");
+        Date.add(0,"31/01/2021");
+
+        Names.add(0,"Book Store");
+        Location.add(0,"Jdeideh,LB");
+        Amount.add(0,"7.00");
+        Date.add(0,"14/02/2021");
+
+        Names.add(0,"Crepaway");
+        Location.add(0,"Byblos,LB");
+        Amount.add(0,"100.20");
+        Date.add(0,"24/01/2021");
+
+        Names.add(0,"Apple Store");
+        Location.add(0,"Byblos,LB");
+        Amount.add(0,"40.00");
+        Date.add(0,"13/02/2021");
+
+        Names.add(0,"Carrefour");
+        Location.add(0,"Hazmieh,LB");
+        Amount.add(0,"57.00");
+        Date.add(0,"03/02/2021");
+
+        Names.add(0,"Mac Donald");
+        Location.add(0,"Byblos,LB");
+        Amount.add(0,"27.00");
+        Date.add(0,"11/03/2021");
+
+            for (int i = 0 ; i< Names.size();i++) {
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                HashMap<String, Object> values = new HashMap<>();
+                values.put("Name", Names.get(i));
+                values.put("Location", Location.get(i));
+                values.put("Amount", Amount.get(i));
+                values.put("Date", Date.get(i));
+                mDatabase.child("Users").child(user.getUid()).child("Transactions").child(""+i).updateChildren(values);
+            }
+            HashMap<String, Object> values2 = new HashMap<>();
+            values2.put("Transaction count",Names.size());
+            mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values2);
         //
-        p = new PurchaseItems[Names.size()];
-        //
-        float val = 0;
-        float val1 = 0;
-
-        for (int i =0 ; i<p.length;i++) {
-            val1 = Float.parseFloat(Amount.get(i));
-            val = val + val1;
-        }
-
-        textView2.setText("$"+val);
-
-
         user = FirebaseAuth.getInstance().getCurrentUser();
-        Float finalVal = val;
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
+
+
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String x;
-                try {
-                    x = dataSnapshot.child("income").getValue().toString();
-                    int income = Integer.parseInt(x);
-                    int perc_res = (int) ((finalVal /income)*100);
-                    textView3.setText(perc_res+"%");
-                    circularProgressBar.setProgressWithAnimation((float) perc_res, Long.valueOf(3000)); // 3 sec;
-                    if (income < perc_res){
-                        circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
-                    }
-                    else if (perc_res > 0.60*income && perc_res < income){
-                        circularProgressBar.setProgressBarColor(Color.parseColor("#FF9847"));
-                    }
-                    else {}
-
-                }catch(Exception e) {
-                    e.printStackTrace();
+                String xl = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
+                int SI = Integer.parseInt(xl);
+                //
+                p = new ArrayList<>();
+                // getting recycler data
+                for (int i =0 ; i<SI;i++) {
+                    Names.add(dataSnapshot.child("Transactions").child("" + i).child("Name").getValue().toString());
+                    Location.add(dataSnapshot.child("Transactions").child("" + i).child("Location").getValue().toString());
+                    Amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
+                    Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
                 }
+
+                for (int i =0 ; i<SI;i++) {
+                    p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i),Date.get(i)));
+                    recyclerView.setAdapter(new Adapter(getContext(), p));
+                }
+                //
+                float val = 0;
+                float val1 = 0;
+
+                for (int i =0 ; i<SI;i++) {
+                    val1 = Float.parseFloat(Amount.get(i));
+                    val = val + val1;
+                }
+                textView2.setText("$"+val);
+                Float finalVal = val;
+                // val and % data;
+                String x;
+            try {
+                x = dataSnapshot.child("User Data").child("income").getValue().toString();
+                int income = Integer.parseInt(x);
+                int perc_res = (int) ((finalVal / income) * 100);
+                textView3.setText(perc_res + "%");
+                circularProgressBar.setProgressWithAnimation((float) perc_res, Long.valueOf(3000)); // 3 sec;
+                if (income < perc_res) {
+                    circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
+                } else if (perc_res > 0.60 * income && perc_res < income) {
+                    circularProgressBar.setProgressBarColor(Color.parseColor("#FF9847"));
+                } else {
+                }
+            }catch(Exception e){
+
+            }
+
             }
             @Override
             public void onCancelled(DatabaseError error) {
 
             }
         });
-
-        for (int i =0 ; i<p.length;i++) {
-             p[i] = new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i),Date.get(i));
-            itemsArrayList.add(p[i]);
-        }
     }
 }
