@@ -61,5 +61,8 @@ dependencies {
     implementation 'com.applandeo:material-calendar-view:1.7.0'
     implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
     implementation 'com.riontech:calendar:1.0'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
 
+    implementation "androidx.biometric:biometric:1.1.0"
+    implementation 'androidx.biometric:biometric:1.0.0-rc01'
 }

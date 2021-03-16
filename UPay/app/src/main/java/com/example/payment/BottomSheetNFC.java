@@ -1,40 +1,46 @@
 package com.example.payment;
 
 import android.annotation.TargetApi;
+import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import androidx.biometric.BiometricPrompt;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.cardemulation.CardEmulation;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.upay.HomePage;
 import com.example.upay.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.ByteArrayInputStream;
+import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
 public class BottomSheetNFC extends BottomSheetDialogFragment {
     public NfcAdapter mNfcAdapter;
     public CardEmulation cardEmulation;
     VideoView videoView;
-
+    TextView textView;
 
     public static final int REQUEST_CODE_DEFAULT_PAYMENT_APP = 1;
     @Nullable
@@ -43,9 +49,22 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
         final View view = inflater.inflate(R.layout.activity_bottom_sheet_nfc, container, false);
         //
         mNfcAdapter = NfcAdapter.getDefaultAdapter(getContext());
+        //
+        textView = view.findViewById(R.id.textView26);
+        //
         videoView = view.findViewById(R.id.videoView);
-        intro_vid();
-        videoView.setVisibility(View.INVISIBLE);
+        Uri uri = Uri.parse("android.resource://"+ getContext().getPackageName()+"/"+R.raw.nfc1);
+        videoView.setZOrderOnTop(true);
+        videoView.setVideoURI(uri);
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
+        videoView.start();
+
         if (mNfcAdapter != null) {
             cardEmulation = CardEmulation.getInstance(mNfcAdapter);
         }
@@ -53,7 +72,26 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
         return  view;
     }
 
+    public void verified(){
+        textView.setText("Payment Success");
+        //
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(false);
+            }
+        });
+        Uri uri = Uri.parse("android.resource://"+ getContext().getPackageName()+"/"+R.raw.nfc_check);
+        videoView.setZOrderOnTop(true);
+        videoView.setVideoURI(uri);
+        videoView.start();
+    }
+
+
     public void Payment(){
+        // biometric test;
+        biometric();
+        biometricPrompt.authenticate(promptInfo);
         ComponentName componentName;
         if (mNfcAdapter == null) {
             Toast.makeText(getContext(), "NFC is not available", Toast.LENGTH_LONG).show();
@@ -73,6 +111,47 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
             }
         }
     }
+    private BiometricPrompt.PromptInfo promptInfo;
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    public void biometric(){
+        executor = ContextCompat.getMainExecutor(getContext());
+        biometricPrompt = new BiometricPrompt(BottomSheetNFC.this,
+                executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode,
+                                              @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Toast.makeText(getContext(),
+                        "Authentication error: " + errString, Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(
+                    @NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Toast.makeText(getContext(),
+                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+                verified();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getContext(), "Authentication failed",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Biometric login for my app")
+                .setSubtitle("Log in using your biometric credential")
+                .setNegativeButtonText("Use account password")
+                .build();
+        //
+    }
 
     @Override
     public void onResume() {
@@ -83,14 +162,5 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     public void onPause() {
         super.onPause();
 
-    }
-
-
-    public  void intro_vid(){
-        videoView.setVisibility(View.VISIBLE);
-        Uri uri = Uri.parse("android.resource://"+ getContext().getPackageName()+"/"+R.raw.vid4);
-        videoView.setVideoURI(uri);
-        videoView.setZOrderOnTop(true);
-        videoView.start();
     }
 }

@@ -10,6 +10,8 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.VideoView;
 
+import com.example.upay.R;
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -204,7 +206,6 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
             configureReadRecResponse(swipeData);
         }
     }
-
     public void onCreate() {
         super.onCreate();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

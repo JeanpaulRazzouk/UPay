@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -264,7 +265,7 @@ public void Recommendation_Algorithm(){
                 }
                 // setting data in first graph;
                 ValueLineSeries series = new ValueLineSeries();
-                series.setColor(0xFF35ef4e);
+                series.setColor(0xFFD267E4);
                 series.addPoint(new ValueLinePoint("", 0));
                 for(int z = 0; z <= 30;z++) {
                     series.addPoint(new ValueLinePoint(""+z, Float.parseFloat(""+predictForValue(z,DateX,AmountY))));
@@ -272,7 +273,6 @@ public void Recommendation_Algorithm(){
                 series.addPoint(new ValueLinePoint("", 0));
                 mCubicValueLineChart.addSeries(series);
                 mCubicValueLineChart.startAnimation();
-
                 // cumdata
                 float  vl_set_tot =0;
                 for(int z = 0; z <= 30;z++) {
@@ -288,6 +288,8 @@ public void Recommendation_Algorithm(){
                 mPieChart.addPieSlice(new PieModel("Duty Free", 19, Color.parseColor("#FED70E")));
 
                 mPieChart.startAnimation();
+                //
+                //
 
             }
             @Override
@@ -346,4 +348,11 @@ public void Recommendation_Algorithm(){
 
         return Double.valueOf(Math.round((slope * predictForDependentVariable) + intercept));
     }
+
+    public void cut(View view){
+        Toast.makeText(this,"test message",Toast.LENGTH_SHORT).show();
+    }
+
+
+
 }

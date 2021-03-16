@@ -280,8 +280,9 @@ public class AnalyticsFrag extends Fragment {
 
     public void getDataFromHome()
     {
-        ProgressDialog pd = new ProgressDialog(getContext());
-        pd.setMessage("Loading one more thing...");
+        ProgressDialog pd = new ProgressDialog(getContext(),R.style.MyAlertDialogStyle);
+        pd.setMessage("One sec...");
+        pd.getWindow().setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.dialog_bg));
         pd.show();
         user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
