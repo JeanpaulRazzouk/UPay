@@ -4,26 +4,39 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+
+import com.example.Profile.Profile;
+import com.example.payment.BottomSheetNFC;
 import com.example.upay.R;
 
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import androidx.annotation.NonNull;
+
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,16 +67,17 @@ import java.util.Locale;
 
 public class Forecast extends AppCompatActivity {
 
-    private DatabaseReference mDatabase;
     private FirebaseUser user;
+    ImageButton imageButton;
     ArrayList<String> Date;
     ArrayList<String> amount;
-    public String x; // number of transactions;
-    public String TransCount;
-    SharedPreferences sharedPreferences;
+    ArrayList<String> Name;
     ValueLineChart mCubicValueLineChart;
     PieChart mPieChart;
     TextView textView;
+    TextView textView2;
+    TextView textView3;
+    private DatabaseReference mDatabase;
     public Forecast() {
     }
 
@@ -78,219 +92,210 @@ public class Forecast extends AppCompatActivity {
         mCubicValueLineChart = (ValueLineChart) findViewById(R.id.cubiclinechart);
         mPieChart = findViewById(R.id.piechart);
         textView = findViewById(R.id.textView20);
+        textView2 = findViewById(R.id.textView27);
+        textView3 = findViewById(R.id.textView28);
+        imageButton = findViewById(R.id.imageButton11);
        // methods;
        LRegression();
+       //
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CutBottomSheet bottomSheet = new CutBottomSheet();
+                bottomSheet.show(getSupportFragmentManager(),"TAG");
+            }
+        });
     }
-
-public void Recommendation_Algorithm(){
-
-
-}
-
     public void LRegression(){
         Date = new ArrayList<>();
         amount = new ArrayList<>();
+        Name  = new ArrayList<>();
         //
         user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    String x = dataSnapshot.child("Transaction count").getValue().toString();
-                    //
-                    sharedPreferences = getApplicationContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(TransCount, x);
-                    editor.apply();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        sharedPreferences = getApplicationContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
-        x = sharedPreferences.getString(TransCount, null);
-        //
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                String x = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
                 for (int i = 0; i < Integer.parseInt(x); i++) {
-                    amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
-                    Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                    Name.add(dataSnapshot.child("Transactions").child("" + i).child("Name").getValue().toString());
+                    amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
+                    Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
                 }
 
-                float b[] = new float[31];
-                float b2[] = new float[31];
+                Float m1 = 0.0f;
+                Float m2 = 0.0f;
+                Float m3 = 0.0f;
+                Float m4 = 0.0f;
+                Float m5 = 0.0f;
+                Float m6 = 0.0f;
+                Float m7 = 0.0f;
+                Float m8 = 0.0f;
+                Float m9 = 0.0f;
+                Float m10 = 0.0f;
+                Float m11 = 0.0f;
+                Float m12 = 0.0f;
                 //int month_num;
                 for (int i = 0; i < Integer.parseInt(x); i++) {
-
                     String date = Date.get(i);
                     String[] dateParts = date.split("/");
                     String day = dateParts[0];
                     String month = dateParts[1];
                     String year = dateParts[2];
 
-                    // First convert to Date.
-                    String dateString = String.format("%s", day);
-                    String dateString2 = String.format("%s-%s", year,month);
+                    // First convert to Date. This is one of the many ways.
+                    String dateString = String.format("%s-%s-%s", year, month, day);
                     Date d = null;
-                    Date d2 = null;
                     try {
-                        d = new SimpleDateFormat("dd").parse(dateString);
-                        d2 = new SimpleDateFormat("yyyy-MM").parse(dateString2);
+                        d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     // Then get the month of the year from the Date based on specific locale.
-                    String day_of_month = new SimpleDateFormat("D", Locale.ENGLISH).format(d);
-                    //
-                    String monthXX = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).format(d2);
+                    String month_of_year = new SimpleDateFormat("M", Locale.ENGLISH).format(d);
 
-                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
-                    LocalDateTime now = LocalDateTime.now();
-                    String month_2 = dtf.format(now);
-                    //
                     try {
-                        //
-                        if (monthXX.equals(month_2)) {
-                            switch (day_of_month) {
+                        switch (month_of_year) {
 
-                                case "1":
-                                    b[1] = b[1] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "2":
-                                    b[2] = b[2] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "3":
-                                    b[3] = b[3] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "4":
-                                    b[4] = b[4] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "5":
-                                    b[5] = b[5] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "6":
-                                    b[6] = b[6] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "7":
-                                    b[7] = b[7] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "8":
-                                    b[8] = b[8] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "9":
-                                    b[9] = b[9] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "10":
-                                    b[10] = b[10] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "11":
-                                    b[11] = b[11] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "12":
-                                    b[12] = b[12] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "13":
-                                    b[13] = b[13] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "14":
-                                    b[14] = b[14] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "15":
-                                    b[15] = b[15] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "16":
-                                    b[16] = b[16] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "17":
-                                    b[17] = b[17] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "18":
-                                    b[18] = b[18] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "19":
-                                    b[19] = b[19] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "20":
-                                    b[20] = b[20] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "21":
-                                    b[21] = b[21] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "22":
-                                    b[22] = b[22] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "23":
-                                    b[23] = b[23] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "24":
-                                    b[24] = b[24] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "25":
-                                    b[25] = b[25] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "26":
-                                    b[26] = b[26] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "27":
-                                    b[27] = b[27] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "28":
-                                    b[28] = b[28] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "29":
-                                    b[29] = b[29] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "30":
-                                    b[30] = b[30] + Float.parseFloat(amount.get(i));
-                                    break;
-                                case "31":
-                                    b[31] = b[31] + Float.parseFloat(amount.get(i));
-                                    break;
-                            }
+                            case "1":
+                                m1 = m1 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "2":
+                                m2 = m2 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "3":
+                                m3 = m3 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "4":
+                                m4 = m4 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "5":
+                                m5 = m5 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "6":
+                                m6 = m6 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "7":
+                                m7 = m7 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "8":
+                                m8 = m8 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "9":
+                                m9 = m9 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "10":
+                                m10 = m10 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "11":
+                                m11 = m11 + Float.parseFloat(amount.get(i));
+                                break;
+                            case "12":
+                                m12 = m12 + Float.parseFloat(amount.get(i));
+                                break;
                         }
                     } catch(Exception e ){}
                 }
-                ArrayList<Integer> DateX = new ArrayList<>(Arrays. asList(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31));
-                ArrayList<Float> AmountY = new ArrayList<>();
-                // adding data;
-                for(int z = 0; z <= 30;z++){
-                        AmountY.add(b[z]);
-                }
+
+
                 // setting data in first graph;
                 ValueLineSeries series = new ValueLineSeries();
-                series.setColor(0xFFD267E4);
+                series.setColor(0xFF2196F3);
                 series.addPoint(new ValueLinePoint("", 0));
-                for(int z = 0; z <= 30;z++) {
-                    series.addPoint(new ValueLinePoint(""+z, Float.parseFloat(""+predictForValue(z,DateX,AmountY))));
+
+                ArrayList<Integer> DateX = new ArrayList<>(Arrays. asList(1,2,3,4,5,6,7,8,9,10,11,12));
+                ArrayList<Float> AmountY = new ArrayList<>();
+                AmountY.add(m1);
+                AmountY.add(m2);
+                AmountY.add(m3);
+                AmountY.add(m4);
+                AmountY.add(m5);
+                AmountY.add(m6);
+                AmountY.add(m7);
+                AmountY.add(m8);
+                AmountY.add(m9);
+                AmountY.add(m10);
+                AmountY.add(m11);
+                AmountY.add(m12);
+                //
+                AmountY.removeAll(Collections.singleton(0.0f));
+                //
+
+                for (int i = 0; i<12;i++){
+                    try {
+                        if (AmountY.get(i) != 0.0f) {
+                        }
+                    }catch(Exception e){
+                        DateX.set(i,0);
+                    }
                 }
+
+                DateX.removeAll(Collections.singleton(0));
+
+
+                for (int i = 0; i<=11;i++){
+                    try {
+                        if (AmountY.get(i) != 0.0f) {
+                            series.addPoint(new ValueLinePoint("" + i, AmountY.get(i)));
+                        }
+                    }catch(Exception e){
+                        if (predictForValue(i, DateX, AmountY) >=0 ) {
+                            series.addPoint(new ValueLinePoint("" + i, Float.parseFloat("" + predictForValue(i, DateX, AmountY))));
+                        }else{}
+                    }
+                }
+
+
                 series.addPoint(new ValueLinePoint("", 0));
                 mCubicValueLineChart.addSeries(series);
                 mCubicValueLineChart.startAnimation();
-                // cumdata
-                float  vl_set_tot =0;
-                for(int z = 0; z <= 30;z++) {
-                    vl_set_tot+= Float.parseFloat(""+predictForValue(z,DateX,AmountY));
-                }
-                textView.setText("$"+vl_set_tot);
+                // CumData
+                Date date = new Date();
+                LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                int month = localDate.getMonthValue();
+                int h = month;
+                //
+                textView.setText("$" + (predictForValue(h, DateX, AmountY)));
+                // present to next month increase decrease;
+                float this_month = Float.parseFloat(dataSnapshot.child("User Data").child("This Month").getValue().toString());
 
-                // data to piechart
-                //TODO this is just a test;
-                mPieChart.addPieSlice(new PieModel("Mc'Donalds", 15, Color.parseColor("#FE6DA8")));
-                mPieChart.addPieSlice(new PieModel("Crepaway", 25, Color.parseColor("#56B7F1")));
-                mPieChart.addPieSlice(new PieModel("Carrefour", 65, Color.parseColor("#CDA67F")));
-                mPieChart.addPieSlice(new PieModel("Duty Free", 19, Color.parseColor("#FED70E")));
+                if (this_month < predictForValue(h, DateX, AmountY)) {
+                    float final_value =  Float.parseFloat(""+predictForValue(h, DateX, AmountY)) - this_month;
+                    textView2.setText("Spending is Likely \n to Increase \n by "+"+"+ "$"+final_value);
+                }
+                else if (this_month > predictForValue(h, DateX, AmountY)){
+                    float final_value = this_month - Float.parseFloat(""+predictForValue(h, DateX, AmountY));
+                    textView2.setText("Spending is Likely \n to Decrease \n by "+"$"+ final_value);
+                }
+                // Data to Pie Chart (This month)
+
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                //
+                for (int j = 0; j < Integer.parseInt(x); j++) {
+                    mPieChart.addPieSlice(new PieModel(Name.get(j), Float.parseFloat(amount.get(j)), Color.parseColor(getColor())));
+                }
 
                 mPieChart.startAnimation();
                 //
-                //
+                    // cut % algorithm;
+                    String income = dataSnapshot.child("User Data").child("income").getValue().toString();
 
+                        float percent_value = 0.0f;
+                        float val = 0;
+                        for (int j = 0; j< AmountY.size();j++) {
+                            if (AmountY.get(j) != 0.0f) {
+                                val = val + AmountY.get(j);
+                                percent_value = (val / Float.parseFloat(income)) - (Float.parseFloat("" + predictForValue(month, DateX, AmountY)/Float.parseFloat(income)));
+                            }
+                        }
+                        textView3.setText(" Recommended future \n spending to be cut \n by " + Math.round(percent_value*100) +"%");
+                for (int j = 0; j< AmountY.size();j++) {
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    HashMap<String, Object> values = new HashMap<>();
+                    values.put("percent value", percent_value);
+                    mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values);
+
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -302,7 +307,7 @@ public void Recommendation_Algorithm(){
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private static Double predictForValue(int predictForDependentVariable, ArrayList<Integer> xx, ArrayList<Float> y) {
+    public static Double predictForValue(int predictForDependentVariable, ArrayList<Integer> xx, ArrayList<Float> y) {
         if (xx.size() != y.size())
             throw new IllegalStateException("Must have equal X and Y data points");
 
@@ -350,9 +355,38 @@ public void Recommendation_Algorithm(){
     }
 
     public void cut(View view){
-        Toast.makeText(this,"test message",Toast.LENGTH_SHORT).show();
+
+
+
+
+
     }
 
+    public String getColor() {
+        // Red
+        String red;
+        // Green
+        String green;
+        // blue
+        String blue;
+        // generate random object
+        Random random = new Random();
+        // generate a red color code
+        red = Integer.toHexString(random.nextInt(256)).toUpperCase();
+        // generate green color code
+        green = Integer.toHexString(random.nextInt(256)).toUpperCase();
+        // color code generating blue
+        blue = Integer.toHexString(random.nextInt(256)).toUpperCase();
 
+        // determine the number of bits Code Red
+        red = red.length() == 1 ? "0" + red : red;
+        // determine the number of bits of green code
+        green = green.length() == 1 ? "0" + green : green;
+        // code to determine the number of bits of blue
+        blue = blue.length() == 1 ? "0" + blue : blue;
+        // generate hexadecimal color values
+        String color = "#" + red + green + blue;
+        return color;
+    }
 
 }

@@ -216,5 +216,7 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
     
     @Override
     public void onDeactivated(int reason) {
+//        BottomSheetNFC bottomSheetNFC = new BottomSheetNFC();
+//        bottomSheetNFC.verified();
     }
 }

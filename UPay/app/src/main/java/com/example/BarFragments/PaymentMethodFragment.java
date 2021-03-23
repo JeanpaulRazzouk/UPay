@@ -33,6 +33,7 @@ public class PaymentMethodFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_payment_method, container, false);
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         textView = view.findViewById(R.id.textView3);
         //
         Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),

@@ -93,7 +93,7 @@ public class AnalyticsFrag extends Fragment {
     ArrayList<String> Date3;
     ArrayList<String> amount3;
 
-    public String x; // number of transactions;
+//    public String x; // number of transactions;
     public String TransCount;
     //
     String value; // to avoid bottom sheet loop
@@ -216,16 +216,17 @@ public class AnalyticsFrag extends Fragment {
             String past_month = "" + (p_mo < 10 ? ("0" + p_mo) : (p_mo)); // past month string;
 
             for (int i = 0; i < 5; i++) {
-                Log.d("TESTX", "" + x);
-                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Float current_month_val = 0.0f;
                         Float past_month_val = 0.0f;
                         //
+                        String x = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
+                        //
                         for (int i = 0; i < Integer.parseInt(x); i++) {
-                            amount3.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
-                            Date3.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                            amount3.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
+                            Date3.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
                         }
                         //
                         for (int j = 0; j < Integer.parseInt(x); j++) {
@@ -285,43 +286,21 @@ public class AnalyticsFrag extends Fragment {
         pd.getWindow().setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.dialog_bg));
         pd.show();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    String x = dataSnapshot.child("Transaction count").getValue().toString();
-                    //
-                    sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(TransCount, x);
-                    editor.apply();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
-        x = sharedPreferences.getString(TransCount, null);
         //
         Date = new ArrayList<>();
         amount = new ArrayList<>();
         //
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                String x = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
                 try {
                     for (int i = 0; i < Integer.parseInt(x); i++) {
-                        amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
-                        Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                        amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
+                        Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
                     }
+
                 }catch(Exception e){}
                 // First Graph;
                 Float a1 = 0.0f;
@@ -568,13 +547,14 @@ public class AnalyticsFrag extends Fragment {
     public void calendar() {
         Date2 = new ArrayList<>();
         amount2 = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                String x = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
                 for (int i = 0; i < Integer.parseInt(x); i++) {
-                    amount2.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
-                    Date2.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                    amount2.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
+                    Date2.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
                 }
                 String dateSX2[] = new String[Integer.parseInt(x)];
                 // The following is to add dots on the transaction dates;
@@ -636,13 +616,14 @@ public class AnalyticsFrag extends Fragment {
     }
 
     public void CurrentMonth(){
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                String x = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
                 for (int i = 0; i < Integer.parseInt(x); i++) {
-                    amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
-                    Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                    amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
+                    Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
                 }
                 float fin_val = 0.0f;
                 for (int i = 0; i < Integer.parseInt(x); i++) {
@@ -670,7 +651,12 @@ public class AnalyticsFrag extends Fragment {
                         fin_val = fin_val + Float.parseFloat(amount.get(i));
                     }
                 }
-                textView.setText("$"+fin_val);
+                textView.setText("$"+fin_val);//
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                HashMap<String, Object> values = new HashMap<>();
+                values.put("This Month", ""+fin_val);
+                mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

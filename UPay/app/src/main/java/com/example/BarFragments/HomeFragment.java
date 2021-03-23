@@ -74,6 +74,7 @@ public class HomeFragment extends Fragment {
     TextView textView;
     TextView textView2;
     TextView textView3;
+    TextView textView4;
     ScrollView scrollView;
     ProgressBar progressBar;
     //
@@ -153,6 +154,8 @@ public class HomeFragment extends Fragment {
         textView3 = view.findViewById(R.id.percentage);
         //
         textView = view.findViewById(R.id.textView3);
+        textView4 = view.findViewById(R.id.textView14);
+        textView4.setVisibility(View.INVISIBLE);
         textView.setText("Home");
         //
         relativeLayout = view.findViewById(R.id.frag_home);
@@ -177,7 +180,6 @@ public class HomeFragment extends Fragment {
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // THIS IS JUST A TEST;
                 BottomSheetNFC bottomSheet = new BottomSheetNFC();
                 bottomSheet.show(getFragmentManager(),"TAG");
             }
@@ -281,7 +283,7 @@ public class HomeFragment extends Fragment {
 //        // TODO Data Injection;
         Names.add(0,"Crepaway");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"25.00");
+        Amount.add(0,"60.21");
         Date.add(0,"24/01/2021");
         //
         Names.add(0,"Carrefour");
@@ -291,96 +293,40 @@ public class HomeFragment extends Fragment {
         //
         Names.add(0,"Starbucks");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"20.00");
+        Amount.add(0,"100.00");
         Date.add(0,"26/02/2021");
         //
 
         Names.add(0,"Apple Store");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"68.00");
+        Location.add(0,"NY,USA");
+        Amount.add(0,"158.00");
         Date.add(0,"27/02/2021");
-
         //
-        Names.add(0,"Book Store");
+        Names.add(0,"Mc'Donalds");
         Location.add(0,"Tyre,LB");
         Amount.add(0,"100.00");
         Date.add(0,"01/03/2021");
 
         Names.add(0,"Crepaway");
         Location.add(0,"Byblos,LB");
-        Amount.add(0,"30.00");
-        Date.add(0,"24/11/2020");
+        Amount.add(0,"130.00");
+        Date.add(0,"09/03/2021");
+
+        Names.add(0,"Starbucks");
+        Location.add(0,"Beirut,LB");
+        Amount.add(0,"120.00");
+        Date.add(0,"12/03/2021");
+
+        Names.add(0,"Mc'Donalds");
+        Location.add(0,"Dora,LB");
+        Amount.add(0,"12.00");
+        Date.add(0,"15/03/2021");
 
         Names.add(0,"Starbucks");
         Location.add(0,"Beirut,LB");
         Amount.add(0,"12.00");
-        Date.add(0,"04/02/2021");
-
-        Names.add(0,"Library");
-        Location.add(0,"Tyr,LB");
-        Amount.add(0,"23.00");
-        Date.add(0,"06/03/2021");
-
-        Names.add(0,"Mac Donald");
-        Location.add(0,"Jdeideh,LB");
-        Amount.add(0,"31.00");
-        Date.add(0,"09/01/2021");
-
-        Names.add(0,"Roadster");
-        Location.add(0,"Ashrafieh,LB");
-        Amount.add(0,"27.00");
-        Date.add(0,"11/03/2021");
-
-        Names.add(0,"Crepaway");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"36.00");
-        Date.add(0,"24/12/2020");
-
-        Names.add(0,"Virgin Store");
-        Location.add(0,"DownTown,LB");
-        Amount.add(0,"52.00");
-        Date.add(0,"17/02/2021");
-
-        Names.add(0,"Mac Donald");
-        Location.add(0,"Zahle,LB");
-        Amount.add(0,"19.00");
-        Date.add(0,"09/03/2021");
-
-        Names.add(0,"Roadster");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"16.00");
-        Date.add(0,"15/01/2021");
-
-        Names.add(0,"Starbucks");
-        Location.add(0,"Khaldeh,LB");
-        Amount.add(0,"9.00");
-        Date.add(0,"31/01/2021");
-
-        Names.add(0,"Book Store");
-        Location.add(0,"Jdeideh,LB");
-        Amount.add(0,"7.00");
-        Date.add(0,"14/02/2021");
-
-        Names.add(0,"Crepaway");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"100.20");
-        Date.add(0,"24/01/2021");
-
-        Names.add(0,"Apple Store");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"40.00");
-        Date.add(0,"13/02/2021");
-
-        Names.add(0,"Carrefour");
-        Location.add(0,"Hazmieh,LB");
-        Amount.add(0,"57.00");
-        Date.add(0,"03/02/2021");
-
-        Names.add(0,"Mac Donald");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"27.00");
-        Date.add(0,"11/03/2021");
-
+        Date.add(0,"18/03/2021");
+        //
             for (int i = 0 ; i< Names.size();i++) {
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 HashMap<String, Object> values = new HashMap<>();
@@ -411,7 +357,13 @@ public class HomeFragment extends Fragment {
                     Amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
                     Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
                 }
-
+                    try {
+                        if (Names.get(0) == null) {
+                        }
+                    }catch(Exception e){
+                        progressBar.setVisibility(View.INVISIBLE);
+                        textView4.setVisibility(View.VISIBLE);
+                    }
                 for (int i =0 ; i<SI;i++) {
                     p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i),Date.get(i)));
                     recyclerView.setAdapter(new Adapter(getContext(), p));

@@ -36,7 +36,6 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
 
     RecyclerView recyclerView;
     public ArrayList<CalData>  calData;
-//    CalData [] c;
     ArrayList<CalData> c;
     public AdapterCal adapter;
     private FirebaseUser user;
@@ -46,10 +45,6 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
     public ArrayList<String> amount = new ArrayList<>();
     public ArrayList<String> Date = new ArrayList<>();
     //
-    SharedPreferences sharedPreferences;
-    SharedPreferences sharedPreferences2;
-    public String x; // number of transactions;
-    public String TransCount;
     String LIMIT;
     public BottomSheetCal(String fin) {
         LIMIT = fin;
@@ -73,42 +68,18 @@ public class BottomSheetCal extends BottomSheetDialogFragment {
     public void Activity(){
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    String x = dataSnapshot.child("Transaction count").getValue().toString();
-                    //
-                    sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(TransCount, x);
-                    editor.apply();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        sharedPreferences = getContext().getSharedPreferences(TransCount, Context.MODE_PRIVATE);
-        x = sharedPreferences.getString(TransCount, null);
-
         c = new ArrayList<>();
 
 ArrayList<String> new_date = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Transactions").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                String x = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
                 for (int i = 0; i < Integer.parseInt(x); i++) {
-                    names.add(dataSnapshot.child("" + i).child("Name").getValue().toString());
-                    location.add(dataSnapshot.child("" + i).child("Location").getValue().toString());
-                    amount.add(dataSnapshot.child("" + i).child("Amount").getValue().toString());
-                    Date.add(dataSnapshot.child("" + i).child("Date").getValue().toString());
+                    names.add(dataSnapshot.child("Transactions").child("" + i).child("Name").getValue().toString());
+                    location.add(dataSnapshot.child("Transactions").child("" + i).child("Location").getValue().toString());
+                    amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
+                    Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
 
 
                     String r = Date.get(i);

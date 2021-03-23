@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import androidx.biometric.BiometricPrompt;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -33,6 +34,7 @@ import com.example.upay.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
@@ -85,6 +87,10 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
         videoView.setZOrderOnTop(true);
         videoView.setVideoURI(uri);
         videoView.start();
+        //
+        MediaPlayer mp = new MediaPlayer();
+            mp = MediaPlayer.create(getContext(), R.raw.nfc_check_sound);
+            mp.start();
     }
 
 
@@ -123,7 +129,7 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                                               @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
                 Toast.makeText(getContext(),
-                        "Authentication error: " + errString, Toast.LENGTH_SHORT)
+                        " Something went wrong: " + errString, Toast.LENGTH_SHORT)
                         .show();
             }
 
@@ -131,26 +137,24 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Toast.makeText(getContext(),
-                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+                //
                 verified();
             }
 
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                Toast.makeText(getContext(), "Authentication failed",
+                Toast.makeText(getContext(), "Something went wrong: ",
                         Toast.LENGTH_SHORT)
                         .show();
             }
         });
 
         promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Biometric login for my app")
-                .setSubtitle("Log in using your biometric credential")
-                .setNegativeButtonText("Use account password")
+                .setTitle("Get near Payment Terminal")
+                .setSubtitle("Place your finger to Pay")
+                .setNegativeButtonText(" ")
                 .build();
-        //
     }
 
     @Override

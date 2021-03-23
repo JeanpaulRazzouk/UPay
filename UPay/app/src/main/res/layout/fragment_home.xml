@@ -209,12 +209,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="500dp" />
 
+
                 <ProgressBar
                     android:id="@+id/progressBar3"
                     android:theme="@style/AppTheme.Design"
                     android:layout_marginTop="-400sp"
                     android:layout_width="match_parent"
                     android:layout_height="60dp" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="120sp"
+                    android:layout_marginTop="-50sp"
+                    android:textSize="@dimen/common_20_dp"
+                    android:fontFamily="@font/sf_ui_display_black"
+                    android:text="No Transactions" />
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
