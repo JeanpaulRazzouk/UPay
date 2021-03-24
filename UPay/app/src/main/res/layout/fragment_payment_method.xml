@@ -9,42 +9,171 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
-        android:layout_height="199dp" />
+        android:layout_height="199dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center_vertical"
+        app:srcCompat="@drawable/blue_round_top" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".HomePage">
 
-        <ScrollView
-            android:id="@+id/scroll"
-            android:layout_width="410dp"
-            android:layout_height="740dp"
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="71dp"
+            android:layout_marginBottom="102dp"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:gravity="top"
+            android:orientation="vertical"
+            android:text="Wallet"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toTopOf="@+id/cardView3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imageButton9"
+            android:layout_width="66dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="300dp"
+            android:background="@null"
+            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.488">
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_button" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView3"
+            android:layout_width="338dp"
+            android:layout_height="220dp"
+            android:layout_marginBottom="234dp"
+            app:cardCornerRadius="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+            <ImageButton
+                android:id="@+id/payment_card"
+                android:layout_width="342dp"
+                android:background="@null"
+                android:layout_height="match_parent"></ImageButton>
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="60dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="616dp"
+                android:id="@+id/card_pan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#101010"
                 android:fontFamily="@font/sf_ui_display_black"
-                android:gravity="top"
-                android:orientation="vertical"
-                android:text="Payment Method"
-                android:textColor="#070707"
-                android:textSize="36sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton"
-                app:layout_constraintStart_toStartOf="parent" />
-        </ScrollView>
+                android:textSize="20sp"
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="120sp"
+                android:text="5412 7512 3412 3456" />
+
+            <TextView
+                android:id="@+id/card_holder_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="170sp"
+                android:textSize="15sp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:textColor="#0C0C0C"
+                android:layout_marginStart="20sp"
+                android:text="John Doe" />
+
+            <ImageView
+                android:id="@+id/chipset"
+                android:layout_width="57dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="66dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/chip" />
+
+            <TextView
+                android:id="@+id/expiry_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="170sp"
+                android:textSize="10sp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:textColor="#050505"
+                android:layout_marginStart="180sp"
+                android:text="Valid till" />
+
+            <TextView
+                android:id="@+id/expiry_date_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="185sp"
+                android:textSize="15sp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:textColor="#090808"
+                android:layout_marginStart="180sp"
+                android:text="04/23" />
+
+            <ImageView
+                android:id="@+id/visa"
+                android:layout_width="85dp"
+                android:layout_height="63dp"
+                android:layout_marginStart="250dp"
+                android:layout_marginTop="20sp"
+                app:srcCompat="@drawable/ic_visa__1_" />
+
+            <TextView
+                android:id="@+id/track_data"
+                android:layout_width="wrap_content"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:textSize="25sp"
+                android:layout_marginTop="20sp"
+                android:layout_marginStart="20sp"
+                android:layout_height="wrap_content"
+                android:text="Enter Track Data" />
+
+            <EditText
+                android:id="@+id/editTextTextPersonName2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60sp"
+                android:layout_marginStart="20sp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="Track Data"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/imageButton12"
+                android:layout_width="100sp"
+                android:layout_marginTop="150sp"
+                android:layout_marginStart="125sp"
+                android:background="@null"
+                android:layout_height="50sp"
+                app:srcCompat="@drawable/butto_bg_2" />
+
+            <TextView
+                android:id="@+id/add"
+                android:layout_width="98dp"
+                android:layout_height="49dp"
+                android:layout_marginStart="125dp"
+                android:layout_marginTop="150dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:textSize="16sp"
+                android:text="+Add"
+                android:gravity="center"
+                android:textColor="@color/colorTextPrimary" />
+        </androidx.cardview.widget.CardView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

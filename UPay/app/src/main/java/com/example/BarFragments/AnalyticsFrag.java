@@ -83,7 +83,6 @@ public class AnalyticsFrag extends Fragment {
     CardView cardView;
     MaterialCalendarView materialCalendarView;
     double income;
-    SharedPreferences sharedPreferences;
     private DatabaseReference mDatabase;
     private FirebaseUser user;
     ArrayList<String> Date;
@@ -92,10 +91,6 @@ public class AnalyticsFrag extends Fragment {
     ArrayList<String> amount2;
     ArrayList<String> Date3;
     ArrayList<String> amount3;
-
-//    public String x; // number of transactions;
-    public String TransCount;
-    //
     String value; // to avoid bottom sheet loop
 
     public AnalyticsFrag() {
@@ -385,17 +380,11 @@ public class AnalyticsFrag extends Fragment {
 
                 // Second Graph;
                 Float m1 = 0.0f;
-                ;
                 Float m2 = 0.0f;
-                ;
                 Float m3 = 0.0f;
-                ;
                 Float m4 = 0.0f;
-                ;
                 Float m5 = 0.0f;
-                ;
                 Float m6 = 0.0f;
-                ;
                 Float m7 = 0.0f;
                 Float m8 = 0.0f;
                 Float m9 = 0.0f;
