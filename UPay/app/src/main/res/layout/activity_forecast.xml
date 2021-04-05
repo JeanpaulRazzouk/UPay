@@ -167,23 +167,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12sp"
                     android:layout_marginTop="10sp"
+                    android:layout_marginBottom="10sp"
                     android:fontFamily="@font/sf_ui_display_black"
-                    android:text="Payment Distribution"
+                    android:text="Current Payment Distribution"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-                <org.eazegraph.lib.charts.PieChart xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/piechart"
-                    android:layout_width="match_parent"
-                    android:layout_height="300sp"
-                    android:layout_marginTop="20sp"
-                    android:layout_marginBottom="40sp"
-                    android:padding="8sp"
-                    app:egLegendTextSize="18sp"
-                    app:egUsePieRotation="true"
-                    app:egValueTextSize="36sp" />
+                <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                    android:id="@+id/aa_chart_view"
+                    android:layout_width="330dp"
+                    android:layout_height="500dp"
+                    android:layout_marginStart="30sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.4"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                </com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
 
             </LinearLayout>
         </ScrollView>

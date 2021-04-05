@@ -37,6 +37,7 @@ import java.io.File;
 public class FirstTimeActivity extends AppCompatActivity {
 TextView textView;
 TextView textView2;
+TextView textView3;
 ImageButton imageButton;
 ImageButton imageButton2;
 Animation animation;
@@ -48,11 +49,12 @@ Uri link;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_time);
-
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
        textView = findViewById(R.id.welcome);
        textView2 = findViewById(R.id.welcome2);
+       textView3 = findViewById(R.id.textView16);
+       textView3.setText("Continue");
        //
        imageButton = findViewById(R.id.imageButton6);
        imageButton2 = findViewById(R.id.imageButton4);

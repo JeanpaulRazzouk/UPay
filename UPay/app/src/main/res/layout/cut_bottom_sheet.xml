@@ -5,19 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.eazegraph.lib.charts.ValueLineChart
-        android:id="@+id/cubiclinechartop"
-        android:layout_width="match_parent"
-        android:layout_height="200sp"
-        android:layout_marginTop="83dp"
-        app:egCurveSmoothness="0.4"
-        app:egIndicatorLineColor="#FE6DA8"
-        app:egLegendHeight="40sp"
-        app:egShowStandardValue="true"
-        app:egUseCubic="true"
-        app:egUseOverlapFill="true"
+    <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+        android:id="@+id/aa_chart_view"
+        android:layout_width="392dp"
+        android:layout_height="398dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

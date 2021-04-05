@@ -10,18 +10,28 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
+
 import com.example.upay.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.example.payment.ConstantCard.DEFAULT_SWIPE_DATA;
+
+//import static com.example.payment.ConstantCard.DEFAULT_SWIPE_DATA;
 import static com.example.payment.ConstantCard.SWIPE_DATA_PREF_KEY;
 //
 public class MyHostApduService extends HostApduService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private FirebaseUser user;
     private static final String TAG = MyHostApduService.class.getSimpleName();
 
     private static final byte[] ISO7816_UNKNOWN_ERROR_RESPONSE = {
@@ -202,21 +212,42 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (SWIPE_DATA_PREF_KEY.equals(key)) {
-            String swipeData = prefs.getString(SWIPE_DATA_PREF_KEY, DEFAULT_SWIPE_DATA);
-            configureReadRecResponse(swipeData);
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String swipeData = prefs.getString(SWIPE_DATA_PREF_KEY, dataSnapshot.child("User Data").child("Track Data").getValue().toString());
+                    configureReadRecResponse(swipeData);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
     }
     public void onCreate() {
         super.onCreate();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String swipeData = prefs.getString(SWIPE_DATA_PREF_KEY, DEFAULT_SWIPE_DATA);
-        configureReadRecResponse(swipeData);
-        prefs.registerOnSharedPreferenceChangeListener(this);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String swipeData = prefs.getString(SWIPE_DATA_PREF_KEY, dataSnapshot.child("User Data").child("Track Data").getValue().toString());
+                configureReadRecResponse(swipeData);
+                prefs.registerOnSharedPreferenceChangeListener((SharedPreferences.OnSharedPreferenceChangeListener) getApplicationContext());
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     
     @Override
     public void onDeactivated(int reason) {
-//        BottomSheetNFC bottomSheetNFC = new BottomSheetNFC();
-//        bottomSheetNFC.verified();
+       BottomSheetNFC bottomSheetNFC = new BottomSheetNFC();
+       bottomSheetNFC.verified();
     }
 }

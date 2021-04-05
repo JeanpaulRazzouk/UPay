@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -32,6 +34,9 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude("META-INF/*.kotlin_module")
         exclude 'META-INF/INDEX.LIST'
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
@@ -78,4 +83,7 @@ dependencies {
     implementation "androidx.biometric:biometric:1.1.0"
     implementation 'androidx.biometric:biometric:1.0.0-rc01'
     implementation 'us.fatehi:magnetictrackparser:1.8'
+
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
+
 }

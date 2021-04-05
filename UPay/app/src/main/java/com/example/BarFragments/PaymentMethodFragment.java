@@ -90,14 +90,69 @@ public class PaymentMethodFragment extends Fragment {
         //
         imageView = view.findViewById(R.id.chipset);
         imageView2 = view.findViewById(R.id.visa);
-        textView3.setVisibility(View.INVISIBLE);
-        textView4.setVisibility(View.INVISIBLE);
-        textView5.setVisibility(View.INVISIBLE);
-        textView6.setVisibility(View.INVISIBLE);
-        imageView.setVisibility(View.INVISIBLE);
-        imageView2.setVisibility(View.INVISIBLE);
+
+//      textView3.setVisibility(View.INVISIBLE);
+//        textView4.setVisibility(View.INVISIBLE);
+//        textView5.setVisibility(View.INVISIBLE);
+//        textView6.setVisibility(View.INVISIBLE);
+//        imageView.setVisibility(View.INVISIBLE);
+//        imageView2.setVisibility(View.INVISIBLE);
+//
         textView2.setText("No Cards Found");
         //
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        //
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    if (!dataSnapshot.child("User Data").child("Track Data").getValue().toString().equals(" ")) {
+                        final BankCardMagneticTrack allTracks = BankCardMagneticTrack.from(dataSnapshot.child("User Data").child("Track Data").getValue().toString());
+                        Track1FormatB track1Data = allTracks.getTrack1();
+                        String cardNumber = track1Data.getPrimaryAccountNumber().getLastFourDigits();
+                        String expDate = track1Data.getExpirationDate().toString();
+                        String fullName = track1Data.hasName() ? track1Data.getName().getFullName() : "[none]";
+                        textView3.setText("**** **** **** " + cardNumber);
+                        textView4.setText(fullName);
+                        textView6.setText(expDate);
+                        //
+                        imageButton.setVisibility(View.INVISIBLE);
+                        imageButton3.setVisibility(View.INVISIBLE);
+                        textView7.setVisibility(View.INVISIBLE);
+                        editText.setVisibility(View.INVISIBLE);
+                        textView8.setVisibility(View.INVISIBLE);
+                        //
+                        textView2.setVisibility(View.INVISIBLE);
+                        //
+                        textView3.setVisibility(View.VISIBLE);
+                        textView4.setVisibility(View.VISIBLE);
+                        textView5.setVisibility(View.VISIBLE);
+                        textView6.setVisibility(View.VISIBLE);
+                        imageView.setVisibility(View.VISIBLE);
+                        imageView2.setVisibility(View.VISIBLE);
+
+                        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
+                        animation.setDuration(1000);
+                        cardView.setAnimation(animation);
+                        cardView.setVisibility(View.VISIBLE);
+
+                    }else{
+                        HashMap<String, Object> values = new HashMap<>();
+                        values.put("Track Data", " ");
+                        mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values);
+                    }
+                }catch(Exception e ){
+                 }
+                }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,6 +163,14 @@ public class PaymentMethodFragment extends Fragment {
                animation.setDuration(1300);
                cardView.setAnimation(animation);
                imageButton.setVisibility(View.INVISIBLE);
+               //
+                textView3.setVisibility(View.INVISIBLE);
+                textView4.setVisibility(View.INVISIBLE);
+                textView5.setVisibility(View.INVISIBLE);
+                textView6.setVisibility(View.INVISIBLE);
+                imageView.setVisibility(View.INVISIBLE);
+                imageView2.setVisibility(View.INVISIBLE);
+
 
             }
         });
@@ -130,44 +193,10 @@ public class PaymentMethodFragment extends Fragment {
                         mDatabase = FirebaseDatabase.getInstance().getReference();
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         HashMap<String, Object> values = new HashMap<>();
-                        if (trackData_input !=null) {
+                        if (trackData_input !=" ") {
                             values.put("Track Data", trackData_input);
                             mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values);
                         }
-
-                        //
-                        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                final BankCardMagneticTrack allTracks = BankCardMagneticTrack.from(dataSnapshot.child("User Data").child("Track Data").getValue().toString());
-                                Track1FormatB track1Data = allTracks.getTrack1();
-                                String cardNumber = track1Data.getPrimaryAccountNumber().getLastFourDigits();
-                                String expDate = track1Data.getExpirationDate().toString();
-                                String fullName = track1Data.hasName() ? track1Data.getName().getFullName() : "[none]";
-                                textView3.setText("**** **** **** " + cardNumber);
-                                textView4.setText(fullName);
-                                textView6.setText(expDate);
-                                //
-                                textView3.setVisibility(View.VISIBLE);
-                                textView4.setVisibility(View.VISIBLE);
-                                textView5.setVisibility(View.VISIBLE);
-                                textView6.setVisibility(View.VISIBLE);
-                                imageView.setVisibility(View.VISIBLE);
-                                imageView2.setVisibility(View.VISIBLE);
-                                //
-                                imageButton3.setVisibility(View.INVISIBLE);
-                                textView7.setVisibility(View.INVISIBLE);
-                                editText.setVisibility(View.INVISIBLE);
-                                textView8.setVisibility(View.INVISIBLE);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-
                     }
                 });
                 oa1.start();

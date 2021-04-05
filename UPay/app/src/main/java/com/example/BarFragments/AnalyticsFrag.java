@@ -582,10 +582,13 @@ public class AnalyticsFrag extends Fragment {
                                 value = dateSX2[j];
                             }
                         }
+                        try {
                             if (value.equals(FIN)) {
                                 BottomSheetCal bottomSheet = new BottomSheetCal(FIN);
                                 bottomSheet.show(getFragmentManager(), "TAG");
                             }
+                        }catch (Exception e)
+                        {}
                     }
                 });
             }

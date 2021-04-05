@@ -339,10 +339,6 @@ public class HomeFragment extends Fragment {
             HashMap<String, Object> values2 = new HashMap<>();
             values2.put("Transaction count",Names.size());
             mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values2);
-        //
-        user = FirebaseAuth.getInstance().getCurrentUser();
-
-
         FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
