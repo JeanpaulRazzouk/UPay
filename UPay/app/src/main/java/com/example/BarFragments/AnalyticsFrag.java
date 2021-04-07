@@ -153,8 +153,12 @@ public class AnalyticsFrag extends Fragment {
             imageButton2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(getContext(), Forecast.class);
-                    startActivity(i);
+                    if (textViewIncome.getText().toString().equals("Press to add")) {
+                        Toast.makeText(getContext(), "Please add income", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Intent i = new Intent(getContext(), Forecast.class);
+                        startActivity(i);
+                    }
                 }
             });
 

@@ -6,33 +6,80 @@
     android:background="?android:windowBackground"
     tools:context="com.example.Profile.FeedBack">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="250dp"
-        android:layout_marginTop="400dp"
-        android:text="Button" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".HomePage">
 
-        <ScrollView
-            android:id="@+id/scroll"
-            android:layout_width="410dp"
-            android:layout_height="740dp"
+        <TextView
+            android:id="@+id/textView29"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="51dp"
+            android:layout_marginBottom="12dp"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:text="Feedback"
+            android:textColor="@color/defaultContentColor"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="43dp"
+            android:theme="@style/RatingBar"
+            app:layout_constraintBottom_toTopOf="@+id/editText5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView29" />
+
+        <EditText
+            android:id="@+id/editText5"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginStart="49dp"
+            android:layout_marginEnd="49dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/box_back"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:gravity="center"
+            android:hint="Tell us what you think !"
+            android:textColor="@color/defaultContentColor"
+            app:layout_constraintBottom_toTopOf="@+id/textView30"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+        <ImageButton
+            android:id="@+id/imageButton14"
+            android:layout_width="142dp"
+            android:layout_height="71dp"
+            android:background="@null"
+            android:src="@drawable/butto_bg_2"
+            app:layout_constraintBottom_toBottomOf="@+id/textView30"
+            app:layout_constraintEnd_toEndOf="@+id/textView30"
+            app:layout_constraintStart_toStartOf="@+id/textView30"
+            app:layout_constraintTop_toTopOf="@+id/textView30"></ImageButton>
+
+        <TextView
+            android:id="@+id/textView30"
+            android:layout_width="142dp"
+            android:layout_height="71dp"
+            android:layout_marginBottom="129dp"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:gravity="center"
+            android:text="Send"
+            android:textColor="@color/colorTextPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.503">
-
-
-        </ScrollView>
-
+            app:layout_constraintTop_toBottomOf="@+id/editText5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </FrameLayout>

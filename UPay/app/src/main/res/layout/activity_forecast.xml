@@ -177,16 +177,10 @@
 
                 <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/aa_chart_view"
-                    android:layout_width="330dp"
-                    android:layout_height="500dp"
-                    android:layout_marginStart="30sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.4"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                </com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
-
+                    android:layout_width="match_parent"
+                    android:layout_height="415dp"
+                    android:layout_marginBottom="50sp"
+                    ></com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
             </LinearLayout>
         </ScrollView>
 

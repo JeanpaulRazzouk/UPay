@@ -3,7 +3,6 @@ package com.example.Profile;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ActivityOptions;
@@ -21,11 +20,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.Adapters.Adapter;
 import com.example.Adapters.Adapter2;
 import com.example.External.LoginPage;
 import com.example.upay.PersInfoData;
-import com.example.upay.PurchaseItems;
 import com.example.upay.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,14 +35,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Profile extends AppCompatActivity {
   TextView textView;
   TextView textView2;
-  TextView textview3;
   ImageButton imageButton;
+  ArrayList<PersInfoData> p;
     //
     Uri link;
     //
@@ -60,7 +56,6 @@ public class Profile extends AppCompatActivity {
         //
         textView = findViewById(R.id.textView);
         textView2 = findViewById(R.id.textView7);
-        textview3 = findViewById(R.id.textView101);
         imageButton = findViewById(R.id.imageButton);
         imageButton.setClipToOutline(true);
         //
@@ -71,6 +66,7 @@ public class Profile extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //
     }
 
     public void access_Dta() {
@@ -79,7 +75,6 @@ public class Profile extends AppCompatActivity {
             user = FirebaseAuth.getInstance().getCurrentUser();
             textView.setText(" Hello,");
             textView2.setText(user.getDisplayName());
-            textview3.setText("How UPay"+"\n"+"Works");
             Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),
                    Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
             textView2.getPaint().setShader(shader);
@@ -154,20 +149,6 @@ public class Profile extends AppCompatActivity {
 
     public void Pers_info(View view){
         PersonalInfoFragment bottomSheet = new PersonalInfoFragment();
-        bottomSheet.show(getSupportFragmentManager(),"TAG");
-    }
-    public void Pay_info(View view){
-        PaymentInfoFrag bottomSheet = new PaymentInfoFrag();
-        bottomSheet.show(getSupportFragmentManager(),"TAG");
-    }
-
-    public void upay_work(View view){
-        UPayWorks bottomSheet = new UPayWorks();
-        bottomSheet.show(getSupportFragmentManager(),"TAG");
-    }
-
-    public void get_help(View view){
-        GetHelp bottomSheet = new GetHelp();
         bottomSheet.show(getSupportFragmentManager(),"TAG");
     }
 

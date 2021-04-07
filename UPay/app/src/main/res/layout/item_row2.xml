@@ -7,24 +7,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txtOutput"
-        android:layout_width="307dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="135dp"
-        android:fontFamily="@font/sf_ui_display_black"
-        android:padding="1dp"
-        android:textColor="#171717"
-        android:textSize="20sp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/income"
+        android:layout_width="match_parent"
+        android:layout_height="89dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        app:cardBackgroundColor="@color/colorTextPrimary"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="5dp">
+
+        <ImageButton
+            android:id="@+id/theCLicker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null" />
+
+        <TextView
+            android:id="@+id/txtOutput"
+            android:layout_width="305dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="135dp"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:padding="1dp"
+            android:textColor="@color/defaultContentColor"
+            android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="42dp"
         android:layout_height="47dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="-50dp" />
+        android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="82dp"
+            android:layout_marginTop="40sp"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="320sp"
+            android:layout_marginTop="30sp"
+            app:srcCompat="@drawable/ic_arrow_right" />
+
+    </androidx.cardview.widget.CardView>
 
 
 </LinearLayout>

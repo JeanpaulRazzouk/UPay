@@ -38,13 +38,12 @@ class Forecast : AppCompatActivity() {
     //
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //
-        aaChartView = findViewById<AAChartView>(R.id.aa_chart_view)
         setContentView(R.layout.activity_forecast)
         if (Build.VERSION.SDK_INT >= 21) {
             this.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         }
         mCubicValueLineChart = findViewById<View>(R.id.cubiclinechart) as ValueLineChart
+        aaChartView = findViewById<AAChartView>(R.id.aa_chart_view)
         textView = findViewById(R.id.textView20)
         textView2 = findViewById(R.id.textView27)
         textView3 = findViewById(R.id.textView28)
@@ -195,7 +194,7 @@ class Forecast : AppCompatActivity() {
                             percent_value = `val` / income.toFloat() - ("" + predictForValue(month, DateX, AmountY) / income.toFloat()).toFloat()
                         }
                     }
-                    textView3!!.text = """ Recommended future spending to be cut by ${Math.round(percent_value * 100)}%"""
+                    textView3!!.text = """Future spending to be cut by ${Math.round(percent_value * 100)}%"""
 
                     for (j in AmountY.indices) {
                         user = FirebaseAuth.getInstance().currentUser
@@ -204,24 +203,33 @@ class Forecast : AppCompatActivity() {
                         mDatabase!!.child("Users").child(user!!.uid).child("User Data").updateChildren(values)
                     }
                     //
-                    // NOT WORKING;
-                    val final_arr: Array<Any> = arrayOf(7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6)
+                    // TEST NOT REALLLL;
+                    val final_arr: Array<Any> = arrayOf(7.0, 6.9, 9.5, 14.5, 18.2, 21.5)
+                    val final_arr_2: Array<Any> = arrayOf(17.0, 16.9, 19.5, 4.5, 8.2, 1.5, 5.2)
+                    val final_arr_3: Array<Any> = arrayOf(7.0, 16.9, 19.5, 40.5, 38.2, 13.5, 35.2)
                     //
                     val aaChartModel: AAChartModel = AAChartModel()
-                            .chartType(AAChartType.Scatter)
+                            .chartType(AAChartType.Spline)
                             .animationType(AAChartAnimationType.EaseInExpo)
-                            .title("test1 ")
-                            .subtitle("random ")
-                            .backgroundColor("#ffffff")
+                            .subtitle("Places where you are likely to spend next Week ")
+                            .backgroundColor("#fafafa")
                             .dataLabelsEnabled(true)
                             .xAxisLabelsEnabled(false)
                             .series(arrayOf(
                                     AASeriesElement()
-                                            .name("")
-                                            .color("#2196F3")
-                                            .data(final_arr))
-
+                                            .name("Mc'Donalds")
+                                            .color("#FFFACD")
+                                            .data(final_arr),
+                                    AASeriesElement()
+                                            .name("Starbucks")
+                                            .color("#008000")
+                                            .data(final_arr_2),
+                                    AASeriesElement()
+                                            .name("Carrefour")
+                                            .color("#000080")
+                                            .data(final_arr_3))
                             )
+
                     aaChartView?.aa_drawChartWithChartModel(aaChartModel)
 
                 } catch (e: Exception) {
