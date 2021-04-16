@@ -1,0 +1,120 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.Profile.OtherOptions">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="529dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Other Options"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="@dimen/common_20_dp"
+                android:textColor="@color/defaultContentColor"
+                android:textSize="36dp" />
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="347dp"
+                android:layout_height="5dp"
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="20sp"
+                android:layout_marginBottom="20sp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:textSize="@dimen/common_20_dp"
+                android:theme="@style/AppTheme.Design"
+                android:text="Automatic Payment\t\t" />
+
+            <TextView
+                android:id="@+id/textView36"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Detects terminal and Launches UPay"
+                android:layout_marginTop="-15dp"
+                android:layout_marginStart="@dimen/common_20_dp"
+                android:textSize="15dp" />
+
+            <Switch
+                android:id="@+id/switch2"
+                android:layout_width="347dp"
+                android:layout_height="5dp"
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="20sp"
+                android:textSize="@dimen/common_20_dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:theme="@style/AppTheme.Design"
+                android:text="Shop Alert\t\t"
+                />
+
+            <TextView
+                android:id="@+id/textView37"
+                android:layout_width="279dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="@dimen/common_20_dp"
+                android:layout_marginTop="-15dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Get reminders when you're in a store"
+                android:textSize="15dp" />
+
+            <Switch
+                android:id="@+id/switch3"
+                android:layout_width="347dp"
+                android:layout_height="5dp"
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="20sp"
+                android:textSize="@dimen/common_20_dp"
+                android:theme="@style/AppTheme.Design"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Purchase Notification" />
+
+            <TextView
+                android:id="@+id/textView38"
+                android:layout_width="284dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/common_20_dp"
+                android:layout_marginTop="-15dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Get notifcation after each purchase with transaction details"
+                android:textSize="15dp" />
+
+            <Switch
+                android:id="@+id/switch4"
+                android:layout_width="347dp"
+                android:layout_height="5dp"
+                android:layout_marginStart="20sp"
+                android:theme="@style/AppTheme.Design"
+                android:layout_marginTop="0sp"
+                android:layout_marginBottom="20sp"
+                android:textSize="@dimen/common_20_dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Emails" />
+
+            <TextView
+                android:id="@+id/textView39"
+                android:layout_width="177dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="@dimen/common_20_dp"
+                android:layout_marginTop="-10dp"
+                android:layout_marginBottom="@dimen/common_15_dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Get email about transaction"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

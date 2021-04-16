@@ -29,12 +29,26 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.application.isradeleon.notify.Notify;
 import com.example.upay.HomePage;
+import com.example.upay.JavaMailAPI;
 import com.example.upay.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
@@ -43,6 +57,11 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     public CardEmulation cardEmulation;
     VideoView videoView;
     TextView textView;
+    //
+    private FirebaseUser user;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    private DatabaseReference mDatabase;
 
     public static final int REQUEST_CODE_DEFAULT_PAYMENT_APP = 1;
     @Nullable
@@ -67,9 +86,6 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
         });
         videoView.start();
 
-        if (mNfcAdapter != null) {
-            cardEmulation = CardEmulation.getInstance(mNfcAdapter);
-        }
         Payment();
         return  view;
     }
@@ -118,12 +134,14 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-
+                sendData();
+                verified();
                 ComponentName componentName;
                 if (mNfcAdapter == null) {
                     Toast.makeText(getContext(), "NFC is not available", Toast.LENGTH_LONG).show();
                 }
                 else {
+                     cardEmulation = CardEmulation.getInstance(mNfcAdapter);
                     Toast.makeText(getContext(), "NFC availability : "+mNfcAdapter.isEnabled(), Toast.LENGTH_LONG).show();
                     //
                     componentName = new ComponentName(getContext(), MyHostApduService.class);
@@ -135,6 +153,7 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                         intent.putExtra(CardEmulation.EXTRA_CATEGORY, CardEmulation.CATEGORY_PAYMENT);
                         intent.putExtra(CardEmulation.EXTRA_SERVICE_COMPONENT, componentName);
                         getActivity().startActivityForResult(intent, REQUEST_CODE_DEFAULT_PAYMENT_APP);
+                        //
                     }
                 }
             }
@@ -164,5 +183,85 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     public void onPause() {
         super.onPause();
 
+    }
+
+    public void sendData() {
+            //
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //
+                    String count = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
+                    String Switch3 = dataSnapshot.child("Switches").child("Switch3").getValue().toString();
+                    String Switch4 = dataSnapshot.child("Switches").child("Switch4").getValue().toString();
+                    //
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                        LocalDateTime now = null;
+                        now = LocalDateTime.now();
+
+                        user = FirebaseAuth.getInstance().getCurrentUser();
+                        mDatabase = FirebaseDatabase.getInstance().getReference();
+                        //
+                        HashMap<String, Object> values = new HashMap<>();
+                        //TODO() Certain Values are For Testing;
+                        values.put("Name", "Starbucks");
+                        values.put("Location", "Malibu,CA");
+                        values.put("Amount", "20");
+                        values.put("Date", "13/04/2021");
+                        //
+
+                        mDatabase.child("Users").child(user.getUid()).child("Transactions").child(count).setValue(values);
+                        int x = Integer.parseInt(count)+1;
+                        HashMap<String, Object> values2 = new HashMap<>();
+                        values2.put("Transaction count",x);
+                        mDatabase.child("Users").child(user.getUid()).child("User Data").setValue(values2);
+                        //
+                        if (Switch3.equals("true")) {
+                            BottomSheetNFC m = new BottomSheetNFC();
+                          //PurchaseNotification("Starbucks", "Malibu,CA", "20", dtf.format(now));
+                        }
+                        if (Switch4.equals("true")) {
+                            //TODO() Certain Values are For Testing;
+                            BottomSheetNFC m = new BottomSheetNFC();
+                           // sendEmail("Starbucks", "Malibu,CA", "20", dtf.format(now));
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+                //
+            });
+        }
+    public void sendEmail(String Name,String Location,String Date,String Amount) {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String mEmail = user.getEmail();
+        String mSubject = "UPay- "+Name+" Transaction";
+        String mMessage = "Your Recent Transaction at"+Name+":" +
+                "\nLocation: "+Location
+                +"\nThe amount of $"+Amount+" has been spent on " +Date;
+
+        JavaMailAPI javaMailAPI = new JavaMailAPI(getActivity().getApplicationContext(), mEmail, mSubject, mMessage);
+
+        javaMailAPI.execute();
+    }
+
+    public void PurchaseNotification(String Name,String Location,String Date,String Amount){
+        String mSubject = "UPay- "+Name+" Transaction";
+        String mMessage = "Your Recent Transaction at"+Name+":" +
+                "\nLocation: "+Location
+                +"\nThe amount of $"+Amount+" has been spent on " +Date;
+        Notify.build(getContext())
+                .setTitle("UPay")
+                .setContent(mSubject+"\n"+mMessage)
+                .setSmallIcon(R.drawable.ic_payment)
+                .setColor(R.color.color4)
+                .largeCircularIcon()
+                .show(); // Show notification
     }
 }

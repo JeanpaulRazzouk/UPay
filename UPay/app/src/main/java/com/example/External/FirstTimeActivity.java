@@ -26,6 +26,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -33,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class FirstTimeActivity extends AppCompatActivity {
 TextView textView;
@@ -45,12 +48,27 @@ Uri link;
     public FirebaseUser user;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_time);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        //
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
+        HashMap<String, Object> v = new HashMap<>();
+        v.put("Switch1", "false");
+        v.put("Switch2", "false");
+        v.put("Switch3", "false");
+        v.put("Switch4", "false");
+        mDatabase.child("Users").child(user.getUid()).child("Switches").setValue(v);
+        //
+        HashMap<String, Object> values2 = new HashMap<>();
+        values2.put("Transaction count",0);
+        mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values2);
+        //
        textView = findViewById(R.id.welcome);
        textView2 = findViewById(R.id.welcome2);
        textView3 = findViewById(R.id.textView16);
@@ -112,8 +130,9 @@ Uri link;
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(link != null)
         {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
+            final ProgressDialog progressDialog = new ProgressDialog(this,R.style.MyAlertDialogStyle);
             progressDialog.setTitle("Uploading...");
+            progressDialog.getWindow().setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dialog_bg));
             progressDialog.show();
             StorageReference ref = storageReference.child("images/"+user.getUid());
             ref.putFile(link)

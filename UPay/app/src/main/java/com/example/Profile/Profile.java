@@ -1,26 +1,30 @@
 package com.example.Profile;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.ActivityOptions;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.Adapters.Adapter2;
 import com.example.External.LoginPage;
 import com.example.upay.PersInfoData;
 import com.example.upay.R;
@@ -38,16 +42,16 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Profile extends AppCompatActivity {
-  TextView textView;
-  TextView textView2;
-  ImageButton imageButton;
-  ArrayList<PersInfoData> p;
+    TextView textView;
+    TextView textView2;
+    ImageView imageview;
+    ArrayList<PersInfoData> p;
     //
     Uri link;
-    //
     public FirebaseUser user;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +60,9 @@ public class Profile extends AppCompatActivity {
         //
         textView = findViewById(R.id.textView);
         textView2 = findViewById(R.id.textView7);
-        imageButton = findViewById(R.id.imageButton);
-        imageButton.setClipToOutline(true);
-        //
+        imageview = findViewById(R.id.imageButton);
+        imageview.setClipToOutline(true);
+       //
         access_Dta();
         try {
             uploadImage();
@@ -66,7 +70,6 @@ public class Profile extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //
     }
 
     public void access_Dta() {
@@ -75,44 +78,21 @@ public class Profile extends AppCompatActivity {
             user = FirebaseAuth.getInstance().getCurrentUser();
             textView.setText(" Hello,");
             textView2.setText(user.getDisplayName());
-            Shader shader = new LinearGradient(180,220,0,textView.getLineHeight(),
-                   Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
+            Shader shader = new LinearGradient(180, 220, 0, textView.getLineHeight(),
+                    Color.parseColor("#2196F3"), Color.parseColor("#D267E4"), Shader.TileMode.REPEAT);
             textView2.getPaint().setShader(shader);
         }
     }
 
-    public void Gallery(View view) {
-        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageIntent.setType("image/*");
-        startActivityForResult(pickImageIntent, 1);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-                link = data.getData();
-                try {
-                    uploadImage();
-                    GetImage();
-                }
-                catch (Exception e) {
-                    Toast.makeText(this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
     public void uploadImage() {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        if(link != null)
-        {
+        if (link != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            StorageReference ref = storageReference.child("images/"+user.getUid());
+            StorageReference ref = storageReference.child("images/" + user.getUid());
             ref.putFile(link)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -120,7 +100,8 @@ public class Profile extends AppCompatActivity {
                             progressDialog.dismiss();
                             try {
                                 GetImage();
-                            }catch (Exception e){}
+                            } catch (Exception e) {
+                            }
                             Toast.makeText(getApplicationContext(), "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -128,7 +109,7 @@ public class Profile extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -147,23 +128,23 @@ public class Profile extends AppCompatActivity {
         startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
-    public void Pers_info(View view){
+    public void Pers_info(View view) {
         PersonalInfoFragment bottomSheet = new PersonalInfoFragment();
-        bottomSheet.show(getSupportFragmentManager(),"TAG");
+        bottomSheet.show(getSupportFragmentManager(), "TAG");
     }
 
-    public void feedback(View view){
+    public void feedback(View view) {
         FeedBack bottomSheet = new FeedBack();
-        bottomSheet.show(getSupportFragmentManager(),"TAG");
+        bottomSheet.show(getSupportFragmentManager(), "TAG");
     }
 
-    public void terms_service(View view){
+    public void terms_service(View view) {
         TermsService bottomSheet = new TermsService();
-        bottomSheet.show(getSupportFragmentManager(),"TAG");
+        bottomSheet.show(getSupportFragmentManager(), "TAG");
     }
 
     public void GetImage() throws Exception {
-        StorageReference storageRef = storageReference.child("images/" +user.getUid());
+        StorageReference storageRef = storageReference.child("images/" + user.getUid());
         final File localFile = File.createTempFile("images", "jpg");
         localFile.mkdir();
         storageRef.getFile(localFile)
@@ -171,7 +152,7 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         Bitmap bitmap = BitmapFactory.decodeFile(localFile.getPath());
-                        imageButton.setImageBitmap(bitmap);
+                        imageview.setImageBitmap(bitmap);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -181,6 +162,7 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

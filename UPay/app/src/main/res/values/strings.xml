@@ -44,4 +44,10 @@
     <string name="PhoneNumTXT">Verification</string>
     <string name="donetxt">Done</string>
 
+    <string translatable="false" name="notify_channel_id">MyDefaultChannelID</string>
+
+    <string translatable="false" name="notify_channel_name">MyDefaultChannelName</string>
+
+    <string translatable="false" name="notify_channel_description">MyDefaultChannelDescription</string>
+
 </resources>

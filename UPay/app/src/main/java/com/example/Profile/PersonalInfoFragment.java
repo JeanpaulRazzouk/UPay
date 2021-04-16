@@ -64,7 +64,7 @@ public class PersonalInfoFragment  extends BottomSheetDialogFragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-           showForgotDialog(getContext());
+           showForgotDialog();
             }
         });
         return  view;
@@ -121,9 +121,9 @@ public class PersonalInfoFragment  extends BottomSheetDialogFragment {
 
     }
 
-    private void showForgotDialog(Context c) {
-        final EditText taskEditText = new EditText(c);
-        AlertDialog dialog = new AlertDialog.Builder(c)
+    private void showForgotDialog() {
+        final EditText taskEditText = new EditText(getContext());
+        AlertDialog dialog = new AlertDialog.Builder(getContext(),R.style.MyAlertDialogStyle)
                 .setTitle("Password Verification")
                 .setMessage("Please enter your password")
                 .setView(taskEditText)
@@ -138,6 +138,7 @@ public class PersonalInfoFragment  extends BottomSheetDialogFragment {
                 })
                 .setNegativeButton("Cancel", null)
                 .create();
+        dialog.getWindow().setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.dialog_bg));
         dialog.show();
     }
 

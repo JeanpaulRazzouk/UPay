@@ -3,10 +3,6 @@ package com.example.BarFragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +14,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.example.payment.BottomSheetNFC;
 import com.example.upay.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,7 +33,6 @@ import java.util.HashMap;
 
 import us.fatehi.magnetictrack.bankcard.BankCardMagneticTrack;
 import us.fatehi.magnetictrack.bankcard.Track1FormatB;
-import us.fatehi.magnetictrack.bankcard.Track2;
 
 public class PaymentMethodFragment extends Fragment {
     TextView textView;

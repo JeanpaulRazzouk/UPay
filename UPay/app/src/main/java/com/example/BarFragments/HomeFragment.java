@@ -32,11 +32,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Adapters.Adapter;
-import com.example.Adapters.AdapterCal;
 import com.example.Profile.Profile;
 import com.example.payment.BottomSheetNFC;
 import com.example.payment.User;
-import com.example.upay.CalData;
 import com.example.upay.PurchaseItems;
 import com.example.upay.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -57,14 +55,8 @@ import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.io.File;
-import java.text.DecimalFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class HomeFragment extends Fragment {
     //
@@ -124,7 +116,8 @@ public class HomeFragment extends Fragment {
         }
 
         Add(user.getUid(),user.getDisplayName(),user.getEmail());
-
+        //
+        //Count =>
     }
 
     @Override
@@ -280,53 +273,24 @@ public class HomeFragment extends Fragment {
     }
 
     public void Activity (){
-//        // TODO Data Injection;
-        Names.add(0,"Crepaway");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"60.21");
-        Date.add(0,"24/01/2021");
-        //
-        Names.add(0,"Carrefour");
-        Location.add(0,"Hazmieh,LB");
-        Amount.add(0,"98.00");
-        Date.add(0,"25/01/2021");
-        //
-        Names.add(0,"Starbucks");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"100.00");
-        Date.add(0,"26/02/2021");
-        //
+//       TODO Data Injection;
 
-        Names.add(0,"Apple Store");
-        Location.add(0,"NY,USA");
-        Amount.add(0,"158.00");
-        Date.add(0,"27/02/2021");
-        //
-        Names.add(0,"Mc'Donalds");
-        Location.add(0,"Tyre,LB");
-        Amount.add(0,"100.00");
-        Date.add(0,"01/03/2021");
+//        Names.add(0,"Starbucks");
+//        Location.add(0,"Byblos,LB");
+//        Amount.add(0,"32.61");
+//        Date.add(0,"11/04/2021");
+//
+//        Names.add(0,"Apple Store");
+//        Location.add(0,"NY,NY");
+//        Amount.add(0,"10.21");
+//        Date.add(0,"13/04/2021");
+//
+//        Names.add(0,"Costco");
+//        Location.add(0,"Denver,CO");
+//        Amount.add(0,"160.21");
+//        Date.add(0,"15/04/2021");
 
-        Names.add(0,"Crepaway");
-        Location.add(0,"Byblos,LB");
-        Amount.add(0,"130.00");
-        Date.add(0,"09/03/2021");
 
-        Names.add(0,"Starbucks");
-        Location.add(0,"Beirut,LB");
-        Amount.add(0,"120.00");
-        Date.add(0,"12/03/2021");
-
-        Names.add(0,"Mc'Donalds");
-        Location.add(0,"Dora,LB");
-        Amount.add(0,"12.00");
-        Date.add(0,"15/03/2021");
-
-        Names.add(0,"Starbucks");
-        Location.add(0,"Beirut,LB");
-        Amount.add(0,"12.00");
-        Date.add(0,"18/03/2021");
-        //
             for (int i = 0 ; i< Names.size();i++) {
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 HashMap<String, Object> values = new HashMap<>();
@@ -336,9 +300,10 @@ public class HomeFragment extends Fragment {
                 values.put("Date", Date.get(i));
                 mDatabase.child("Users").child(user.getUid()).child("Transactions").child(""+i).updateChildren(values);
             }
-            HashMap<String, Object> values2 = new HashMap<>();
-            values2.put("Transaction count",Names.size());
-            mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values2);
+
+//            HashMap<String, Object> values2 = new HashMap<>();
+//            values2.put("Transaction count",Names.size());
+//            mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values2);
         FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -354,7 +319,9 @@ public class HomeFragment extends Fragment {
                     Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
                 }
                     try {
-                        if (Names.get(0) == null) {
+                        if (Integer.parseInt(xl) == 0) {
+                            textView4.setVisibility(View.VISIBLE);
+                        }else{
                         }
                     }catch(Exception e){
                         progressBar.setVisibility(View.INVISIBLE);

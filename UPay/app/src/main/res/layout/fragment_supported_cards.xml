@@ -1,0 +1,59 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.Profile.SupportedCards">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="529dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView35"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:text="Supported Cards"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="@dimen/common_20_dp"
+            android:textColor="@color/defaultContentColor"
+            android:textSize="36dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton15"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="50sp"
+            android:background="@null"
+            android:src="@drawable/butto_bg_2" />
+
+        <TextView
+            android:id="@+id/textView36"
+            android:layout_width="171dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="-100dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="0sp"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:gravity="center"
+            android:text="Check Card"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+
+    </LinearLayout>
+    </ScrollView>
+
+
+</FrameLayout>

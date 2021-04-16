@@ -1,37 +1,49 @@
 package com.example.payment;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.location.Location;
+import android.location.LocationManager;
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.view.View;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 
+import com.application.isradeleon.notify.Notify;
+import com.example.upay.JavaMailAPI;
 import com.example.upay.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.nio.ByteBuffer;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 //import static com.example.payment.ConstantCard.DEFAULT_SWIPE_DATA;
+import static com.example.payment.ConstantCard.DEFAULT_SWIPE_DATA;
 import static com.example.payment.ConstantCard.SWIPE_DATA_PREF_KEY;
-//
+
 public class MyHostApduService extends HostApduService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private FirebaseUser user;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    private DatabaseReference mDatabase;
+
     private static final String TAG = MyHostApduService.class.getSimpleName();
 
     private static final byte[] ISO7816_UNKNOWN_ERROR_RESPONSE = {
@@ -212,42 +224,42 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (SWIPE_DATA_PREF_KEY.equals(key)) {
-            user = FirebaseAuth.getInstance().getCurrentUser();
-            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String swipeData = prefs.getString(SWIPE_DATA_PREF_KEY, dataSnapshot.child("User Data").child("Track Data").getValue().toString());
-                    configureReadRecResponse(swipeData);
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+//            user = FirebaseAuth.getInstance().getCurrentUser();
+//            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+            String swipeData = prefs.getString(SWIPE_DATA_PREF_KEY, DEFAULT_SWIPE_DATA);
+            configureReadRecResponse(swipeData);
+//                }
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+//        }
         }
     }
     public void onCreate() {
         super.onCreate();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String swipeData = prefs.getString(SWIPE_DATA_PREF_KEY, dataSnapshot.child("User Data").child("Track Data").getValue().toString());
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+                String swipeData = prefs.getString(SWIPE_DATA_PREF_KEY, DEFAULT_SWIPE_DATA);
                 configureReadRecResponse(swipeData);
-                prefs.registerOnSharedPreferenceChangeListener((SharedPreferences.OnSharedPreferenceChangeListener) getApplicationContext());
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+                prefs.registerOnSharedPreferenceChangeListener(this);
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
-    
+
     @Override
     public void onDeactivated(int reason) {
-       BottomSheetNFC bottomSheetNFC = new BottomSheetNFC();
-       bottomSheetNFC.verified();
+//    BottomSheetNFC bottomSheetNFC = new BottomSheetNFC();
+//    bottomSheetNFC.sendData();
     }
-}
+    }
