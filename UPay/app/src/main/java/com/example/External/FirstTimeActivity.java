@@ -56,6 +56,9 @@ Uri link;
         setContentView(R.layout.activity_first_time);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         //
+        MediaPlayer mp = new MediaPlayer();
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.welcometoupay);
+        mp.start();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -102,9 +105,12 @@ Uri link;
             }
         });
         //
-        MediaPlayer mp = new MediaPlayer();
-        mp = MediaPlayer.create(getApplicationContext(), R.raw.welcometoupay);
-        mp.start();
+        //
+//        HashMap<String, Object> values = new HashMap<>();
+//        values.put("Current Country Location", "");
+//        values.put("Current Place Location", "");
+//
+//        mDatabase.child("Users").child(user.getUid()).child("Location").setValue(values);
     }
     public void Gallery(View view) {
         Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
