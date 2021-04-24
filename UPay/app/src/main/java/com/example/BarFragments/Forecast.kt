@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.upay.R
 import com.github.aachartmodel.aainfographics.aachartcreator.*
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -66,7 +67,7 @@ class Forecast : AppCompatActivity() {
         Name = ArrayList()
         //
         user = FirebaseAuth.getInstance().currentUser
-        FirebaseDatabase.getInstance().getReference("Users").child(user!!.uid).addValueEventListener(object : ValueEventListener {
+        FirebaseDatabase.getInstance().getReference("Users").child(user!!.uid).addListenerForSingleValueEvent(object : ValueEventListener {
             @RequiresApi(api = Build.VERSION_CODES.O)
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val x = dataSnapshot.child("User Data").child("Transaction count").value.toString()
@@ -147,6 +148,11 @@ class Forecast : AppCompatActivity() {
                 //
                 AmountY.removeAll(setOf(0.0f))
                 //
+
+                val array_date : ArrayList<String> = arrayListOf("JAN","FEB","MAR","APR","MAY","JUN","JUL",
+                        "AUG","SEPT","OCT","NOV","DEC")
+
+                //
                 for (i in 0..11) {
                     try {
                         if (AmountY[i] != 0.0f) {
@@ -159,11 +165,11 @@ class Forecast : AppCompatActivity() {
                 for (i in 0..11) {
                     try {
                         if (AmountY[i] != 0.0f) {
-                            series.addPoint(ValueLinePoint("" + i, AmountY[i]))
+                            series.addPoint(ValueLinePoint(array_date.get(i), AmountY[i]))
                         }
                     } catch (e: Exception) {
                         if (predictForValue(i, DateX, AmountY) >= 0) {
-                            series.addPoint(ValueLinePoint("" + i, ("" + predictForValue(i, DateX, AmountY)).toFloat()))
+                            series.addPoint(ValueLinePoint(array_date.get(i), ("" + predictForValue(i, DateX, AmountY)).toFloat()))
                         } else {
                         }
                     }
@@ -191,7 +197,7 @@ class Forecast : AppCompatActivity() {
                 mDatabase = FirebaseDatabase.getInstance().reference
                 try {
                     // cut % algorithm;
-                    val income = dataSnapshot.child("User Data").child("income").value.toString()
+                    val income = dataSnapshot.child("Income").child("income").value.toString()
                     var percent_value = 0.0f
                     var `val` = 0.0f
                     for (j in AmountY.indices) {
@@ -206,7 +212,7 @@ class Forecast : AppCompatActivity() {
                         user = FirebaseAuth.getInstance().currentUser
                         val values = HashMap<String, Any>()
                         values["percent value"] = percent_value
-                        mDatabase!!.child("Users").child(user!!.uid).child("User Data").updateChildren(values)
+                        mDatabase!!.child("Users").child(user!!.uid).child("Percent Val").updateChildren(values)
                     }
 
                 } catch (e: Exception) {
@@ -239,9 +245,6 @@ class Forecast : AppCompatActivity() {
                             if (TheMethodName.contains(array_location.get(j))) {
                                     val c = TheMethodName.indexOf(array_location.get(j))
                                     TheMethod.get(c).add(array_amount.get(i).toFloat())
-//                                TheMethod2.add(array_amount.get(i).toFloat())
-//                                TheMethod.add(TheMethod2)
-                                // Log.d("DEA2",TheMethod.get(j).toString())
                             }else{
                                 TheMethodName.add(array_location.get(i))
                                 TheMethod2.add(array_amount.get(i).toFloat())
@@ -282,9 +285,12 @@ class Forecast : AppCompatActivity() {
                 val aaChartModel: AAChartModel = AAChartModel()
                         .chartType(AAChartType.Spline)
                         .animationType(AAChartAnimationType.EaseInExpo)
-                        .subtitle("Places where you are likely to spend next Week ")
+                        .title("User Past Spending")
+                        .titleStyle(AAStyle().fontWeight(AAChartFontWeightType.Bold))
+                        .subtitle("Places You have already spent at ")
                         .backgroundColor("#fafafa")
                         .dataLabelsEnabled(true)
+                        .xAxisLabelsEnabled(false)
                         .series(aaSeries.toTypedArray())
 
                 aaChartView?.aa_drawChartWithChartModel(aaChartModel)

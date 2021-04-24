@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -100,6 +101,10 @@ Uri link;
                 startActivity(i);
             }
         });
+        //
+        MediaPlayer mp = new MediaPlayer();
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.welcometoupay);
+        mp.start();
     }
     public void Gallery(View view) {
         Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

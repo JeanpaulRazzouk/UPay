@@ -165,9 +165,9 @@ public class AnalyticsFrag extends Fragment {
             // methods();
             user = FirebaseAuth.getInstance().getCurrentUser();
             // This if Statement is used for those who haven't had any previously added income;
-            if (FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").child("income") != null) {
+            if (FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Income").child("income") != null) {
 
-                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("User Data").addValueEventListener(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Income").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String val;
@@ -215,7 +215,7 @@ public class AnalyticsFrag extends Fragment {
             String past_month = "" + (p_mo < 10 ? ("0" + p_mo) : (p_mo)); // past month string;
 
             for (int i = 0; i < 5; i++) {
-                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Float current_month_val = 0.0f;
@@ -280,16 +280,16 @@ public class AnalyticsFrag extends Fragment {
 
     public void getDataFromHome()
     {
-        ProgressDialog pd = new ProgressDialog(getContext(),R.style.MyAlertDialogStyle);
-        pd.setMessage("One sec...");
-        pd.getWindow().setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.dialog_bg));
-        pd.show();
+//        ProgressDialog pd = new ProgressDialog(getContext(),R.style.MyAlertDialogStyle);
+//        pd.setMessage("One sec...");
+//        pd.getWindow().setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.dialog_bg));
+//        pd.show();
         user = FirebaseAuth.getInstance().getCurrentUser();
         //
         Date = new ArrayList<>();
         amount = new ArrayList<>();
         //
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -485,7 +485,7 @@ public class AnalyticsFrag extends Fragment {
                 mCubicValueLineChart.addSeries(se);
                 mCubicValueLineChart.startAnimation();
                 //
-                pd.hide();
+               // pd.hide();
             }
 
             @Override
@@ -540,7 +540,7 @@ public class AnalyticsFrag extends Fragment {
     public void calendar() {
         Date2 = new ArrayList<>();
         amount2 = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -608,7 +608,7 @@ public class AnalyticsFrag extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> values = new HashMap<>();
         values.put("income", income);
-        mDatabase.child("Users").child(userId).child("User Data").updateChildren(values);
+        mDatabase.child("Users").child(userId).child("Income").updateChildren(values);
     }
 
     public void CurrentMonth(){

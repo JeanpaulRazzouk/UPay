@@ -39,7 +39,9 @@ public class Settings extends AppCompatActivity {
                             selectedFragment).commit();
                     break;
                 case "1":
-
+                    selectedFragment = new CurrencySettings();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_r,
+                            selectedFragment).commit();
                     break;
                 case "2":
                     selectedFragment = new SupportedCards();

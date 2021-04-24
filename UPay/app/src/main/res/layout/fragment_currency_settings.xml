@@ -1,0 +1,61 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.Profile.CurrencySettings">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="362dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="@dimen/common_15_dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/sf_ui_display_black"
+        android:text="Currency Settings"
+        android:textColor="@color/defaultContentColor"
+        android:textSize="30dp" />
+
+
+    <RadioGroup
+        android:layout_width="193dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="100dp">
+
+        <RadioButton
+            android:id="@+id/checkBox2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:text="USD (United Sates Dollar)"
+            android:textColor="@color/add_manual_account_completed_activity_add_account_button_gradient_stop_color_2"
+            android:textSize="@dimen/common_15_dp"
+            android:theme="@style/AppTheme.Design" />
+
+        <RadioButton
+            android:id="@+id/checkBox3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_15_dp"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:text="EUR (EURO)"
+            android:textColor="@color/color1"
+            android:textSize="@dimen/common_15_dp"
+            android:theme="@style/AppTheme.Design" />
+
+        <RadioButton
+            android:id="@+id/checkBox4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_15_dp"
+            android:fontFamily="@font/sf_ui_display_black"
+            android:text="CND (Canadian Dollar)"
+            android:textColor="#ED90A6"
+            android:textSize="@dimen/common_15_dp"
+            android:theme="@style/AppTheme.Design" />
+
+
+    </RadioGroup>
+    />
+
+</FrameLayout>

@@ -102,8 +102,8 @@ public class PaymentMethodFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    if (!dataSnapshot.child("User Data").child("Track Data").getValue().toString().equals(" ")) {
-                        final BankCardMagneticTrack allTracks = BankCardMagneticTrack.from(dataSnapshot.child("User Data").child("Track Data").getValue().toString());
+                    if (!dataSnapshot.child("Track Data").child("Track Data").getValue().toString().equals(" ")) {
+                        final BankCardMagneticTrack allTracks = BankCardMagneticTrack.from(dataSnapshot.child("Track Data").child("Track Data").getValue().toString());
                         Track1FormatB track1Data = allTracks.getTrack1();
                         String cardNumber = track1Data.getPrimaryAccountNumber().getLastFourDigits();
                         String expDate = track1Data.getExpirationDate().toString();
@@ -135,7 +135,7 @@ public class PaymentMethodFragment extends Fragment {
                     }else{
                         HashMap<String, Object> values = new HashMap<>();
                         values.put("Track Data", " ");
-                        mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values);
+                        mDatabase.child("Users").child(user.getUid()).child("Track Data").updateChildren(values);
                     }
                 }catch(Exception e ){
                  }
@@ -188,7 +188,7 @@ public class PaymentMethodFragment extends Fragment {
                         HashMap<String, Object> values = new HashMap<>();
                         if (trackData_input !=" ") {
                             values.put("Track Data", trackData_input);
-                            mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values);
+                            mDatabase.child("Users").child(user.getUid()).child("Track Data").updateChildren(values);
                         }
                     }
                 });

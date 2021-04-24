@@ -76,6 +76,7 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,6 +87,7 @@ public class HomeFragment extends Fragment {
     //
     ImageButton imageButton;
     ImageButton imageButton2;
+    ImageButton refresh;
     ImageView imageView;
     TextView textView;
     TextView textView2;
@@ -229,8 +231,25 @@ public class HomeFragment extends Fragment {
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BottomSheetNFC bottomSheet = new BottomSheetNFC();
-                bottomSheet.show(getFragmentManager(), "TAG");
+                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try{
+                            String icm = dataSnapshot.child("Track Data").child("Track Data").getValue().toString();
+                            if (icm  != null){
+                                BottomSheetNFC bottomSheet = new BottomSheetNFC();
+                                bottomSheet.show(getFragmentManager(), "TAG");
+                            }
+                        }catch(Exception e){
+                            Toast.makeText(getContext(),"Please add Track Data",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
         //
@@ -250,6 +269,18 @@ public class HomeFragment extends Fragment {
                 Activity();
             }
         });
+        //
+        refresh = view.findViewById(R.id.refresh);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+                getActivity().overridePendingTransition(0, 0);
+                startActivity(getActivity().getIntent());
+                getActivity().overridePendingTransition(0, 0);
+            }
+        });
+
         return view;
     }
 
@@ -346,7 +377,7 @@ public class HomeFragment extends Fragment {
 //            values2.put("Transaction count",Names.size());
 //            mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values2);
             //
-        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String xl = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
@@ -354,21 +385,21 @@ public class HomeFragment extends Fragment {
                 //
                 p = new ArrayList<>();
                 // getting recycler data
-                for (int i = 0; i < SI; i++) {
-                    Names.add(dataSnapshot.child("Transactions").child("" + i).child("Name").getValue().toString());
-                    Location.add(dataSnapshot.child("Transactions").child("" + i).child("Location").getValue().toString());
-                    Amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
-                    Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
-                }
-                try {
+                    for (int i = 0; i < SI; i++) {
+                        try {
+                            Names.add(dataSnapshot.child("Transactions").child("" + i).child("Name").getValue().toString());
+                            Location.add(dataSnapshot.child("Transactions").child("" + i).child("Location").getValue().toString());
+                            Amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
+                            Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
+                        }catch(Exception e){}
+                    }
                     if (Integer.parseInt(xl) == 0) {
                         textView4.setVisibility(View.VISIBLE);
                     } else {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        textView4.setVisibility(View.INVISIBLE);
                     }
-                } catch (Exception e) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    textView4.setVisibility(View.VISIBLE);
-                }
+
                 for (int i = 0; i < SI; i++) {
                     p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i), Date.get(i)));
                     recyclerView.setAdapter(new Adapter(getContext(), p));
@@ -386,7 +417,7 @@ public class HomeFragment extends Fragment {
                 // val and % data;
                 String x;
                 try {
-                    x = dataSnapshot.child("User Data").child("income").getValue().toString();
+                    x = dataSnapshot.child("Income").child("income").getValue().toString();
                     int income = Integer.parseInt(x);
                     int perc_res = (int) ((finalVal / income) * 100);
                     textView3.setText(perc_res + "%");
@@ -443,19 +474,21 @@ public class HomeFragment extends Fragment {
     }
 
     private void startLocationUpdate() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+        try {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+        }catch(Exception e){}
     }
 
 

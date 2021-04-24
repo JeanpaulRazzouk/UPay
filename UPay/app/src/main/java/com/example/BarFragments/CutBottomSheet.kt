@@ -122,7 +122,7 @@ class CutBottomSheet : BottomSheetDialogFragment() {
                 DateX.removeAll(setOf(0))
                 // continuity of the algorithm;
 
-                val percent_value = dataSnapshot.child("User Data").child("percent value").value.toString().toFloat()
+                val percent_value = dataSnapshot.child("Percent Val").child("percent value").value.toString().toFloat()
                 try {
                     val final_arr: Array<Any> = arrayOf(
                             Forecast.predictForValue(0, DateX, AmountY).toInt() - percent_value * Forecast.predictForValue(0, DateX, AmountY).toInt(),

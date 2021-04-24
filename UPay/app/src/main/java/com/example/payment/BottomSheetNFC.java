@@ -201,49 +201,47 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     //
-                    String Income = dataSnapshot.child("User Data").child("income").getValue().toString();
-                    String Location = dataSnapshot.child("Location").child("Current Country Location").getValue().toString();
-                    String Place = dataSnapshot.child("Location").child("Current Place Location").getValue().toString();
-                    String count = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
-                    String Switch3 = dataSnapshot.child("Switches").child("Switch3").getValue().toString();
-                    String Switch4 = dataSnapshot.child("Switches").child("Switch4").getValue().toString();
-                    //
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        LocalDate date = LocalDate.now();
-                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                        String text = date.format(dtf);
+                        String Location = dataSnapshot.child("Location").child("Current Country Location").getValue().toString();
+                        String Place = dataSnapshot.child("Location").child("Current Place Location").getValue().toString();
+                        String count = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
+                        String Switch3 = dataSnapshot.child("Switches").child("Switch3").getValue().toString();
+                        String Switch4 = dataSnapshot.child("Switches").child("Switch4").getValue().toString();
                         //
-                        LocalDate parsedDate = LocalDate.parse(text, dtf);
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
-                        //
-                        user = FirebaseAuth.getInstance().getCurrentUser();
-                        mDatabase = FirebaseDatabase.getInstance().getReference();
-                        //
-                        HashMap<String, Object> values = new HashMap<>();
-                        //TODO() Certain Values are For Testing;
-                        values.put("Name", Place);
-                        values.put("Location", Location);
-                        values.put("Amount", "20");
-                        values.put("Date", formatter.format(parsedDate));
-                        //
-
-                        mDatabase.child("Users").child(user.getUid()).child("Transactions").child(count).setValue(values);
-                        int x = Integer.parseInt(count)+1;
-                        HashMap<String, Object> values2 = new HashMap<>();
-                        values2.put("Transaction count",x);
-                        values2.put("income",Income);
-                        mDatabase.child("Users").child(user.getUid()).child("User Data").setValue(values2);
-                        //
-                        if (Switch3.equals("true")) {
-                            BottomSheetNFC m = new BottomSheetNFC();
-                         PurchaseNotification(Place, Location, formatter.format(parsedDate),"20" );
-                        }
-                        if (Switch4.equals("true")) {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            LocalDate date = LocalDate.now();
+                            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                            String text = date.format(dtf);
+                            //
+                            LocalDate parsedDate = LocalDate.parse(text, dtf);
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+                            //
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            mDatabase = FirebaseDatabase.getInstance().getReference();
+                            //
+                            HashMap<String, Object> values = new HashMap<>();
                             //TODO() Certain Values are For Testing;
-                            BottomSheetNFC m = new BottomSheetNFC();
-                           sendEmail(Place, Location, formatter.format(parsedDate),"20" );
+                            values.put("Name", Place);
+                            values.put("Location", Location);
+                            values.put("Amount", "20");
+                            values.put("Date", formatter.format(parsedDate));
+                            //
+
+                            mDatabase.child("Users").child(user.getUid()).child("Transactions").child(count).setValue(values);
+                            int x = Integer.parseInt(count) + 1;
+                            HashMap<String, Object> values2 = new HashMap<>();
+                            values2.put("Transaction count", x);
+                            mDatabase.child("Users").child(user.getUid()).child("User Data").setValue(values2);
+                            //
+                            if (Switch3.equals("true")) {
+                                BottomSheetNFC m = new BottomSheetNFC();
+                                PurchaseNotification(Place, Location, formatter.format(parsedDate), "20");
+                            }
+                            if (Switch4.equals("true")) {
+                                //TODO() Certain Values are For Testing;
+                                BottomSheetNFC m = new BottomSheetNFC();
+                                sendEmail(Place, Location, formatter.format(parsedDate), "20");
+                            }
                         }
-                    }
                 }
 
                 @Override
