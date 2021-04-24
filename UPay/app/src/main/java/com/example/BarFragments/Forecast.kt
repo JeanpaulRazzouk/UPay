@@ -2,6 +2,7 @@ package com.example.BarFragments
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
@@ -17,7 +18,9 @@ import org.eazegraph.lib.models.ValueLinePoint
 import org.eazegraph.lib.models.ValueLineSeries
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.stream.Collectors
 import java.util.stream.IntStream
@@ -102,6 +105,7 @@ class Forecast : AppCompatActivity() {
                     }
                     // Then get the month of the year from the Date based on specific locale.
                     val month_of_year = SimpleDateFormat("M", Locale.ENGLISH).format(d)
+                    Log.d("DEA",month_of_year)
                     try {
                         when (month_of_year) {
                             "1" -> m1 += amount!![i].toFloat()
@@ -174,14 +178,16 @@ class Forecast : AppCompatActivity() {
                 //
                 textView!!.text = "$" + predictForValue(month, DateX, AmountY)
                 // present to next month increase decrease;
-                val this_month = dataSnapshot.child("User Data").child("This Month").value.toString().toFloat()
-                if (this_month < predictForValue(month, DateX, AmountY)) {
-                    val final_value = ("" + predictForValue(month, DateX, AmountY)).toFloat() - this_month
-                    textView2!!.text = "Spending is Likely \n to Increase \n by +$$final_value"
-                } else if (this_month > predictForValue(month, DateX, AmountY)) {
-                    val final_value = this_month - ("" + predictForValue(month, DateX, AmountY)).toFloat()
-                    textView2!!.text = "Spending is Likely \n to Decrease \n by $$final_value"
-                }
+                try {
+                    val this_month = dataSnapshot.child("User Data").child("This Month").value.toString().toFloat()
+                    if (this_month < predictForValue(month, DateX, AmountY)) {
+                        val final_value = ("" + predictForValue(month, DateX, AmountY)).toFloat() - this_month
+                        textView2!!.text = "Spending is Likely \n to Increase \n by +$$final_value"
+                    } else if (this_month > predictForValue(month, DateX, AmountY)) {
+                        val final_value = this_month - ("" + predictForValue(month, DateX, AmountY)).toFloat()
+                        textView2!!.text = "Spending is Likely \n to Decrease \n by $$final_value"
+                    }
+                }catch (e: java.lang.Exception){}
                 mDatabase = FirebaseDatabase.getInstance().reference
                 try {
                     // cut % algorithm;
@@ -202,38 +208,86 @@ class Forecast : AppCompatActivity() {
                         values["percent value"] = percent_value
                         mDatabase!!.child("Users").child(user!!.uid).child("User Data").updateChildren(values)
                     }
-                    //
-                    // TEST NOT REALLLL;
-                    val final_arr: Array<Any> = arrayOf(7.0, 6.9, 9.5, 14.5, 18.2, 21.5)
-                    val final_arr_2: Array<Any> = arrayOf(17.0, 16.9, 19.5, 4.5, 8.2, 1.5, 5.2)
-                    val final_arr_3: Array<Any> = arrayOf(7.0, 16.9, 19.5, 40.5, 38.2, 13.5, 35.2)
-                    //
-                    val aaChartModel: AAChartModel = AAChartModel()
-                            .chartType(AAChartType.Spline)
-                            .animationType(AAChartAnimationType.EaseInExpo)
-                            .subtitle("Places where you are likely to spend next Week ")
-                            .backgroundColor("#fafafa")
-                            .dataLabelsEnabled(true)
-                            .xAxisLabelsEnabled(false)
-                            .series(arrayOf(
-                                    AASeriesElement()
-                                            .name("Mc'Donalds")
-                                            .color("#FFFACD")
-                                            .data(final_arr),
-                                    AASeriesElement()
-                                            .name("Starbucks")
-                                            .color("#008000")
-                                            .data(final_arr_2),
-                                    AASeriesElement()
-                                            .name("Carrefour")
-                                            .color("#000080")
-                                            .data(final_arr_3))
-                            )
-
-                    aaChartView?.aa_drawChartWithChartModel(aaChartModel)
 
                 } catch (e: Exception) {
                 }
+
+                val array_location: ArrayList<String> = arrayListOf();
+                val array_amount: ArrayList<String> = arrayListOf();
+                val array_Date: ArrayList<String> = arrayListOf();
+                //
+                var aaSeriesElement: AASeriesElement
+                var aaSeries: ArrayList<AASeriesElement> = arrayListOf()
+
+                var TheMethod: ArrayList<ArrayList<Float>> = arrayListOf()
+                //
+                var TheMethodName: ArrayList<String> = arrayListOf()
+                //
+                val Count = dataSnapshot.child("User Data").child("Transaction count").value.toString()
+                for (i in 0 until Count.toInt()) {
+                    array_location?.add(dataSnapshot.child("Transactions").child(i.toString()).child("Name").value.toString())
+                    array_amount?.add(dataSnapshot.child("Transactions").child(i.toString()).child("Amount").value.toString())
+                    array_Date?.add(dataSnapshot.child("Transactions").child(i.toString()).child("Date").value.toString())
+                }
+
+
+                for (j in 0 until Count.toInt()) {
+                    for (i in j+1 until Count.toInt()) {
+                        if (array_location.get(j)==array_location.get(i)) {
+                            var TheMethod2: ArrayList<Float> = arrayListOf()
+
+                            if (TheMethodName.contains(array_location.get(j))) {
+                                    val c = TheMethodName.indexOf(array_location.get(j))
+                                    TheMethod.get(c).add(array_amount.get(i).toFloat())
+//                                TheMethod2.add(array_amount.get(i).toFloat())
+//                                TheMethod.add(TheMethod2)
+                                // Log.d("DEA2",TheMethod.get(j).toString())
+                            }else{
+                                TheMethodName.add(array_location.get(i))
+                                TheMethod2.add(array_amount.get(i).toFloat())
+                                TheMethod2.add(array_amount.get(j).toFloat())
+                                TheMethod.add(TheMethod2)
+                            }
+                        }
+                        else{
+                            var TheMethod3: ArrayList<Float> = arrayListOf()
+                            if (TheMethodName.contains(array_location.get(j))) {
+                                if (i<1) {
+                                    val c = TheMethodName.indexOf(array_location.get(j))
+                                    TheMethod.get(c).add(array_amount.get(i).toFloat())
+                                }
+                            }
+                            else {
+                                TheMethodName.add(array_location.get(i))
+                                TheMethod3.add(array_amount.get(i).toFloat())
+                                TheMethod.add(TheMethod3)
+                                // Log.d("DEA3",TheMethod.get(j).toString())
+                            }
+                        }
+                    }
+                }
+
+                        for (j in 0 until  TheMethod.size) {
+                                        Log.d("DEA2", TheMethod.get(j).toString())
+
+                        }
+
+
+                for (j in 0 until TheMethodName.size) {
+                    aaSeriesElement = AASeriesElement().name(TheMethodName.get(j))
+                            .data(TheMethod.get(j).toTypedArray());
+                    aaSeries.add(aaSeriesElement)
+                }
+
+                val aaChartModel: AAChartModel = AAChartModel()
+                        .chartType(AAChartType.Spline)
+                        .animationType(AAChartAnimationType.EaseInExpo)
+                        .subtitle("Places where you are likely to spend next Week ")
+                        .backgroundColor("#fafafa")
+                        .dataLabelsEnabled(true)
+                        .series(aaSeries.toTypedArray())
+
+                aaChartView?.aa_drawChartWithChartModel(aaChartModel)
             }
 
             override fun onCancelled(error: DatabaseError) {}

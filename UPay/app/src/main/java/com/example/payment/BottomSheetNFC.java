@@ -8,6 +8,7 @@ import androidx.biometric.BiometricPrompt;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
@@ -33,6 +34,7 @@ import com.application.isradeleon.notify.Notify;
 import com.example.upay.HomePage;
 import com.example.upay.JavaMailAPI;
 import com.example.upay.R;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,8 +48,12 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.logging.Logger;
@@ -187,46 +193,55 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
 
     public void sendData() {
             //
+        // Get location if available
+        //
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
             FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     //
+                    String Income = dataSnapshot.child("User Data").child("income").getValue().toString();
+                    String Location = dataSnapshot.child("Location").child("Current Country Location").getValue().toString();
+                    String Place = dataSnapshot.child("Location").child("Current Place Location").getValue().toString();
                     String count = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
                     String Switch3 = dataSnapshot.child("Switches").child("Switch3").getValue().toString();
                     String Switch4 = dataSnapshot.child("Switches").child("Switch4").getValue().toString();
                     //
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-                        LocalDateTime now = null;
-                        now = LocalDateTime.now();
-
+                        LocalDate date = LocalDate.now();
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                        String text = date.format(dtf);
+                        //
+                        LocalDate parsedDate = LocalDate.parse(text, dtf);
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+                        //
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         mDatabase = FirebaseDatabase.getInstance().getReference();
                         //
                         HashMap<String, Object> values = new HashMap<>();
                         //TODO() Certain Values are For Testing;
-                        values.put("Name", "Starbucks");
-                        values.put("Location", "Malibu,CA");
+                        values.put("Name", Place);
+                        values.put("Location", Location);
                         values.put("Amount", "20");
-                        values.put("Date", "13/04/2021");
+                        values.put("Date", formatter.format(parsedDate));
                         //
 
                         mDatabase.child("Users").child(user.getUid()).child("Transactions").child(count).setValue(values);
                         int x = Integer.parseInt(count)+1;
                         HashMap<String, Object> values2 = new HashMap<>();
                         values2.put("Transaction count",x);
+                        values2.put("income",Income);
                         mDatabase.child("Users").child(user.getUid()).child("User Data").setValue(values2);
                         //
                         if (Switch3.equals("true")) {
                             BottomSheetNFC m = new BottomSheetNFC();
-                          //PurchaseNotification("Starbucks", "Malibu,CA", "20", dtf.format(now));
+                         PurchaseNotification(Place, Location, formatter.format(parsedDate),"20" );
                         }
                         if (Switch4.equals("true")) {
                             //TODO() Certain Values are For Testing;
                             BottomSheetNFC m = new BottomSheetNFC();
-                           // sendEmail("Starbucks", "Malibu,CA", "20", dtf.format(now));
+                           sendEmail(Place, Location, formatter.format(parsedDate),"20" );
                         }
                     }
                 }
@@ -242,7 +257,7 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         String mEmail = user.getEmail();
         String mSubject = "UPay- "+Name+" Transaction";
-        String mMessage = "Your Recent Transaction at"+Name+":" +
+        String mMessage = "Your Recent Transaction at "+Name+":" +
                 "\nLocation: "+Location
                 +"\nThe amount of $"+Amount+" has been spent on " +Date;
 
@@ -252,16 +267,20 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     }
 
     public void PurchaseNotification(String Name,String Location,String Date,String Amount){
-        String mSubject = "UPay- "+Name+" Transaction";
-        String mMessage = "Your Recent Transaction at"+Name+":" +
+       // String mSubject = "UPay- "+Name+" Transaction";
+        String mMessage = "Your Recent Transaction at "+Name+":" +
                 "\nLocation: "+Location
                 +"\nThe amount of $"+Amount+" has been spent on " +Date;
         Notify.build(getContext())
                 .setTitle("UPay")
-                .setContent(mSubject+"\n"+mMessage)
+                .setContent(mMessage)
                 .setSmallIcon(R.drawable.ic_payment)
                 .setColor(R.color.color4)
                 .largeCircularIcon()
                 .show(); // Show notification
+    }
+
+    public void Location(){
+
     }
 }

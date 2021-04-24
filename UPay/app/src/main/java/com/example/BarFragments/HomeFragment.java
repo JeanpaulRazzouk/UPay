@@ -1,16 +1,24 @@
 package com.example.BarFragments;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +42,23 @@ import android.widget.Toast;
 
 import com.example.Adapters.Adapter;
 import com.example.Profile.Profile;
+import com.example.Profile.Settings;
 import com.example.payment.BottomSheetNFC;
 import com.example.payment.User;
 import com.example.upay.PurchaseItems;
 import com.example.upay.R;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,8 +75,12 @@ import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
 
 public class HomeFragment extends Fragment {
     //
@@ -69,13 +93,33 @@ public class HomeFragment extends Fragment {
     TextView textView4;
     ScrollView scrollView;
     ProgressBar progressBar;
-    //
-    RelativeLayout relativeLayout;
-    //
     private FirebaseUser user;
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private DatabaseReference mDatabase;
+    //
+    RelativeLayout relativeLayout;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    LocationRequest locationRequest;
+    LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(@NonNull LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            if (locationResult == null){
+                return;
+            }
+
+            for(Location location:locationResult.getLocations()){
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+                    HashMap<String, Object> values = new HashMap<>();
+                    values.put("Current Country Location", getAddress(location.getLatitude(),location.getLongitude()));
+                    values.put("Current Place Location", getAddress2(location.getLatitude(),location.getLongitude()));
+                    mDatabase.child("Users").child(user.getUid()).child("Location").setValue(values);
+            }
+        }
+    };
+    //
     //
     String name;
     BottomNavigationView bottomNavigationView;
@@ -97,6 +141,7 @@ public class HomeFragment extends Fragment {
     public ArrayList<String> Amount = new ArrayList<>();
     public ArrayList<String> Date = new ArrayList<>();
 
+
     public HomeFragment() {
     }
 
@@ -115,9 +160,9 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
 
-        Add(user.getUid(),user.getDisplayName(),user.getEmail());
+        Add(user.getUid(), user.getDisplayName(), user.getEmail());
         //
-        //Count =>
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
     }
 
     @Override
@@ -128,8 +173,18 @@ public class HomeFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= 21) {
             getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
+        //
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(4000);
+        locationRequest.setFastestInterval(2000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        //
+        //getLocation();
+        checkSettingsandStartLocation();
+        //
         scrollView = view.findViewById(R.id.scroll);
-        scrollView.smoothScrollTo(0,0);
+        scrollView.smoothScrollTo(0, 0);
         //
         progressBar = view.findViewById(R.id.progressBar3);
         progressBar.setVisibility(View.VISIBLE);
@@ -155,18 +210,19 @@ public class HomeFragment extends Fragment {
         // second  row;
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.open_animation);
         animation.setDuration(1100);
-        cardView.setAnimation(animation);;
+        cardView.setAnimation(animation);
+        ;
         cardView2.setAnimation(animation);
         //
         bottomNavigationView = view.findViewById(R.id.bottom_navigation);
         //
-         circularProgressBar =view.findViewById(R.id.pb_one);
+        circularProgressBar = view.findViewById(R.id.pb_one);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             Intent i = new Intent(getContext(), Profile.class);
-             startActivity(i);
+                Intent i = new Intent(getContext(), Profile.class);
+                startActivity(i);
             }
         });
 
@@ -174,7 +230,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 BottomSheetNFC bottomSheet = new BottomSheetNFC();
-                bottomSheet.show(getFragmentManager(),"TAG");
+                bottomSheet.show(getFragmentManager(), "TAG");
             }
         });
         //
@@ -188,8 +244,7 @@ public class HomeFragment extends Fragment {
         handlerThread.start();
         Looper looper = handlerThread.getLooper();
         Handler handler = new Handler(looper);
-        handler.post(new Runnable()
-        {
+        handler.post(new Runnable() {
             @Override
             public void run() {
                 Activity();
@@ -197,7 +252,6 @@ public class HomeFragment extends Fragment {
         });
         return view;
     }
-
 
     private void Add(String userId, String name, String email) {
         User user = new User(name, email);
@@ -219,12 +273,11 @@ public class HomeFragment extends Fragment {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        if(link != null)
-        {
+        if (link != null) {
             final ProgressDialog progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            StorageReference ref = storageReference.child("images/"+user.getUid());
+            StorageReference ref = storageReference.child("images/" + user.getUid());
             ref.putFile(link)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -232,7 +285,8 @@ public class HomeFragment extends Fragment {
                             progressDialog.dismiss();
                             try {
                                 GetImage();
-                            }catch (Exception e){}
+                            } catch (Exception e) {
+                            }
                             Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -240,7 +294,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(getContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -250,8 +304,9 @@ public class HomeFragment extends Fragment {
                     });
         }
     }
+
     public void GetImage() throws Exception {
-        StorageReference storageRef = storageReference.child("images/" +user.getUid());
+        StorageReference storageRef = storageReference.child("images/" + user.getUid());
 
         final File localFile = File.createTempFile("images", "jpg");
         localFile.mkdir();
@@ -272,38 +327,25 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void Activity (){
+    public void Activity() {
 //       TODO Data Injection;
 
-//        Names.add(0,"Starbucks");
-//        Location.add(0,"Byblos,LB");
-//        Amount.add(0,"32.61");
-//        Date.add(0,"11/04/2021");
-//
-//        Names.add(0,"Apple Store");
-//        Location.add(0,"NY,NY");
-//        Amount.add(0,"10.21");
-//        Date.add(0,"13/04/2021");
-//
-//        Names.add(0,"Costco");
-//        Location.add(0,"Denver,CO");
-//        Amount.add(0,"160.21");
-//        Date.add(0,"15/04/2021");
 
 
-            for (int i = 0 ; i< Names.size();i++) {
-                user = FirebaseAuth.getInstance().getCurrentUser();
-                HashMap<String, Object> values = new HashMap<>();
-                values.put("Name", Names.get(i));
-                values.put("Location", Location.get(i));
-                values.put("Amount", Amount.get(i));
-                values.put("Date", Date.get(i));
-                mDatabase.child("Users").child(user.getUid()).child("Transactions").child(""+i).updateChildren(values);
-            }
+        for (int i = 0; i < Names.size(); i++) {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            HashMap<String, Object> values = new HashMap<>();
+            values.put("Name", Names.get(i));
+            values.put("Location", Location.get(i));
+            values.put("Amount", Amount.get(i));
+            values.put("Date", Date.get(i));
+            mDatabase.child("Users").child(user.getUid()).child("Transactions").child("" + i).updateChildren(values);
+        }
 
 //            HashMap<String, Object> values2 = new HashMap<>();
 //            values2.put("Transaction count",Names.size());
 //            mDatabase.child("Users").child(user.getUid()).child("User Data").updateChildren(values2);
+            //
         FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -312,58 +354,161 @@ public class HomeFragment extends Fragment {
                 //
                 p = new ArrayList<>();
                 // getting recycler data
-                for (int i =0 ; i<SI;i++) {
+                for (int i = 0; i < SI; i++) {
                     Names.add(dataSnapshot.child("Transactions").child("" + i).child("Name").getValue().toString());
                     Location.add(dataSnapshot.child("Transactions").child("" + i).child("Location").getValue().toString());
                     Amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
                     Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
                 }
-                    try {
-                        if (Integer.parseInt(xl) == 0) {
-                            textView4.setVisibility(View.VISIBLE);
-                        }else{
-                        }
-                    }catch(Exception e){
-                        progressBar.setVisibility(View.INVISIBLE);
+                try {
+                    if (Integer.parseInt(xl) == 0) {
                         textView4.setVisibility(View.VISIBLE);
+                    } else {
                     }
-                for (int i =0 ; i<SI;i++) {
-                    p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i),Date.get(i)));
+                } catch (Exception e) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    textView4.setVisibility(View.VISIBLE);
+                }
+                for (int i = 0; i < SI; i++) {
+                    p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i), Date.get(i)));
                     recyclerView.setAdapter(new Adapter(getContext(), p));
                 }
                 //
                 float val = 0;
                 float val1 = 0;
 
-                for (int i =0 ; i<SI;i++) {
+                for (int i = 0; i < SI; i++) {
                     val1 = Float.parseFloat(Amount.get(i));
                     val = val + val1;
                 }
-                textView2.setText("$"+val);
+                textView2.setText("$" + val);
                 Float finalVal = val;
                 // val and % data;
                 String x;
-            try {
-                x = dataSnapshot.child("User Data").child("income").getValue().toString();
-                int income = Integer.parseInt(x);
-                int perc_res = (int) ((finalVal / income) * 100);
-                textView3.setText(perc_res + "%");
-                circularProgressBar.setProgressWithAnimation((float) perc_res, Long.valueOf(3000)); // 3 sec;
-                if (income < perc_res) {
-                    circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
-                } else if (perc_res > 0.60 * income && perc_res < income) {
-                    circularProgressBar.setProgressBarColor(Color.parseColor("#FF9847"));
-                } else {
-                }
-            }catch(Exception e){
+                try {
+                    x = dataSnapshot.child("User Data").child("income").getValue().toString();
+                    int income = Integer.parseInt(x);
+                    int perc_res = (int) ((finalVal / income) * 100);
+                    textView3.setText(perc_res + "%");
+                    circularProgressBar.setProgressWithAnimation((float) perc_res, Long.valueOf(3000)); // 3 sec;
+                    if (income < perc_res) {
+                        circularProgressBar.setProgressBarColor(Color.parseColor("#FF1D47"));
+                    } else if (perc_res > 0.60 * income && perc_res < income) {
+                        circularProgressBar.setProgressBarColor(Color.parseColor("#FF9847"));
+                    } else {
+                    }
+                } catch (Exception e) {
 
-            }
+                }
                 progressBar.setVisibility(View.INVISIBLE);
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
 
             }
         });
     }
+
+    private void checkSettingsandStartLocation() {
+        LocationSettingsRequest request = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest).build();
+
+        SettingsClient client = LocationServices.getSettingsClient(getContext());
+
+        Task<LocationSettingsResponse> locationSettingsResponseTask = client.checkLocationSettings(request);
+        locationSettingsResponseTask.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // Settings of device are satisfied we can start updates;
+                startLocationUpdate();
+            }
+        });
+
+        //
+
+        locationSettingsResponseTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    ResolvableApiException apiException = (ResolvableApiException) e;
+                    try {
+                        apiException.startResolutionForResult(getActivity(), 1001);
+                    } catch (IntentSender.SendIntentException sendIntentException) {
+                        sendIntentException.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void startLocationUpdate() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
+
+
+
+    private void stopLocationUpdate(){
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    }
+
+
+    @Override
+    public void onStop(){
+        super.onStop();
+     stopLocationUpdate();
+    }
+
+
+
+    public String getAddress(double lat, double lng) {
+        String add = null;
+        try {
+            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+            //add = obj.getAddressLine(0);
+            add = obj.getCountryName();
+        }catch (Exception e){}
+//            add = add + "\n" + obj.getCountryCode();
+//            add = add + "\n" + obj.getAdminArea();
+//            add = add + "\n" + obj.getPostalCode();
+//            add = add + "\n" + obj.getSubAdminArea();
+//            add = add + "\n" + obj.getLocality();
+//            add = add + "\n" + obj.getSubThoroughfare();
+            // TennisAppActivity.showDialog(add);
+        return add;
+    }
+
+    public String getAddress2(double lat, double lng) {
+        String add = null;
+        try {
+            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+            add = obj.getFeatureName();
+        }catch (Exception e){}
+//            add = add + "\n" + obj.getCountryCode();
+//            add = add + "\n" + obj.getAdminArea();
+//            add = add + "\n" + obj.getPostalCode();
+//            add = add + "\n" + obj.getSubAdminArea();
+//            add = add + "\n" + obj.getLocality();
+//            add = add + "\n" + obj.getSubThoroughfare();
+        // TennisAppActivity.showDialog(add);
+        return add;
+    }
+
 }

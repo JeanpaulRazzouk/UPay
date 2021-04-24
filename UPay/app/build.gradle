@@ -86,4 +86,6 @@ dependencies {
     implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
     implementation 'io.card:android-sdk:5.5.1'
     implementation 'com.github.isradeleon:Notify-Android:1.0.4' // updated for Android X
+    //
+    implementation "com.google.android.gms:play-services-location:18.0.0"
 }

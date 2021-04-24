@@ -6,6 +6,9 @@ buildscript {
         jcenter()
         maven { url 'https://jitpack.io' }
         maven { url "http://pay.cards/maven" }
+        maven {
+            url  "http://dl.bintray.com/skullper/maven"
+        }
         
     }
     dependencies {
