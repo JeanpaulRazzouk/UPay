@@ -247,7 +247,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="120sp"
                     android:layout_marginTop="-50sp"
-                    android:textSize="@dimen/common_20_dp"
+                    android:textSize="20dp"
                     android:fontFamily="@font/sf_ui_display_black"
                     android:text="No Transactions" />
 

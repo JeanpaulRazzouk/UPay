@@ -8,9 +8,12 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.Adapters.ForecastAdapter
+import com.example.upay.ForecastParam
 import com.example.upay.R
 import com.github.aachartmodel.aainfographics.aachartcreator.*
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -19,9 +22,7 @@ import org.eazegraph.lib.models.ValueLinePoint
 import org.eazegraph.lib.models.ValueLineSeries
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.stream.Collectors
 import java.util.stream.IntStream
@@ -39,6 +40,10 @@ class Forecast : AppCompatActivity() {
     var textView3: TextView? = null
     private var mDatabase: DatabaseReference? = null
     var aaChartView : AAChartView? = null
+    private var itemsArrayList: ArrayList<ForecastParam>? = null
+    var p: ArrayList<ForecastParam>? = null
+    var recycler : RecyclerView? = null
+    private var adapter: ForecastAdapter? = null
     //
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +57,12 @@ class Forecast : AppCompatActivity() {
         textView2 = findViewById(R.id.textView27)
         textView3 = findViewById(R.id.textView28)
         imageButton = findViewById(R.id.imageButton11)
+        //
+        recycler = findViewById(R.id.recycler)
+        recycler?.setLayoutManager(LinearLayoutManager(applicationContext))
+        itemsArrayList = ArrayList<ForecastParam>()
+        adapter = ForecastAdapter(applicationContext, itemsArrayList)
+        recycler?.setAdapter(adapter)
         // methods;
         LRegression()
         //
@@ -106,7 +117,7 @@ class Forecast : AppCompatActivity() {
                     }
                     // Then get the month of the year from the Date based on specific locale.
                     val month_of_year = SimpleDateFormat("M", Locale.ENGLISH).format(d)
-                    Log.d("DEA",month_of_year)
+                    Log.d("DEA", month_of_year)
                     try {
                         when (month_of_year) {
                             "1" -> m1 += amount!![i].toFloat()
@@ -149,8 +160,8 @@ class Forecast : AppCompatActivity() {
                 AmountY.removeAll(setOf(0.0f))
                 //
 
-                val array_date : ArrayList<String> = arrayListOf("JAN","FEB","MAR","APR","MAY","JUN","JUL",
-                        "AUG","SEPT","OCT","NOV","DEC")
+                val array_date: ArrayList<String> = arrayListOf("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL",
+                        "AUG", "SEPT", "OCT", "NOV", "DEC")
 
                 //
                 for (i in 0..11) {
@@ -193,7 +204,8 @@ class Forecast : AppCompatActivity() {
                         val final_value = this_month - ("" + predictForValue(month, DateX, AmountY)).toFloat()
                         textView2!!.text = "Spending is Likely \n to Decrease \n by $$final_value"
                     }
-                }catch (e: java.lang.Exception){}
+                } catch (e: java.lang.Exception) {
+                }
                 mDatabase = FirebaseDatabase.getInstance().reference
                 try {
                     // cut % algorithm;
@@ -236,64 +248,95 @@ class Forecast : AppCompatActivity() {
                     array_Date?.add(dataSnapshot.child("Transactions").child(i.toString()).child("Date").value.toString())
                 }
 
-
                 for (j in 0 until Count.toInt()) {
-                    for (i in j+1 until Count.toInt()) {
-                        if (array_location.get(j)==array_location.get(i)) {
-                            var TheMethod2: ArrayList<Float> = arrayListOf()
+                    for (i in j + 1 until Count.toInt()) {
+                        if (array_location.get(j) == array_location.get(i)) {
 
                             if (TheMethodName.contains(array_location.get(j))) {
-                                    val c = TheMethodName.indexOf(array_location.get(j))
-                                    TheMethod.get(c).add(array_amount.get(i).toFloat())
-                            }else{
+                                val c = TheMethodName.indexOf(array_location.get(j))
+                                TheMethod.get(c).add(array_amount.get(i).toFloat())
+                            } else {
+                                var TheMethod2: ArrayList<Float> = arrayListOf()
                                 TheMethodName.add(array_location.get(i))
                                 TheMethod2.add(array_amount.get(i).toFloat())
                                 TheMethod2.add(array_amount.get(j).toFloat())
                                 TheMethod.add(TheMethod2)
                             }
-                        }
-                        else{
-                            var TheMethod3: ArrayList<Float> = arrayListOf()
+                        } else {
                             if (TheMethodName.contains(array_location.get(j))) {
-                                if (i<1) {
+                                if (i < 1) {
                                     val c = TheMethodName.indexOf(array_location.get(j))
-                                    TheMethod.get(c).add(array_amount.get(i).toFloat())
+                                    TheMethod.get(c).add(array_amount.get(j).toFloat())
                                 }
-                            }
-                            else {
-                                TheMethodName.add(array_location.get(i))
-                                TheMethod3.add(array_amount.get(i).toFloat())
+                            } else {
+                                var TheMethod3: ArrayList<Float> = arrayListOf()
+                                TheMethodName.add(array_location.get(j))
+                                TheMethod3.add(array_amount.get(j).toFloat())
                                 TheMethod.add(TheMethod3)
-                                // Log.d("DEA3",TheMethod.get(j).toString())
                             }
                         }
                     }
                 }
 
-                        for (j in 0 until  TheMethod.size) {
-                                        Log.d("DEA2", TheMethod.get(j).toString())
+                var TheMethodEXTRA: ArrayList<ArrayList<Float>> = arrayListOf()
 
-                        }
+                for (j in 0 until TheMethod.size) {
+                    TheMethodEXTRA.add(TheMethod.get(j).distinct().toCollection(ArrayList()))
+                }
 
 
                 for (j in 0 until TheMethodName.size) {
                     aaSeriesElement = AASeriesElement().name(TheMethodName.get(j))
-                            .data(TheMethod.get(j).toTypedArray());
+                            .data(TheMethodEXTRA.get(j).toTypedArray());
                     aaSeries.add(aaSeriesElement)
                 }
 
                 val aaChartModel: AAChartModel = AAChartModel()
                         .chartType(AAChartType.Spline)
-                        .animationType(AAChartAnimationType.EaseInExpo)
-                        .title("User Past Spending")
-                        .titleStyle(AAStyle().fontWeight(AAChartFontWeightType.Bold))
-                        .subtitle("Places You have already spent at ")
+                        .animationType(AAChartAnimationType.SwingTo)
                         .backgroundColor("#fafafa")
                         .dataLabelsEnabled(true)
                         .xAxisLabelsEnabled(false)
                         .series(aaSeries.toTypedArray())
 
                 aaChartView?.aa_drawChartWithChartModel(aaChartModel)
+                // The Forecasting section;
+                var size: ArrayList<Float> = arrayListOf()
+                for (i in 0 until TheMethodName.size) {
+                    size.add(TheMethodEXTRA.get(i).size.toFloat())
+                }
+
+                var Number: ArrayList<ArrayList<Int>> = arrayListOf()
+                for (i in 0 until TheMethodName.size) {
+                    var range: List<Int>? = null
+                    range = IntStream.rangeClosed(1, size.get(i).toInt()).boxed().collect(Collectors.toList())
+                    Number.add(range.toCollection(ArrayList()))
+                }
+
+                for (i in 0 until TheMethodName.size) {
+                    var output = " Spending at " + TheMethodName.get(i) + "will increase by" +
+                            predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i))
+                }
+
+                // TODO()
+                val t3 = arrayOfNulls<Int>(2)
+                t3[0] = R.drawable.ic_growth
+                t3[1] = R.drawable.ic_loss
+                //
+                p = ArrayList<ForecastParam>()
+                for (i in 0 until TheMethodName.size) {
+                    if(predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)) > TheMethodEXTRA.get(i).maxOrNull()?.toDouble()!!) {
+                        p?.add(ForecastParam(TheMethodName.get(i),
+                                predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)).toString(),  t3[0]))
+                        recycler?.adapter = ForecastAdapter(applicationContext, p)
+                    }else{
+                        p?.add(ForecastParam(TheMethodName.get(i),
+                                predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)).toString(),  t3[1]))
+                        recycler?.adapter = ForecastAdapter(applicationContext, p)
+                    }
+
+                }
+
             }
 
             override fun onCancelled(error: DatabaseError) {}

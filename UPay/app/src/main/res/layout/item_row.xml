@@ -35,14 +35,14 @@
 
         <TextView
             android:id="@+id/txtAmount"
-            android:layout_width="143dp"
-            android:layout_height="wrap_content"
+            android:layout_width="113dp"
+            android:layout_height="41dp"
             android:layout_marginStart="220dp"
             android:layout_marginTop="25dp"
             android:fontFamily="@font/sf_ui_display_black"
-            android:textColor="@color/design_default_color_on_secondary"
-            android:gravity="center_vertical"
+            android:gravity="right"
             android:padding="1dp"
+            android:textColor="@color/design_default_color_on_secondary"
             android:textSize="20dp" />
 
         <TextView

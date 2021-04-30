@@ -2,6 +2,7 @@ package com.example.BarFragments;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -11,7 +12,11 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -19,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +49,6 @@ import android.widget.Toast;
 
 import com.example.Adapters.Adapter;
 import com.example.Profile.Profile;
-import com.example.Profile.Settings;
 import com.example.payment.BottomSheetNFC;
 import com.example.payment.User;
 import com.example.upay.PurchaseItems;
@@ -164,7 +170,8 @@ public class HomeFragment extends Fragment {
 
         Add(user.getUid(), user.getDisplayName(), user.getEmail());
         //
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        //
     }
 
     @Override
@@ -363,15 +370,15 @@ public class HomeFragment extends Fragment {
 
 
 
-        for (int i = 0; i < Names.size(); i++) {
-            user = FirebaseAuth.getInstance().getCurrentUser();
-            HashMap<String, Object> values = new HashMap<>();
-            values.put("Name", Names.get(i));
-            values.put("Location", Location.get(i));
-            values.put("Amount", Amount.get(i));
-            values.put("Date", Date.get(i));
-            mDatabase.child("Users").child(user.getUid()).child("Transactions").child("" + i).updateChildren(values);
-        }
+//        for (int i = 0; i < Names.size(); i++) {
+//            user = FirebaseAuth.getInstance().getCurrentUser();
+//            HashMap<String, Object> values = new HashMap<>();
+//            values.put("Name", Names.get(i));
+//            values.put("Location", Location.get(i));
+//            values.put("Amount", Amount.get(i));
+//            values.put("Date", Date.get(i));
+//            mDatabase.child("Users").child(user.getUid()).child("Transactions").child("" + i).updateChildren(values);
+//        }
 
 //            HashMap<String, Object> values2 = new HashMap<>();
 //            values2.put("Transaction count",Names.size());
@@ -385,7 +392,7 @@ public class HomeFragment extends Fragment {
                 //
                 p = new ArrayList<>();
                 // getting recycler data
-                    for (int i = 0; i < SI; i++) {
+                for (int i = 0; i < SI; i++) {
                         try {
                             Names.add(dataSnapshot.child("Transactions").child("" + i).child("Name").getValue().toString());
                             Location.add(dataSnapshot.child("Transactions").child("" + i).child("Location").getValue().toString());
@@ -400,7 +407,7 @@ public class HomeFragment extends Fragment {
                         textView4.setVisibility(View.INVISIBLE);
                     }
 
-                for (int i = 0; i < SI; i++) {
+                for (int i = SI-1; i >=0; i--) {
                     p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i), Date.get(i)));
                     recyclerView.setAdapter(new Adapter(getContext(), p));
                 }
@@ -478,13 +485,6 @@ public class HomeFragment extends Fragment {
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());

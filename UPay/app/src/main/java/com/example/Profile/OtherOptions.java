@@ -5,8 +5,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.cardemulation.CardEmulation;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -23,6 +25,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.application.isradeleon.notify.Notify;
+import com.example.payment.MyHostApduService;
 import com.example.upay.JavaMailAPI;
 import com.example.upay.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -137,10 +140,13 @@ public class OtherOptions extends Fragment {
             HashMap<String, Object> values = new HashMap<>();
             values.put("Switch1", true);
             mDatabase.child("Users").child(user.getUid()).child("Switches").updateChildren(values);
+            //
+            AutomaticPayment(true);
         }else {
             HashMap<String, Object> values = new HashMap<>();
             values.put("Switch1", false);
             mDatabase.child("Users").child(user.getUid()).child("Switches").updateChildren(values);
+            AutomaticPayment(false);
         }
     }
 
@@ -191,9 +197,16 @@ public class OtherOptions extends Fragment {
        }
 
 
-       public void AutomaticPayment(){
+       public void AutomaticPayment(boolean input){
+        if (input == true){
+            Intent intent = new Intent();
+            intent.setAction(CardEmulation.ACTION_CHANGE_DEFAULT);
+            intent.putExtra(CardEmulation.EXTRA_SERVICE_COMPONENT,
+                    new ComponentName(getContext(), MyHostApduService.class));
+            intent.putExtra(CardEmulation.EXTRA_CATEGORY, CardEmulation.CATEGORY_PAYMENT);
 
-        //TODO()
+            startActivity(intent);
+        }
 
        }
 
