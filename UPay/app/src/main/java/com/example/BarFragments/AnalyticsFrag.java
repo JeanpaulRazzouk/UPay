@@ -32,8 +32,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.Adapters.Adapter;
 import com.example.upay.BottomSheetCal;
 import com.example.upay.EventDeco;
+import com.example.upay.PurchaseItems;
 import com.example.upay.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,6 +53,7 @@ import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -167,13 +170,25 @@ public class AnalyticsFrag extends Fragment {
             // This if Statement is used for those who haven't had any previously added income;
             if (FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Income").child("income") != null) {
 
-                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Income").addListenerForSingleValueEvent(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String val;
+                        String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
                         try {
-                            val = dataSnapshot.child("income").getValue().toString();
-                            textViewIncome.setText("$" + val);
+                            val = dataSnapshot.child("Income").child("income").getValue().toString();
+                            if (Currency.equals("$")) {
+                                textViewIncome.setText("$" + val);
+                            }
+                            else if (Currency.equals("€")){
+                                double v = 0.83*Double.parseDouble(val);
+                                textViewIncome.setText("€" + v);
+                            }
+                            else if (Currency.equals("$CA")){
+                                double v = 1.23*Double.parseDouble(val);
+                                textViewIncome.setText("$CA" + v);
+                            }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -222,6 +237,7 @@ public class AnalyticsFrag extends Fragment {
                         Float past_month_val = 0.0f;
                         //
                         String x = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
+                        String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
                         //
                         for (int i = 0; i < Integer.parseInt(x); i++) {
                             amount3.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
@@ -249,7 +265,16 @@ public class AnalyticsFrag extends Fragment {
                         if (current_month_val > past_month_val && current_month_val != null && past_month_val != null) {
                             float fin = current_month_val - past_month_val;
 
-                            textView3.setText("+" + "$" + fin);
+                            if (Currency.equals("$")) {
+                                textView3.setText("+" + "$" + fin);
+                            }
+                            else if (Currency.equals("€")){
+                                textView3.setText("+" + "€"+  new DecimalFormat("##.##").format(0.83*fin));
+                            }
+                            else if (Currency.equals("$CA")){
+                                textView3.setText("+" + "$CA" +  new DecimalFormat("##.##").format(1.23*fin));
+                            }
+
                             if (current_month_val == 0.0f || past_month_val == 0.0f) {
                                 percentage.setText("0%");
                             } else {
@@ -259,7 +284,17 @@ public class AnalyticsFrag extends Fragment {
                             }
                         } else if (current_month_val < past_month_val && current_month_val != null && past_month_val != null) {
                             float fin = past_month_val - current_month_val;
-                            textView3.setText("-" + "$" + fin);
+
+                            if (Currency.equals("$")) {
+                                textView3.setText("-" + "$" + fin);
+                            }
+                            else if (Currency.equals("€")){
+                                textView3.setText("-" + "€"+   new DecimalFormat("##.##").format(0.83*fin));
+                            }
+                            else if (Currency.equals("$CA")){
+                                textView3.setText("-" + "$CA" +   new DecimalFormat("##.##").format(1.23*fin));
+                            }
+
                             if (current_month_val == 0.0f || past_month_val == 0.0f) {
                                 percentage.setText("0%");
                             } else {
@@ -617,6 +652,7 @@ public class AnalyticsFrag extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String x = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
+                String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
                 for (int i = 0; i < Integer.parseInt(x); i++) {
                     amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
                     Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
@@ -647,7 +683,17 @@ public class AnalyticsFrag extends Fragment {
                         fin_val = fin_val + Float.parseFloat(amount.get(i));
                     }
                 }
-                textView.setText("$"+fin_val);//
+                if (Currency.equals("$")) {
+                    textView.setText("$"+new DecimalFormat("##.##").format(fin_val));//
+                }
+                else if (Currency.equals("€")){
+                    double val =  (0.83*Double.parseDouble(""+fin_val));
+                    textView.setText("€"+new DecimalFormat("##.##").format(val));//
+                }
+                else if (Currency.equals("$CA")){
+                    double val = (1.23*Double.parseDouble(""+fin_val));
+                    textView.setText("$CA"+new DecimalFormat("##.##").format(val));//
+                }
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 mDatabase = FirebaseDatabase.getInstance().getReference();
                 HashMap<String, Object> values = new HashMap<>();

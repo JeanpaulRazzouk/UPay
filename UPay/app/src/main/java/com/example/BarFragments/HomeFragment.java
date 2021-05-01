@@ -83,6 +83,7 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import java.io.File;
 import java.io.IOException;
 import java.security.spec.ECField;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -388,6 +389,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String xl = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
+                String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
                 int SI = Integer.parseInt(xl);
                 //
                 p = new ArrayList<>();
@@ -408,8 +410,20 @@ public class HomeFragment extends Fragment {
                     }
 
                 for (int i = SI-1; i >=0; i--) {
-                    p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t$" + Amount.get(i), Date.get(i)));
-                    recyclerView.setAdapter(new Adapter(getContext(), p));
+                    if (Currency.equals("$")) {
+                        p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t" + Currency + Amount.get(i), Date.get(i)));
+                        recyclerView.setAdapter(new Adapter(getContext(), p));
+                    }
+                    else if (Currency.equals("€")){
+                        double val =  (0.83*Double.parseDouble(Amount.get(i)));
+                        p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t" + Currency + new DecimalFormat("##.##").format(val), Date.get(i)));
+                        recyclerView.setAdapter(new Adapter(getContext(), p));
+                    }
+                    else if (Currency.equals("$CA")){
+                        double val = (1.23*Double.parseDouble(Amount.get(i)));
+                        p.add(new PurchaseItems(Names.get(i), Location.get(i), "\t\t" + Currency + new DecimalFormat("##.##").format(val), Date.get(i)));
+                        recyclerView.setAdapter(new Adapter(getContext(), p));
+                    }
                 }
                 //
                 float val = 0;
@@ -419,7 +433,16 @@ public class HomeFragment extends Fragment {
                     val1 = Float.parseFloat(Amount.get(i));
                     val = val + val1;
                 }
-                textView2.setText("$" + val);
+                if (Currency.equals("$")) {
+                    textView2.setText("$" + new DecimalFormat("##.##").format( val));
+                }
+                else if (Currency.equals("€")){
+                    textView2.setText("€" + new DecimalFormat("##.##").format( 0.83*val));
+
+                }
+                else if (Currency.equals("$CA")){
+                    textView2.setText("$CA" +new DecimalFormat("##.##").format( 1.23*val));
+                }
                 Float finalVal = val;
                 // val and % data;
                 String x;

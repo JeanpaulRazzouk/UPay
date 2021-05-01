@@ -7,52 +7,85 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="529dp">
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView35"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/sf_ui_display_black"
-            android:text="Supported Cards"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="@dimen/common_20_dp"
-            android:textColor="@color/defaultContentColor"
-            android:textSize="36dp" />
+            android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/imageButton15"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="100dp"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginBottom="50sp"
-            android:background="@null"
-            android:src="@drawable/butto_bg_2" />
+            <TextView
+                android:id="@+id/textView35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/common_20_dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Supported Cards"
+                android:textColor="@color/defaultContentColor"
+                android:textSize="36dp" />
 
-        <TextView
-            android:id="@+id/textView36"
-            android:layout_width="171dp"
-            android:layout_height="49dp"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="-100dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginBottom="0sp"
-            android:fontFamily="@font/sf_ui_display_black"
-            android:gravity="center"
-            android:text="Check Card"
-            android:textColor="@color/white"
-            android:textSize="15dp" />
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="@dimen/common_20_dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/cards_can" />
+
+            <TextView
+                android:id="@+id/textView37"
+                android:layout_width="wrap_content"
+                android:layout_height="74dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="@dimen/common_20_dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="50sp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:gravity="center"
+                android:text=" Scan Card to check whether your card is valid or not "
+                android:textColor="#6E6C6C"
+                android:textSize="20dp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                app:cardCornerRadius="50dp"
+                android:layout_gravity="center">
 
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/imageButton15"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginBottom="50sp"
+                android:background="@null"
+                android:src="@drawable/butto_bg_2" />
+
+                <TextView
+                    android:id="@+id/textView36"
+                    android:layout_width="152dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="100dp"
+                    android:layout_marginBottom="50sp"
+                    android:fontFamily="@font/sf_ui_display_black"
+                    android:gravity="center"
+                    android:text="Scan Card"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="15dp" />
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
     </ScrollView>
 
 

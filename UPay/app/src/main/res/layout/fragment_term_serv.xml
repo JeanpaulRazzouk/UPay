@@ -6,15 +6,6 @@
     android:background="?android:windowBackground"
     tools:context="com.example.Profile.TermsService">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="250dp"
-        android:layout_marginTop="400dp"
-        android:text="Button" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,6 +22,17 @@
             app:layout_constraintVertical_bias="0.503">
 
 
+            <TextView
+                android:id="@+id/textView40"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="50dp"
+                android:textSize="15dp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="TextView" />
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

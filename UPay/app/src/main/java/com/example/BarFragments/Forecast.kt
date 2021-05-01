@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import com.google.firebase.database.*
 import org.eazegraph.lib.charts.ValueLineChart
 import org.eazegraph.lib.models.ValueLinePoint
 import org.eazegraph.lib.models.ValueLineSeries
+import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.ZoneId
@@ -44,6 +46,7 @@ class Forecast : AppCompatActivity() {
     var p: ArrayList<ForecastParam>? = null
     var recycler : RecyclerView? = null
     private var adapter: ForecastAdapter? = null
+    var progressbar :ProgressBar? = null
     //
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +60,10 @@ class Forecast : AppCompatActivity() {
         textView2 = findViewById(R.id.textView27)
         textView3 = findViewById(R.id.textView28)
         imageButton = findViewById(R.id.imageButton11)
+        //
+        progressbar = findViewById(R.id.progressBar5)
+        progressbar?.visibility =View.VISIBLE
+
         //
         recycler = findViewById(R.id.recycler)
         recycler?.setLayoutManager(LinearLayoutManager(applicationContext))
@@ -193,16 +200,42 @@ class Forecast : AppCompatActivity() {
                 val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
                 val month = localDate.monthValue
                 //
-                textView!!.text = "$" + predictForValue(month, DateX, AmountY)
+                var Currency = dataSnapshot.child("Currency").child("Currency").value.toString()
+                if (Currency == "$") {
+                    textView!!.text = "$" + predictForValue(month, DateX, AmountY)
+                } else if (Currency == "€") {
+                    val `val`: Double = 0.83 * predictForValue(month, DateX, AmountY)
+                    textView!!.text = "€" + `val`
+                } else if (Currency == "\$CA") {
+                    val `val`: Double = 1.23 * predictForValue(month, DateX, AmountY)
+                    textView!!.text = "\$CA" + `val`
+                }
                 // present to next month increase decrease;
                 try {
                     val this_month = dataSnapshot.child("User Data").child("This Month").value.toString().toFloat()
                     if (this_month < predictForValue(month, DateX, AmountY)) {
                         val final_value = ("" + predictForValue(month, DateX, AmountY)).toFloat() - this_month
-                        textView2!!.text = "Spending is Likely \n to Increase \n by +$$final_value"
+                        if (Currency == "$") {
+                            textView2!!.text = "Spending is Likely \n to Increase \n by +$$final_value"
+                        } else if (Currency == "€") {
+                            val `val`: Double = 0.83 * final_value
+                            textView2!!.text = "Spending is Likely \n to Increase \n by +€"+ DecimalFormat("##.##").format(`val`)
+                        } else if (Currency == "\$CA") {
+                            val `val`: Double = 1.23 * predictForValue(month, DateX, AmountY)
+                            textView2!!.text = "Spending is Likely \n to Increase \n by +\$CA"+ DecimalFormat("##.##").format(`val`)
+                        }
+
                     } else if (this_month > predictForValue(month, DateX, AmountY)) {
                         val final_value = this_month - ("" + predictForValue(month, DateX, AmountY)).toFloat()
-                        textView2!!.text = "Spending is Likely \n to Decrease \n by $$final_value"
+                        if (Currency == "$") {
+                            textView2!!.text = "Spending is Likely \n to Decrease \n by $$final_value"
+                        } else if (Currency == "€") {
+                            val `val`: Double = 0.83 * final_value
+                            textView2!!.text = "Spending is Likely \n to Decrease \n by +€"+ DecimalFormat("##.##").format(`val`)
+                        } else if (Currency == "\$CA") {
+                            val `val`: Double = 1.23 * predictForValue(month, DateX, AmountY)
+                            textView2!!.text = "Spending is Likely \n to Decrease \n by +\$CA"+ DecimalFormat("##.##").format(`val`)
+                        }
                     }
                 } catch (e: java.lang.Exception) {
                 }
@@ -298,7 +331,9 @@ class Forecast : AppCompatActivity() {
                         .dataLabelsEnabled(true)
                         .xAxisLabelsEnabled(false)
                         .series(aaSeries.toTypedArray())
-
+                //
+                progressbar?.visibility = View.INVISIBLE
+                //
                 aaChartView?.aa_drawChartWithChartModel(aaChartModel)
                 // The Forecasting section;
                 var size: ArrayList<Float> = arrayListOf()
@@ -325,13 +360,13 @@ class Forecast : AppCompatActivity() {
                 //
                 p = ArrayList<ForecastParam>()
                 for (i in 0 until TheMethodName.size) {
-                    if(predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)) > TheMethodEXTRA.get(i).maxOrNull()?.toDouble()!!) {
+                    if (predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)) > TheMethodEXTRA.get(i).maxOrNull()?.toDouble()!!) {
                         p?.add(ForecastParam(TheMethodName.get(i),
-                                predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)).toString(),  t3[0]))
+                                predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)).toString(), t3[0]))
                         recycler?.adapter = ForecastAdapter(applicationContext, p)
-                    }else{
+                    } else {
                         p?.add(ForecastParam(TheMethodName.get(i),
-                                predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)).toString(),  t3[1]))
+                                predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)).toString(), t3[1]))
                         recycler?.adapter = ForecastAdapter(applicationContext, p)
                     }
 

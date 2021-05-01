@@ -206,6 +206,7 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                         String count = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
                         String Switch3 = dataSnapshot.child("Switches").child("Switch3").getValue().toString();
                         String Switch4 = dataSnapshot.child("Switches").child("Switch4").getValue().toString();
+                        String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
                         //
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                             LocalDate date = LocalDate.now();
@@ -225,7 +226,6 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                             values.put("Amount", "20");
                             values.put("Date", formatter.format(parsedDate));
                             //
-
                             mDatabase.child("Users").child(user.getUid()).child("Transactions").child(count).setValue(values);
                             int x = Integer.parseInt(count) + 1;
                             HashMap<String, Object> values2 = new HashMap<>();
@@ -234,12 +234,12 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                             //
                             if (Switch3.equals("true")) {
                                 BottomSheetNFC m = new BottomSheetNFC();
-                                PurchaseNotification(Place, Location, formatter.format(parsedDate), "20");
+                                PurchaseNotification(Place, Location, formatter.format(parsedDate), "20",Currency);
                             }
                             if (Switch4.equals("true")) {
                                 //TODO() Certain Values are For Testing;
                                 BottomSheetNFC m = new BottomSheetNFC();
-                                sendEmail(Place, Location, formatter.format(parsedDate), "20");
+                                sendEmail(Place, Location, formatter.format(parsedDate), "20",Currency);
                             }
                         }
                 }
@@ -251,24 +251,24 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                 //
             });
         }
-    public void sendEmail(String Name,String Location,String Date,String Amount) {
+    public void sendEmail(String Name,String Location,String Date,String Amount,String Currency) {
         user = FirebaseAuth.getInstance().getCurrentUser();
         String mEmail = user.getEmail();
         String mSubject = "UPay- "+Name+" Transaction";
         String mMessage = "Your Recent Transaction at "+Name+":" +
                 "\nLocation: "+Location
-                +"\nThe amount of $"+Amount+" has been spent on " +Date;
+                +"\nThe amount of "+Currency+Amount+" has been spent on " +Date;
 
         JavaMailAPI javaMailAPI = new JavaMailAPI(getActivity().getApplicationContext(), mEmail, mSubject, mMessage);
 
         javaMailAPI.execute();
     }
 
-    public void PurchaseNotification(String Name,String Location,String Date,String Amount){
+    public void PurchaseNotification(String Name,String Location,String Date,String Amount,String Currency){
        // String mSubject = "UPay- "+Name+" Transaction";
         String mMessage = "Your Recent Transaction at "+Name+":" +
                 "\nLocation: "+Location
-                +"\nThe amount of $"+Amount+" has been spent on " +Date;
+                +"\nThe amount of "+Currency+Amount+" has been spent on " +Date;
         Notify.build(getContext())
                 .setTitle("UPay")
                 .setContent(mMessage)

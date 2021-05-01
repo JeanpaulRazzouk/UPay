@@ -1,10 +1,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.Profile.CurrencySettings">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="362dp"
         android:layout_height="63dp"
@@ -15,12 +15,24 @@
         android:textColor="@color/defaultContentColor"
         android:textSize="30dp" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="@dimen/common_20_dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/payments" />
+
 
     <RadioGroup
         android:layout_width="193dp"
         android:layout_height="wrap_content"
+
         android:layout_marginStart="30dp"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="400dp">
 
         <RadioButton
             android:id="@+id/checkBox2"
@@ -28,7 +40,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/sf_ui_display_black"
             android:text="USD (United Sates Dollar)"
-            android:textColor="@color/add_manual_account_completed_activity_add_account_button_gradient_stop_color_2"
+            android:textColor="#757474"
             android:textSize="@dimen/common_15_dp"
             android:theme="@style/AppTheme.Design" />
 
@@ -39,7 +51,7 @@
             android:layout_marginTop="@dimen/common_15_dp"
             android:fontFamily="@font/sf_ui_display_black"
             android:text="EUR (EURO)"
-            android:textColor="@color/color1"
+            android:textColor="#757474"
             android:textSize="@dimen/common_15_dp"
             android:theme="@style/AppTheme.Design" />
 
@@ -50,7 +62,7 @@
             android:layout_marginTop="@dimen/common_15_dp"
             android:fontFamily="@font/sf_ui_display_black"
             android:text="CND (Canadian Dollar)"
-            android:textColor="#ED90A6"
+            android:textColor="#757474"
             android:textSize="@dimen/common_15_dp"
             android:theme="@style/AppTheme.Design" />
 

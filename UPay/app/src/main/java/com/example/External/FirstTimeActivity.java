@@ -61,7 +61,13 @@ Uri link;
         mp.start();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
-
+        //
+        HashMap<String, Object> value2 = new HashMap<>();
+        value2.put("USD",false);
+        value2.put("EUR",false);
+        value2.put("CAN",false);
+        mDatabase.child("Users").child(user.getUid()).child("Currency Settings").updateChildren(value2);
+        //
         HashMap<String, Object> v = new HashMap<>();
         v.put("Switch1", "false");
         v.put("Switch2", "false");

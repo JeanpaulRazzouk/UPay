@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.Adapters.Adapter;
 import com.example.Adapters.AdapterCal;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -29,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -80,7 +82,8 @@ ArrayList<String> new_date = new ArrayList<>();
                     location.add(dataSnapshot.child("Transactions").child("" + i).child("Location").getValue().toString());
                     amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
                     Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
-
+                    //
+                    String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
 
                     String r = Date.get(i);
                     String[] dateP = r.split("/");
@@ -94,8 +97,25 @@ ArrayList<String> new_date = new ArrayList<>();
                     Log.d("Apple2",""+new_date.get(i));;
 
                     if (new_date.get(i).equals(LIMIT)) {
-                        c.add(new CalData(names.get(i), location.get(i), "$" + amount.get(i), Date.get(i)));
-                        recyclerView.setAdapter(new AdapterCal(getContext(), c));
+                        if (Currency.equals("$")) {
+                            c.add(new CalData(names.get(i), location.get(i), "$" + amount.get(i), Date.get(i)));
+                            recyclerView.setAdapter(new AdapterCal(getContext(), c));
+                        }
+                        else if (Currency.equals("€")){
+                            double val = 0.83*Double.parseDouble(amount.get(i));
+                            c.add(new CalData(names.get(i), location.get(i), "€" + new DecimalFormat("##.##").format(val), Date.get(i)));
+                            recyclerView.setAdapter(new AdapterCal(getContext(), c));
+
+                        }
+                        else if (Currency.equals("$CA")){
+                            double val = 1.23*Double.parseDouble(amount.get(i));
+                            c.add(new CalData(names.get(i), location.get(i), "$CA" + new DecimalFormat("##.##").format(val), Date.get(i)));
+                            recyclerView.setAdapter(new AdapterCal(getContext(), c));
+
+                        }
+
+
+
                     }
                 }
             }

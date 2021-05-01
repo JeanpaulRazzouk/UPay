@@ -15,12 +15,21 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.upay.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.jetbrains.annotations.TestOnly;
+
+import java.util.HashMap;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
 
 public class SupportedCards extends Fragment {
  private ImageButton imageButton;
+
  static final int REQUEST_CODE_SCAN_CARD = 1;
 
     @Override
@@ -89,8 +98,6 @@ public class SupportedCards extends Fragment {
             else {
                 resultDisplayStr = "Scan was canceled.";
             }
-            // do something with resultDisplayStr, maybe display it in a textView
-            // resultTextView.setText(resultDisplayStr);
         }
         // else handle other activity results
     }
