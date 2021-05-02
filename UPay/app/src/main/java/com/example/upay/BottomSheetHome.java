@@ -130,7 +130,7 @@ public class BottomSheetHome  extends BottomSheetDialogFragment implements OnMap
                     String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
                     int SI = Integer.parseInt(xl);
 
-                    for (int i = 0; i < SI; i++) {
+                    for (int i = SI-1; i >=0; i--) {
                         Names.add(dataSnapshot.child("Transactions").child("" + i).child("Name").getValue().toString());
                         Location.add(dataSnapshot.child("Transactions").child("" + i).child("Location").getValue().toString());
                         Amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
@@ -138,12 +138,12 @@ public class BottomSheetHome  extends BottomSheetDialogFragment implements OnMap
                         lat.add(dataSnapshot.child("Transactions").child("" + i).child("Latitude").getValue().toString());
                         lon.add(dataSnapshot.child("Transactions").child("" + i).child("Longitude").getValue().toString());
                     }
-                    for (int i = 0; i < SI; i++) {
+                    for (int i = SI-1; i >=0; i--) {
                         if (position.equals(""+i)) {
                             Name.setText(Names.get(i));
                             location.setText(Location.get(i));
                             if (Currency.equals("$")) {
-                                amount.setText("$"+new DecimalFormat("##.##").format(Amount.get(i)));
+                                amount.setText("$"+new DecimalFormat("##.##").format(Float.parseFloat(Amount.get(i))));
                             }
                             else if (Currency.equals("€")){
                                 double val =  (0.83*Double.parseDouble(Amount.get(i)));

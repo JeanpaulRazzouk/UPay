@@ -53,6 +53,7 @@ import com.example.payment.BottomSheetNFC;
 import com.example.payment.User;
 import com.example.upay.PurchaseItems;
 import com.example.upay.R;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -65,6 +66,12 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -85,9 +92,12 @@ import java.io.IOException;
 import java.security.spec.ECField;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 
 public class HomeFragment extends Fragment {
@@ -102,6 +112,12 @@ public class HomeFragment extends Fragment {
     TextView textView4;
     ScrollView scrollView;
     ProgressBar progressBar;
+    //
+    ArrayList<Double> like = new ArrayList<>();
+    ArrayList<String> like_name = new ArrayList<>();
+    double max ;
+    int result_index;
+    //
     private FirebaseUser user;
     private FirebaseStorage storage;
     private StorageReference storageReference;
@@ -118,15 +134,59 @@ public class HomeFragment extends Fragment {
                 return;
             }
 
-            for(Location location:locationResult.getLocations()){
-                    user = FirebaseAuth.getInstance().getCurrentUser();
-                    mDatabase = FirebaseDatabase.getInstance().getReference();
-                    HashMap<String, Object> values = new HashMap<>();
-                    values.put("Current Country Location", getAddress(location.getLatitude(),location.getLongitude()));
-                    values.put("Current Place Location", getAddress2(location.getLatitude(),location.getLongitude()));
-                    values.put("Latitude",location.getLatitude());
-                    values.put("Longitude", location.getLongitude());
-                    mDatabase.child("Users").child(user.getUid()).child("Location").setValue(values);
+
+            Places.initialize(getContext(), "AIzaSyD9v2IAlt4QW5hGn_h3sKp7zIGJVYIs8Ms");
+            PlacesClient placesClient = Places.createClient(getContext());
+            // Use fields to define the data types to return.
+            List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
+
+            // Use the builder to create a FindCurrentPlaceRequest.
+            FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
+
+            // Call findCurrentPlace and handle the response (first check that the user has granted permission).
+            if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
+                placeResponse.addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        FindCurrentPlaceResponse response = task.getResult();
+                        for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+                            Log.i("TAGA", String.format("Place '%s' has likelihood: %f",
+                                    placeLikelihood.getPlace().getName(),
+                                    placeLikelihood.getLikelihood()));
+
+                            like_name.add(placeLikelihood.getPlace().getName());
+                            like.add(placeLikelihood.getLikelihood());
+
+                             max =like.get(0);
+                            for (Double x : like) {
+                                if (x > max)
+                                    max = x;
+                            }
+
+                            result_index = like.indexOf(max);
+
+                        }
+
+                        for(Location location:locationResult.getLocations()){
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            mDatabase = FirebaseDatabase.getInstance().getReference();
+                            HashMap<String, Object> values = new HashMap<>();
+                            values.put("Current Country Location", getAddress(location.getLatitude(),location.getLongitude()));
+                            values.put("Current Place Location",like_name.get(result_index));
+                            values.put("Latitude",location.getLatitude());
+                            values.put("Longitude", location.getLongitude());
+                            mDatabase.child("Users").child(user.getUid()).child("Location").updateChildren(values);
+                        }
+                    } else {
+                        Exception exception = task.getException();
+                        if (exception instanceof ApiException) {
+                            ApiException apiException = (ApiException) exception;
+                            Log.e("TAGA", "Place not found: " + apiException.getStatusCode());
+                        }
+                    }
+                });
+            } else {
+                // getLocationPermission();
             }
         }
     };
@@ -174,7 +234,7 @@ public class HomeFragment extends Fragment {
         Add(user.getUid(), user.getDisplayName(), user.getEmail());
         //
        // requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        //
+        PlacesAPI();
     }
 
     @Override
@@ -505,7 +565,7 @@ public class HomeFragment extends Fragment {
 
     private void startLocationUpdate() {
         try {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+            if (ActivityCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -566,5 +626,17 @@ public class HomeFragment extends Fragment {
         // TennisAppActivity.showDialog(add);
         return add;
     }
+
+
+    public void PlacesAPI(){
+
+
+
+
+
+
+    }
+
+
 
 }
