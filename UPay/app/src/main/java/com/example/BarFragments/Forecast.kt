@@ -202,13 +202,13 @@ class Forecast : AppCompatActivity() {
                 //
                 var Currency = dataSnapshot.child("Currency").child("Currency").value.toString()
                 if (Currency == "$") {
-                    textView!!.text = "$" + predictForValue(month, DateX, AmountY)
+                    textView!!.text = "$" +  DecimalFormat("##.##").format(predictForValue(month, DateX, AmountY))
                 } else if (Currency == "€") {
                     val `val`: Double = 0.83 * predictForValue(month, DateX, AmountY)
-                    textView!!.text = "€" + `val`
+                    textView!!.text = "€" + DecimalFormat("##.##").format(`val`)
                 } else if (Currency == "\$CA") {
                     val `val`: Double = 1.23 * predictForValue(month, DateX, AmountY)
-                    textView!!.text = "\$CA" + `val`
+                    textView!!.text = "\$CA" + DecimalFormat("##.##").format(`val`)
                 }
                 // present to next month increase decrease;
                 try {
@@ -219,10 +219,10 @@ class Forecast : AppCompatActivity() {
                             textView2!!.text = "Spending is Likely \n to Increase \n by +$$final_value"
                         } else if (Currency == "€") {
                             val `val`: Double = 0.83 * final_value
-                            textView2!!.text = "Spending is Likely \n to Increase \n by +€"+ DecimalFormat("##.##").format(`val`)
+                            textView2!!.text = "Spending is Likely \n to Increase \n by +€" + DecimalFormat("##.##").format(`val`)
                         } else if (Currency == "\$CA") {
                             val `val`: Double = 1.23 * predictForValue(month, DateX, AmountY)
-                            textView2!!.text = "Spending is Likely \n to Increase \n by +\$CA"+ DecimalFormat("##.##").format(`val`)
+                            textView2!!.text = "Spending is Likely \n to Increase \n by +\$CA" + DecimalFormat("##.##").format(`val`)
                         }
 
                     } else if (this_month > predictForValue(month, DateX, AmountY)) {
@@ -231,10 +231,10 @@ class Forecast : AppCompatActivity() {
                             textView2!!.text = "Spending is Likely \n to Decrease \n by $$final_value"
                         } else if (Currency == "€") {
                             val `val`: Double = 0.83 * final_value
-                            textView2!!.text = "Spending is Likely \n to Decrease \n by +€"+ DecimalFormat("##.##").format(`val`)
+                            textView2!!.text = "Spending is Likely \n to Decrease \n by +€" + DecimalFormat("##.##").format(`val`)
                         } else if (Currency == "\$CA") {
                             val `val`: Double = 1.23 * predictForValue(month, DateX, AmountY)
-                            textView2!!.text = "Spending is Likely \n to Decrease \n by +\$CA"+ DecimalFormat("##.##").format(`val`)
+                            textView2!!.text = "Spending is Likely \n to Decrease \n by +\$CA" + DecimalFormat("##.##").format(`val`)
                         }
                     }
                 } catch (e: java.lang.Exception) {

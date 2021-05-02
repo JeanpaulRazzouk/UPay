@@ -124,6 +124,8 @@ public class HomeFragment extends Fragment {
                     HashMap<String, Object> values = new HashMap<>();
                     values.put("Current Country Location", getAddress(location.getLatitude(),location.getLongitude()));
                     values.put("Current Place Location", getAddress2(location.getLatitude(),location.getLongitude()));
+                    values.put("Latitude",location.getLatitude());
+                    values.put("Longitude", location.getLongitude());
                     mDatabase.child("Users").child(user.getUid()).child("Location").setValue(values);
             }
         }
@@ -171,7 +173,7 @@ public class HomeFragment extends Fragment {
 
         Add(user.getUid(), user.getDisplayName(), user.getEmail());
         //
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+       // requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         //
     }
 
@@ -395,12 +397,10 @@ public class HomeFragment extends Fragment {
                 p = new ArrayList<>();
                 // getting recycler data
                 for (int i = 0; i < SI; i++) {
-                        try {
                             Names.add(dataSnapshot.child("Transactions").child("" + i).child("Name").getValue().toString());
                             Location.add(dataSnapshot.child("Transactions").child("" + i).child("Location").getValue().toString());
                             Amount.add(dataSnapshot.child("Transactions").child("" + i).child("Amount").getValue().toString());
                             Date.add(dataSnapshot.child("Transactions").child("" + i).child("Date").getValue().toString());
-                        }catch(Exception e){}
                     }
                     if (Integer.parseInt(xl) == 0) {
                         textView4.setVisibility(View.VISIBLE);

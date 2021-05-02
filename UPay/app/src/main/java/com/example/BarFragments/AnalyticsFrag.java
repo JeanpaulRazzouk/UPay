@@ -266,7 +266,7 @@ public class AnalyticsFrag extends Fragment {
                             float fin = current_month_val - past_month_val;
 
                             if (Currency.equals("$")) {
-                                textView3.setText("+" + "$" + fin);
+                                textView3.setText("+" + "$" + new DecimalFormat("##.##").format(fin));
                             }
                             else if (Currency.equals("€")){
                                 textView3.setText("+" + "€"+  new DecimalFormat("##.##").format(0.83*fin));
@@ -286,7 +286,7 @@ public class AnalyticsFrag extends Fragment {
                             float fin = past_month_val - current_month_val;
 
                             if (Currency.equals("$")) {
-                                textView3.setText("-" + "$" + fin);
+                                textView3.setText("-" + "$" + new DecimalFormat("##.##").format(fin));
                             }
                             else if (Currency.equals("€")){
                                 textView3.setText("-" + "€"+   new DecimalFormat("##.##").format(0.83*fin));
@@ -508,7 +508,7 @@ public class AnalyticsFrag extends Fragment {
                 se.addPoint(new ValueLinePoint("Feb", m2));
                 se.addPoint(new ValueLinePoint("Mar", m3));
                 se.addPoint(new ValueLinePoint("Apr", m4));
-                se.addPoint(new ValueLinePoint("Mai", m5));
+                se.addPoint(new ValueLinePoint("May", m5));
                 se.addPoint(new ValueLinePoint("Jun", m6));
                 se.addPoint(new ValueLinePoint("Jul", m7));
                 se.addPoint(new ValueLinePoint("Aug", m8));

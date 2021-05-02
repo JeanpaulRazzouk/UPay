@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -61,6 +63,19 @@ Uri link;
         mp.start();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        //
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        //
+        HashMap<String, Object> values4 = new HashMap<>();
+        values4.put("Current Country Location","");
+        values4.put("Current Place Location","");
+        mDatabase.child("Users").child(user.getUid()).child("Location").updateChildren(values4);
+        //
+        HashMap<String, Object> values3 = new HashMap<>();
+        values3.put("Currency","$");
+        mDatabase.child("Users").child(user.getUid()).child("Currency").updateChildren(values3);
         //
         HashMap<String, Object> value2 = new HashMap<>();
         value2.put("USD",false);

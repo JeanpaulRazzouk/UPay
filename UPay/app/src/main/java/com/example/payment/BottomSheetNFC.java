@@ -49,6 +49,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -192,7 +193,6 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     }
 
     public void sendData() {
-            //
         // Get location if available
         //
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -200,13 +200,17 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
             FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    //
+                        //
                         String Location = dataSnapshot.child("Location").child("Current Country Location").getValue().toString();
                         String Place = dataSnapshot.child("Location").child("Current Place Location").getValue().toString();
+                        String lon = dataSnapshot.child("Location").child("Longitude").getValue().toString();
+                        String lat = dataSnapshot.child("Location").child("Latitude").getValue().toString();
                         String count = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
                         String Switch3 = dataSnapshot.child("Switches").child("Switch3").getValue().toString();
                         String Switch4 = dataSnapshot.child("Switches").child("Switch4").getValue().toString();
                         String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
+                        //
+                        String AmountFINAL = "21";
                         //
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                             LocalDate date = LocalDate.now();
@@ -219,12 +223,26 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                             user = FirebaseAuth.getInstance().getCurrentUser();
                             mDatabase = FirebaseDatabase.getInstance().getReference();
                             //
+                            if (Currency.equals("$")){
+                            }
+                            else if (Currency.equals("€")){
+                              Double new_val = Double.parseDouble(AmountFINAL);
+                              AmountFINAL = new DecimalFormat("##.##").format(new_val*1.20);
+                            }
+                            else if (Currency.equals("$CA")){
+                                Double new_val = Double.parseDouble(AmountFINAL);
+                                AmountFINAL = new DecimalFormat("##.##").format(new_val*0.81);
+                            }
+
+                            //
                             HashMap<String, Object> values = new HashMap<>();
                             //TODO() Certain Values are For Testing;
                             values.put("Name", Place);
                             values.put("Location", Location);
-                            values.put("Amount", "20");
+                            values.put("Amount", AmountFINAL);
                             values.put("Date", formatter.format(parsedDate));
+                            values.put("Longitude", lon);
+                            values.put("Latitude", lat);
                             //
                             mDatabase.child("Users").child(user.getUid()).child("Transactions").child(count).setValue(values);
                             int x = Integer.parseInt(count) + 1;
@@ -234,12 +252,12 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                             //
                             if (Switch3.equals("true")) {
                                 BottomSheetNFC m = new BottomSheetNFC();
-                                PurchaseNotification(Place, Location, formatter.format(parsedDate), "20",Currency);
+                                PurchaseNotification(Place, Location, formatter.format(parsedDate), AmountFINAL,Currency);
                             }
                             if (Switch4.equals("true")) {
                                 //TODO() Certain Values are For Testing;
                                 BottomSheetNFC m = new BottomSheetNFC();
-                                sendEmail(Place, Location, formatter.format(parsedDate), "20",Currency);
+                                sendEmail(Place, Location, formatter.format(parsedDate), AmountFINAL,Currency);
                             }
                         }
                 }
