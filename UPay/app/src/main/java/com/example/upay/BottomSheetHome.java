@@ -156,7 +156,7 @@ public class BottomSheetHome  extends BottomSheetDialogFragment implements OnMap
                             }
                             date.setText(Date.get(i));
                             map.addMarker(new MarkerOptions().position(new LatLng(Float.parseFloat(lat.get(i)), Float.parseFloat(lon.get(i)))).title("Marker"));
-                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Float.parseFloat(lat.get(i)), Float.parseFloat(lon.get(i))), 12.0f));
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Float.parseFloat(lat.get(i)), Float.parseFloat(lon.get(i))), 17.0f));
                         }
                     }
                 }catch(Exception e){}

@@ -134,60 +134,58 @@ public class HomeFragment extends Fragment {
                 return;
             }
 
+           try {
 
-            Places.initialize(getContext(), "AIzaSyD9v2IAlt4QW5hGn_h3sKp7zIGJVYIs8Ms");
-            PlacesClient placesClient = Places.createClient(getContext());
-            // Use fields to define the data types to return.
-            List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
+               Places.initialize(getContext(), "AIzaSyD9v2IAlt4QW5hGn_h3sKp7zIGJVYIs8Ms");
+               PlacesClient placesClient = Places.createClient(getContext());
 
-            // Use the builder to create a FindCurrentPlaceRequest.
-            FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
+               List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
 
-            // Call findCurrentPlace and handle the response (first check that the user has granted permission).
-            if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
-                placeResponse.addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        FindCurrentPlaceResponse response = task.getResult();
-                        for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                            Log.i("TAGA", String.format("Place '%s' has likelihood: %f",
-                                    placeLikelihood.getPlace().getName(),
-                                    placeLikelihood.getLikelihood()));
+               FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
 
-                            like_name.add(placeLikelihood.getPlace().getName());
-                            like.add(placeLikelihood.getLikelihood());
+               if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                   Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
+                   placeResponse.addOnCompleteListener(task -> {
+                       if (task.isSuccessful()) {
+                           FindCurrentPlaceResponse response = task.getResult();
+                           for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
 
-                             max =like.get(0);
-                            for (Double x : like) {
-                                if (x > max)
-                                    max = x;
-                            }
+                               like_name.add(placeLikelihood.getPlace().getName());
+                               like.add(placeLikelihood.getLikelihood());
 
-                            result_index = like.indexOf(max);
+                               max = like.get(0);
+                               for (Double x : like) {
+                                   if (x > max)
+                                       max = x;
+                               }
 
-                        }
+                               result_index = like.indexOf(max);
 
-                        for(Location location:locationResult.getLocations()){
-                            user = FirebaseAuth.getInstance().getCurrentUser();
-                            mDatabase = FirebaseDatabase.getInstance().getReference();
-                            HashMap<String, Object> values = new HashMap<>();
-                            values.put("Current Country Location", getAddress(location.getLatitude(),location.getLongitude()));
-                            values.put("Current Place Location",like_name.get(result_index));
-                            values.put("Latitude",location.getLatitude());
-                            values.put("Longitude", location.getLongitude());
-                            mDatabase.child("Users").child(user.getUid()).child("Location").updateChildren(values);
-                        }
-                    } else {
-                        Exception exception = task.getException();
-                        if (exception instanceof ApiException) {
-                            ApiException apiException = (ApiException) exception;
-                            Log.e("TAGA", "Place not found: " + apiException.getStatusCode());
-                        }
-                    }
-                });
-            } else {
-                // getLocationPermission();
-            }
+                           }
+
+                           for (Location location : locationResult.getLocations()) {
+                               user = FirebaseAuth.getInstance().getCurrentUser();
+                               mDatabase = FirebaseDatabase.getInstance().getReference();
+                               HashMap<String, Object> values = new HashMap<>();
+                               values.put("Current Country Location", getAddress(location.getLatitude(), location.getLongitude()));
+                               values.put("Current Place Location", like_name.get(result_index));
+                               values.put("Latitude", location.getLatitude());
+                               values.put("Longitude", location.getLongitude());
+                               mDatabase.child("Users").child(user.getUid()).child("Location").updateChildren(values);
+                           }
+                       } else {
+                           Exception exception = task.getException();
+                           if (exception instanceof ApiException) {
+                               ApiException apiException = (ApiException) exception;
+                               Log.e("TAGA", "Place not found: " + apiException.getStatusCode());
+                           }
+                       }
+                   });
+               } else {
+                   // getLocationPermission();
+               }
+
+           }catch(Exception e){}
         }
     };
     //
@@ -597,7 +595,7 @@ public class HomeFragment extends Fragment {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             Address obj = addresses.get(0);
             //add = obj.getAddressLine(0);
-            add = obj.getCountryName();
+            add = obj.getLocality()+","+obj.getCountryName();
         }catch (Exception e){}
 //            add = add + "\n" + obj.getCountryCode();
 //            add = add + "\n" + obj.getAdminArea();
