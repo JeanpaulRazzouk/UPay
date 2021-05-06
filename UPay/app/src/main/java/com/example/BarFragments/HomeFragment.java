@@ -233,6 +233,10 @@ public class HomeFragment extends Fragment {
         //
        // requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         PlacesAPI();
+        //
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
     }
 
     @Override

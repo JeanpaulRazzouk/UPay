@@ -25,7 +25,7 @@ public class ForecastHolder extends RecyclerView.ViewHolder {
     }
 
     public void setDetails(ForecastParam items) {
-        if (items.getImage().toString().equals("2131231171")) {
+        if (items.getImage().toString().equals("2131231212")) {
             textview.setText("Spending at " + items.getShop() + " likely to increase to $" + items.getAmount());
         }
         else{

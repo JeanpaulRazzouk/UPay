@@ -8,6 +8,7 @@ import androidx.biometric.BiometricPrompt;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -119,13 +120,15 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
 
     public void Payment(){
         // biometric test;
-        biometric();
-        biometricPrompt.authenticate(promptInfo);
+            biometric();
+            biometricPrompt.authenticate(promptInfo);
     }
 
     private BiometricPrompt.PromptInfo promptInfo;
     private Executor executor;
     private BiometricPrompt biometricPrompt;
+
+
     public void biometric(){
         executor = ContextCompat.getMainExecutor(getContext());
         biometricPrompt = new BiometricPrompt(BottomSheetNFC.this,
@@ -141,8 +144,8 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                sendData();
-                verified();
+//                sendData();
+//                verified();
                 ComponentName componentName;
                 if (mNfcAdapter == null) {
                     Toast.makeText(getContext(), "NFC is not available", Toast.LENGTH_LONG).show();
@@ -154,13 +157,10 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                     componentName = new ComponentName(getContext(), MyHostApduService.class);
                     boolean isDefault = cardEmulation.isDefaultServiceForCategory(componentName, CardEmulation.CATEGORY_PAYMENT);
                     if (!isDefault) {
-                        //
-                        //
                         Intent intent = new Intent(CardEmulation.ACTION_CHANGE_DEFAULT);
                         intent.putExtra(CardEmulation.EXTRA_CATEGORY, CardEmulation.CATEGORY_PAYMENT);
                         intent.putExtra(CardEmulation.EXTRA_SERVICE_COMPONENT, componentName);
                         getActivity().startActivityForResult(intent, REQUEST_CODE_DEFAULT_PAYMENT_APP);
-                        //
                     }
                 }
             }
@@ -181,23 +181,12 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                 .build();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
     public void sendData() {
         // Get location if available
         //
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                         //
@@ -296,7 +285,31 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                 .show(); // Show notification
     }
 
-    public void Location(){
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        // This registers messageReceiver to receive messages.
+        LocalBroadcastManager.getInstance(getContext())
+                .registerReceiver(messageReceiver, new IntentFilter("my-message"));
     }
+
+    // Handling the received Intents for the "my-integer" event
+    private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Extract data included in the Intent
+            int yourInteger = intent.getIntExtra("my-integer", -1); // -1 is going to be used as the default value
+            if (yourInteger == 1){
+                verified();
+            }
+        }
+    };
+
+    @Override
+    public void onPause() {
+        // Unregister since the activity is not visible
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(messageReceiver);
+        super.onPause();
+    }
+
 }

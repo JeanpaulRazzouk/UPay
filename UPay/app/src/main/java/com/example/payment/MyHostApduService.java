@@ -1,5 +1,6 @@
 package com.example.payment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
@@ -10,6 +11,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.application.isradeleon.notify.Notify;
 import com.example.upay.JavaMailAPI;
@@ -25,6 +27,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.nio.ByteBuffer;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -242,6 +246,7 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
     public void onCreate() {
         super.onCreate();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        //
 //        user = FirebaseAuth.getInstance().getCurrentUser();
 //        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
 //            @Override
@@ -255,11 +260,128 @@ public class MyHostApduService extends HostApduService implements SharedPreferen
 //
 //            }
 //        });
+        int x = 1;
+        if (x == 1) {
+            sendData();
+            //
+            Intent intent = new Intent("my-message");
+            // Adding some data
+            intent.putExtra("my-integer", 1);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            x++;
+        }
+        else{
+
+        }
     }
 
     @Override
     public void onDeactivated(int reason) {
-//    BottomSheetNFC bottomSheetNFC = new BottomSheetNFC();
-//    bottomSheetNFC.sendData();
+
+    }
+
+
+    public void sendData() {
+        // Get location if available
+        //
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //
+                String Location = dataSnapshot.child("Location").child("Current Country Location").getValue().toString();
+                String Place = dataSnapshot.child("Location").child("Current Place Location").getValue().toString();
+                String lon = dataSnapshot.child("Location").child("Longitude").getValue().toString();
+                String lat = dataSnapshot.child("Location").child("Latitude").getValue().toString();
+                String count = dataSnapshot.child("User Data").child("Transaction count").getValue().toString();
+                String Switch3 = dataSnapshot.child("Switches").child("Switch3").getValue().toString();
+                String Switch4 = dataSnapshot.child("Switches").child("Switch4").getValue().toString();
+                String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
+                //
+                String AmountFINAL = "21";
+                //
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    LocalDate date = LocalDate.now();
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    String text = date.format(dtf);
+                    //
+                    LocalDate parsedDate = LocalDate.parse(text, dtf);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+                    //
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+                    //
+                    if (Currency.equals("$")){
+                    }
+                    else if (Currency.equals("€")){
+                        Double new_val = Double.parseDouble(AmountFINAL);
+                        AmountFINAL = new DecimalFormat("##.##").format(new_val*1.20);
+                    }
+                    else if (Currency.equals("$CA")){
+                        Double new_val = Double.parseDouble(AmountFINAL);
+                        AmountFINAL = new DecimalFormat("##.##").format(new_val*0.81);
+                    }
+
+                    //
+                    HashMap<String, Object> values = new HashMap<>();
+                    //TODO() Certain Values are For Testing;
+                    values.put("Name", Place);
+                    values.put("Location", Location);
+                    values.put("Amount", AmountFINAL);
+                    values.put("Date", formatter.format(parsedDate));
+                    values.put("Longitude", lon);
+                    values.put("Latitude", lat);
+                    //
+                    mDatabase.child("Users").child(user.getUid()).child("Transactions").child(count).setValue(values);
+                    int x = Integer.parseInt(count) + 1;
+                    HashMap<String, Object> values2 = new HashMap<>();
+                    values2.put("Transaction count", x);
+                    mDatabase.child("Users").child(user.getUid()).child("User Data").setValue(values2);
+                    //
+                    if (Switch3.equals("true")) {
+                        BottomSheetNFC m = new BottomSheetNFC();
+                        PurchaseNotification(Place, Location, formatter.format(parsedDate), AmountFINAL,Currency);
+                    }
+                    if (Switch4.equals("true")) {
+                        //TODO() Certain Values are For Testing;
+                        BottomSheetNFC m = new BottomSheetNFC();
+                        sendEmail(Place, Location, formatter.format(parsedDate), AmountFINAL,Currency);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+            //
+        });
+    }
+    public void sendEmail(String Name,String Location,String Date,String Amount,String Currency) {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String mEmail = user.getEmail();
+        String mSubject = "UPay- "+Name+" Transaction";
+        String mMessage = "Your Recent Transaction at "+Name+":" +
+                "\nLocation: "+Location
+                +"\nThe amount of "+Currency+Amount+" has been spent on " +Date;
+
+        JavaMailAPI javaMailAPI = new JavaMailAPI(getApplicationContext(), mEmail, mSubject, mMessage);
+
+        javaMailAPI.execute();
+    }
+
+    public void PurchaseNotification(String Name,String Location,String Date,String Amount,String Currency){
+        // String mSubject = "UPay- "+Name+" Transaction";
+        String mMessage = "Your Recent Transaction at "+Name+":" +
+                "\nLocation: "+Location
+                +"\nThe amount of "+Currency+Amount+" has been spent on " +Date;
+        Notify.build(getApplicationContext())
+                .setTitle("UPay")
+                .setContent(mMessage)
+                .setSmallIcon(R.drawable.ic_payment)
+                .setColor(R.color.color4)
+                .largeCircularIcon()
+                .show(); // Show notification
     }
     }

@@ -216,7 +216,7 @@ class Forecast : AppCompatActivity() {
                     if (this_month < predictForValue(month, DateX, AmountY)) {
                         val final_value = ("" + predictForValue(month, DateX, AmountY)).toFloat() - this_month
                         if (Currency == "$") {
-                            textView2!!.text = "Spending is Likely \n to Increase \n by +$$final_value"
+                            textView2!!.text = "Spending is Likely \n to Increase \n by +$"+DecimalFormat("##.##").format(final_value)
                         } else if (Currency == "€") {
                             val `val`: Double = 0.83 * final_value
                             textView2!!.text = "Spending is Likely \n to Increase \n by +€" + DecimalFormat("##.##").format(`val`)
@@ -228,7 +228,7 @@ class Forecast : AppCompatActivity() {
                     } else if (this_month > predictForValue(month, DateX, AmountY)) {
                         val final_value = this_month - ("" + predictForValue(month, DateX, AmountY)).toFloat()
                         if (Currency == "$") {
-                            textView2!!.text = "Spending is Likely \n to Decrease \n by $$final_value"
+                            textView2!!.text = "Spending is Likely \n to Decrease \n by $"+DecimalFormat("##.##").format(final_value)
                         } else if (Currency == "€") {
                             val `val`: Double = 0.83 * final_value
                             textView2!!.text = "Spending is Likely \n to Decrease \n by +€" + DecimalFormat("##.##").format(`val`)
@@ -358,6 +358,8 @@ class Forecast : AppCompatActivity() {
                 t3[0] = R.drawable.ic_growth
                 t3[1] = R.drawable.ic_loss
                 //
+
+                Log.d("IMAGEDEA",""+t3[0])
                 p = ArrayList<ForecastParam>()
                 for (i in 0 until TheMethodName.size) {
                     if (predictForValue(size.get(i).toInt() + 1, Number.get(i), TheMethodEXTRA.get(i)) > TheMethodEXTRA.get(i).maxOrNull()?.toDouble()!!) {
