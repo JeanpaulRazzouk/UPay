@@ -67,8 +67,6 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
     TextView textView;
     //
     private FirebaseUser user;
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
     private DatabaseReference mDatabase;
 
     public static final int REQUEST_CODE_DEFAULT_PAYMENT_APP = 1;
