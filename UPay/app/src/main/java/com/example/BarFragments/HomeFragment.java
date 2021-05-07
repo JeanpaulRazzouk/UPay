@@ -49,6 +49,7 @@ import android.widget.Toast;
 
 import com.example.Adapters.Adapter;
 import com.example.Profile.Profile;
+import com.example.payment.BottomSheetAmount;
 import com.example.payment.BottomSheetNFC;
 import com.example.payment.User;
 import com.example.upay.PurchaseItems;
@@ -309,7 +310,7 @@ public class HomeFragment extends Fragment {
                         try{
                             String icm = dataSnapshot.child("Track Data").child("Track Data").getValue().toString();
                             if (icm  != null){
-                                BottomSheetNFC bottomSheet = new BottomSheetNFC();
+                                BottomSheetAmount bottomSheet = new BottomSheetAmount();
                                 bottomSheet.show(getFragmentManager(), "TAG");
                             }
                         }catch(Exception e){

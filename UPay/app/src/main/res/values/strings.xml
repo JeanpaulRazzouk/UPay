@@ -50,4 +50,5 @@
 
     <string name="notify_channel_description" translatable="false">MyDefaultChannelDescription</string>
 
+    <string name="pay" translatable="false">Enter Payment Amount</string>
 </resources>

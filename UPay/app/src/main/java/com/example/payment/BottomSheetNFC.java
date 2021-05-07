@@ -142,11 +142,12 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-//                sendData();
-//                verified();
+
                 ComponentName componentName;
                 if (mNfcAdapter == null) {
                     Toast.makeText(getContext(), "NFC is not available", Toast.LENGTH_LONG).show();
+//                     sendData();
+//                     verified();
                 }
                 else {
                      cardEmulation = CardEmulation.getInstance(mNfcAdapter);
@@ -184,7 +185,7 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
         //
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                         //
@@ -196,8 +197,8 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
                         String Switch3 = dataSnapshot.child("Switches").child("Switch3").getValue().toString();
                         String Switch4 = dataSnapshot.child("Switches").child("Switch4").getValue().toString();
                         String Currency = dataSnapshot.child("Currency").child("Currency").getValue().toString();
-                        //
-                        String AmountFINAL = "21";
+                        // At payment
+                        String AmountFINAL = dataSnapshot.child("Amount Value").child("Amount Value").getValue().toString();
                         //
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                             LocalDate date = LocalDate.now();
@@ -308,6 +309,10 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
         // Unregister since the activity is not visible
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(messageReceiver);
         super.onPause();
+    }
+
+    public void Amount (){
+
     }
 
 }
