@@ -4,4 +4,3 @@ Universal Mobile Payment App that works anywhere with forecasting analysis using
 ### Note
 Google Cloud Platform must be activated in order for the app to work properly.
 
-![](./index.html)
