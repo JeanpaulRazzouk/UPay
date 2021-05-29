@@ -18,7 +18,7 @@ Google Cloud Platform must be activated in order for the app to work properly.
 ![12](https://user-images.githubusercontent.com/68122919/120073962-441ebf00-c0a3-11eb-97fa-f65c02fd71a1.jpg)
 ![13](https://user-images.githubusercontent.com/68122919/120073963-44b75580-c0a3-11eb-8c2a-26c9245f035e.jpg)
 ### UPay Demo YouTube link
-[UPay Demo!](https://youtu.be/jBQEGJ552ck)
+[UPay Demo : https://youtu.be/jBQEGJ552ck](https://youtu.be/jBQEGJ552ck)
 
 ![20](https://user-images.githubusercontent.com/68122919/120074165-3fa6d600-c0a4-11eb-8a03-c305456abb8e.jpg)
 ![14](https://user-images.githubusercontent.com/68122919/120073964-454fec00-c0a3-11eb-9a23-d64699f33b33.jpg)
