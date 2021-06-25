@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment {
 
                                like_name.add(placeLikelihood.getPlace().getName());
                                like.add(placeLikelihood.getLikelihood());
-
+                               //
                                max = like.get(0);
                                for (Double x : like) {
                                    if (x > max)
@@ -161,10 +161,10 @@ public class HomeFragment extends Fragment {
                                }
 
                                result_index = like.indexOf(max);
-
                            }
 
                            for (Location location : locationResult.getLocations()) {
+                               //
                                user = FirebaseAuth.getInstance().getCurrentUser();
                                mDatabase = FirebaseDatabase.getInstance().getReference();
                                HashMap<String, Object> values = new HashMap<>();
@@ -233,7 +233,6 @@ public class HomeFragment extends Fragment {
         Add(user.getUid(), user.getDisplayName(), user.getEmail());
         //
        // requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        PlacesAPI();
         //
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -630,15 +629,6 @@ public class HomeFragment extends Fragment {
         return add;
     }
 
-
-    public void PlacesAPI(){
-
-
-
-
-
-
-    }
 
 
 

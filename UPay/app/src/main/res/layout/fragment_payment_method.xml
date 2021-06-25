@@ -25,15 +25,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="71dp"
-            android:layout_marginBottom="102dp"
+            android:layout_marginTop="107dp"
+            android:layout_marginBottom="474dp"
             android:fontFamily="@font/sf_ui_display_black"
             android:gravity="top"
             android:orientation="vertical"
             android:text="Wallet"
             android:textColor="@color/colorTextPrimary"
             android:textSize="36sp"
-            app:layout_constraintBottom_toTopOf="@+id/cardView3"
+            app:layout_constraintBottom_toTopOf="@+id/cardView5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -57,7 +57,7 @@
             android:id="@+id/cardView3"
             android:layout_width="338dp"
             android:layout_height="220dp"
-            android:layout_marginBottom="234dp"
+            android:layout_marginBottom="100dp"
             app:cardCornerRadius="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,30 +67,30 @@
             <ImageButton
                 android:id="@+id/payment_card"
                 android:layout_width="342dp"
-                android:background="@null"
-                android:layout_height="match_parent"></ImageButton>
+                android:layout_height="match_parent"
+                android:background="@null"></ImageButton>
 
             <TextView
                 android:id="@+id/card_pan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#101010"
-                android:fontFamily="@font/sf_ui_display_black"
-                android:textSize="20sp"
                 android:layout_marginStart="20sp"
                 android:layout_marginTop="120sp"
-                android:text="5412 7512 3412 3456" />
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="5412 7512 3412 3456"
+                android:textColor="#101010"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/card_holder_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="170sp"
-                android:textSize="15sp"
-                android:fontFamily="@font/sf_ui_display_black"
-                android:textColor="#0C0C0C"
                 android:layout_marginStart="20sp"
-                android:text="John Doe" />
+                android:layout_marginTop="170sp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="John Doe"
+                android:textColor="#0C0C0C"
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/chipset"
@@ -105,23 +105,23 @@
                 android:id="@+id/expiry_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="170sp"
-                android:textSize="10sp"
-                android:fontFamily="@font/sf_ui_display_black"
-                android:textColor="#050505"
                 android:layout_marginStart="180sp"
-                android:text="Valid till" />
+                android:layout_marginTop="170sp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Valid till"
+                android:textColor="#050505"
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/expiry_date_val"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="185sp"
-                android:textSize="15sp"
-                android:fontFamily="@font/sf_ui_display_black"
-                android:textColor="#090808"
                 android:layout_marginStart="180sp"
-                android:text="04/23" />
+                android:layout_marginTop="185sp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="04/23"
+                android:textColor="#090808"
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/visa"
@@ -134,31 +134,31 @@
             <TextView
                 android:id="@+id/track_data"
                 android:layout_width="wrap_content"
-                android:fontFamily="@font/sf_ui_display_black"
-                android:textSize="25sp"
-                android:layout_marginTop="20sp"
-                android:layout_marginStart="20sp"
                 android:layout_height="wrap_content"
-                android:text="Enter Track Data" />
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="20sp"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:text="Enter Track Data"
+                android:textSize="25sp" />
 
             <EditText
                 android:id="@+id/editTextTextPersonName2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60sp"
                 android:layout_marginStart="20sp"
+                android:layout_marginTop="60sp"
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:hint="Track Data"
+                android:inputType="textPersonName"
                 android:text="" />
 
             <ImageButton
                 android:id="@+id/imageButton12"
                 android:layout_width="100sp"
-                android:layout_marginTop="150sp"
-                android:layout_marginStart="125sp"
-                android:background="@null"
                 android:layout_height="50sp"
+                android:layout_marginStart="125sp"
+                android:layout_marginTop="150sp"
+                android:background="@null"
                 app:srcCompat="@drawable/butto_bg_2" />
 
             <TextView
@@ -168,12 +168,33 @@
                 android:layout_marginStart="125dp"
                 android:layout_marginTop="150dp"
                 android:fontFamily="@font/sf_ui_display_black"
-                android:textSize="16sp"
-                android:text="+Add"
                 android:gravity="center"
-                android:textColor="@color/colorTextPrimary" />
+                android:text="+Add"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="16sp" />
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView5"
+            android:layout_width="286dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="160dp"
+            app:cardCornerRadius="30dp"
+            app:cardBackgroundColor="@color/color1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" >
+
+            <TextView
+                android:id="@+id/textView43"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/sf_ui_display_black"
+                android:gravity="center"
+                android:textColor="@color/colorTextPrimary"
+                android:text="Only Supports VISA MSD" />
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -188,5 +209,6 @@
         android:fontFamily="@font/sf_ui_display_black"
         android:gravity="center"
         android:textSize="20sp" />
+
 
 </RelativeLayout>

@@ -46,7 +46,7 @@ public class BottomSheetAmount extends BottomSheetDialogFragment {
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 //
                 lottieAnimationView.setAnimation(R.raw.process2);
-                lottieAnimationView.setRepeatCount(9999);
+                lottieAnimationView.setRepeatCount(1);
                 //
                 HashMap<String, Object> values2 = new HashMap<>();
                 values2.put("Amount Value",editText.getText().toString());

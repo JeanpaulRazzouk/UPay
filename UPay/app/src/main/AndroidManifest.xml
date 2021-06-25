@@ -43,6 +43,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
+        android:configChanges="orientation"
+        android:screenOrientation="portrait"
         tools:replace="android:theme">
 
         <uses-library
@@ -61,16 +63,38 @@
         <meta-data android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBAr8I668hwoXJLZby2XJc4gzAj0CjHxs8" />
 
-        <activity android:name="com.example.Profile.Settings"></activity>
-        <activity android:name="com.example.BarFragments.Forecast" />
-        <activity android:name="com.example.payment.MyHostApduService"></activity>
-        <activity android:name="com.example.External.FirstTimeActivity" />
-        <activity android:name="com.example.External.CreateNewAccountPhoneAuth" />
-        <activity android:name="com.example.Profile.Profile" />
-        <activity android:name="com.example.External.ForgotPassword" />
-        <activity android:name=".HomePage" />
-        <activity android:name="com.example.External.CreateNewAccount" />
-        <activity android:name="com.example.External.LoginPage">
+        <activity android:name="com.example.Profile.Settings"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name="com.example.BarFragments.Forecast"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait"
+        />
+        <activity android:name="com.example.payment.MyHostApduService"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait"></activity>
+        <activity android:name="com.example.External.FirstTimeActivity"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait" />
+        <activity android:name="com.example.External.CreateNewAccountPhoneAuth"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait" />
+        <activity android:name="com.example.Profile.Profile"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait"/>
+        <activity android:name="com.example.External.ForgotPassword"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".HomePage"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait"/>
+        <activity android:name="com.example.External.CreateNewAccount"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait"/>
+        <activity android:name="com.example.External.LoginPage"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

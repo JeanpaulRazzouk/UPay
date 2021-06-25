@@ -53,7 +53,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                app:cardCornerRadius="50dp"
+                android:layout_marginBottom="20sp"
+                app:cardCornerRadius="15dp"
                 android:layout_gravity="center">
 
 
@@ -67,7 +68,7 @@
                 android:layout_marginEnd="100dp"
                 android:layout_marginBottom="50sp"
                 android:background="@null"
-                android:src="@drawable/butto_bg_2" />
+                android:src="@drawable/button_bg" />
 
                 <TextView
                     android:id="@+id/textView36"

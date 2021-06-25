@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -38,11 +39,13 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PersonalInfoFragment  extends BottomSheetDialogFragment {
     public ArrayList<PersInfoData> PersArray;
     public RecyclerView recyclerView;
     public Adapter2 adapter;
+    private DatabaseReference mDatabase;
     //
     ImageButton imageButton;
     private FirebaseUser user;
@@ -72,53 +75,8 @@ public class PersonalInfoFragment  extends BottomSheetDialogFragment {
 
 
     public void delete_account(String password){
-        // TEST
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        AuthCredential credential = EmailAuthProvider
-                .getCredential(user.getEmail(), password);
-
-        // Prompt the user to re-provide their sign-in credentials
-        user.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        user.delete()
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            //
-                                            Intent i = new Intent(getContext(), LoginPage.class);
-                                            startActivity(i);
-                                            //
-                                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                                            Query applesQuery = ref.child("Users").orderByChild(user.getUid());
-
-                                            applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
-                                                        appleSnapshot.getRef().removeValue();
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-                                                }
-                                            });
-
-                                            user = FirebaseAuth.getInstance().getCurrentUser();
-                                            user.delete();
-                                            //
-                                            //
-                                            FirebaseAuth fAuth = FirebaseAuth.getInstance();
-                                            fAuth.signOut();
-                                        }
-                                    }
-                                });
-                    }
-                });
-
+        // TODO() UNDER CONSTRUCTION;
+        Toast.makeText(getContext(),"This option is currently not available",Toast.LENGTH_SHORT).show();
     }
 
     private void showForgotDialog() {

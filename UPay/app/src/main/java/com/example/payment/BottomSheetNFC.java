@@ -142,12 +142,11 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-
+//                sendData();
+//                verified();
                 ComponentName componentName;
                 if (mNfcAdapter == null) {
                     Toast.makeText(getContext(), "NFC is not available", Toast.LENGTH_LONG).show();
-//                     sendData();
-//                     verified();
                 }
                 else {
                      cardEmulation = CardEmulation.getInstance(mNfcAdapter);

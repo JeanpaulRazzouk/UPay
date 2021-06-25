@@ -214,7 +214,7 @@
                     android:layout_marginStart="270dp"
                     android:scaleType="fitXY"
                     android:background="@null"
-                    android:src="@drawable/ic_notification__1_" />
+                    android:src="@null" />
 
                 <ImageButton
                     android:id="@+id/refresh"

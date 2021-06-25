@@ -7,8 +7,9 @@
 
     <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
         android:id="@+id/aa_chart_view"
-        android:layout_width="392dp"
+        android:layout_width="415dp"
         android:layout_height="398dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

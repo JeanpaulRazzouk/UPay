@@ -60,6 +60,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -212,8 +214,7 @@ public class AnalyticsFrag extends Fragment {
         }catch(Exception e){}
         return view;
     }
-
-
+    
     public void Spree() {
 
         Date3 = new ArrayList<>();
@@ -312,7 +313,6 @@ public class AnalyticsFrag extends Fragment {
             }
         }
     }
-
     public void getDataFromHome()
     {
 //        ProgressDialog pd = new ProgressDialog(getContext(),R.style.MyAlertDialogStyle);
@@ -338,17 +338,11 @@ public class AnalyticsFrag extends Fragment {
                 }catch(Exception e){}
                 // First Graph;
                 Float a1 = 0.0f;
-                ;
                 Float a2 = 0.0f;
-                ;
                 Float a3 = 0.0f;
-                ;
                 Float a4 = 0.0f;
-                ;
                 Float a5 = 0.0f;
-                ;
                 Float a6 = 0.0f;
-                ;
                 Float a7 = 0.0f;
 
                 for (int i = 0; i < Integer.parseInt(x); i++) {
@@ -363,12 +357,18 @@ public class AnalyticsFrag extends Fragment {
                     // First convert to Date. This is one of the many ways.
                     LocalDate from = LocalDate.parse(dateString); // Date from payments;
                     LocalDate to = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())); // current date; (moving)
-
+                    //
+                    //get week of payment and week of current date;
+                    WeekFields weekFields = WeekFields.of(Locale.getDefault());
+                    int payment_week = from.get(weekFields.weekOfWeekBasedYear());
+                    int current_week = to.get(weekFields.weekOfWeekBasedYear());
+                    //
                     long days = ChronoUnit.DAYS.between(from, to);
 
                     int mo = Calendar.getInstance().get(Calendar.MONTH) + 1;
                     // TODO all analytics frame drops;
-                    if (days <= 7 && Integer.parseInt(month) == mo) {
+                    // Must add the same week number;
+                    if (days <= 7 && Integer.parseInt(month) == mo && payment_week == current_week) {
                         Date d = null;
                         try {
                             d = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
@@ -377,7 +377,7 @@ public class AnalyticsFrag extends Fragment {
                         }
                         // Then get the day of week from the Date based on specific locale.
                         String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(d);
-                        //
+                        //-
                         switch (dayOfWeek) {
                             case "Monday":
                                 a1 = a1 + Float.parseFloat(amount.get(i));
