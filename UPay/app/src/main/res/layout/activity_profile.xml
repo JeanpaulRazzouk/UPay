@@ -177,7 +177,7 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/sf_ui_display_black"
                         android:gravity="center"
-                        android:text="@string/terms_of_service"
+                        android:text="UPay"
                         android:textSize="18sp" />
 
                     <ImageButton

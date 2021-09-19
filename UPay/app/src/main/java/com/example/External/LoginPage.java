@@ -184,7 +184,7 @@ public class LoginPage extends AppCompatActivity {
                                      FirebaseUserMetadata metadata = mAuth.getCurrentUser().getMetadata();
                                      if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
                                          // The user is new, show them a fancy intro screen!
-                                         i = new Intent(getApplicationContext(), FirstTimeActivity.class);
+                                         i = new Intent(getApplicationContext(), FirstTimeActivity2.class);
                                      } else {
                                          i = new Intent(getApplicationContext(), HomePage.class);
                                      }

@@ -6,7 +6,7 @@
 
     <string name="txt_create_account">Create New Account</string>
     <string name="txt_login">UPay</string>
-    <string name="txt_forgot_your_password">"   Forgot your password ?"</string>
+    <string name="txt_forgot_your_password">" Forgot your password ?"</string>
 
     <!-- TODO: The following Strings are Subsets of the CreateNewAccount layout -->
     <string name="new_username_hint">E-mail</string>
@@ -14,7 +14,7 @@
 
 
     <string name="tv4">Reset Password</string>
-    <string name="rt6" />
+    <string name="rt6"/>
     <string name="h">E-mail</string>
     <string name="TV7">Enter your E-mail address and we\'ll send you a link to reset your password</string>
     <string name="Display_Name">Username</string>
