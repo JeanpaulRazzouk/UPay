@@ -6,35 +6,45 @@
     android:background="?android:windowBackground"
     tools:context="com.example.Profile.TermsService">
 
+    <VideoView
+            android:id="@+id/videoView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.49"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView26"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".HomePage">
 
         <ScrollView
-            android:id="@+id/scroll"
-            android:layout_width="410dp"
-            android:layout_height="740dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.503">
+                android:id="@+id/scroll"
+                android:layout_width="428dp"
+                android:layout_height="779dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" app:layout_constraintHorizontal_bias="0.0">
 
 
             <TextView
-                android:id="@+id/textView40"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="50dp"
-                android:textSize="15dp"
-                android:fontFamily="@font/sf_ui_display_black"
-                android:text="TextView" />
+                    android:id="@+id/textView40"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="50dp"
+                    android:textSize="15dp"
+                    android:fontFamily="@font/sf_ui_display_black"
+                    android:text="TextView"/>
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </FrameLayout>

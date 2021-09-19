@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -154,16 +155,37 @@ public class AnalyticsFrag extends Fragment {
                     }
                 }
             });
+            // check if there is any transactions;
+            
             // Recommendation button;
             imageButton2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (textViewIncome.getText().toString().equals("Press to add")) {
-                        Toast.makeText(getContext(), "Please add income", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Intent i = new Intent(getContext(), Forecast.class);
-                        startActivity(i);
-                    }
+                    FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            int count = Integer.parseInt("" + dataSnapshot.child("Transactions").getChildrenCount());
+                            Log.d("ANDREA_COUNT",""+count);
+                            if(count >= 7){
+                                if (textViewIncome.getText().toString().equals("Press to add")) {
+                                    Toast.makeText(getContext(), "Please add income", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Intent i = new Intent(getContext(), Forecast.class);
+                                    startActivity(i);
+                                }
+
+                            }else{
+                                showDialogForecastZERO();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+
+                        }
+                    });
+
+
                 }
             });
 
@@ -644,6 +666,16 @@ public class AnalyticsFrag extends Fragment {
         HashMap<String, Object> values = new HashMap<>();
         values.put("income", income);
         mDatabase.child("Users").child(userId).child("Income").updateChildren(values);
+    }
+
+    private void showDialogForecastZERO() {
+        AlertDialog dialog = new AlertDialog.Builder(getContext(),R.style.MyAlertDialogStyle)
+                .setTitle("Forecast Not Available")
+                .setMessage("You must commit a minimum of 7 Transaction to enable forecasting")
+                .setNegativeButton("Go Back", null)
+                .create();
+        dialog.getWindow().setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.dialog_bg));
+        dialog.show();
     }
 
     public void CurrentMonth(){

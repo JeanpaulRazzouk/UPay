@@ -32,7 +32,9 @@ public class JavaMailAPI extends AsyncTask<Void, Void, Void> {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.socketFactory.port", "465");
+        properties.setProperty("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.port", "465");
 

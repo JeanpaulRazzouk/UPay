@@ -1,5 +1,7 @@
 package com.example.Profile;
 
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -16,11 +19,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class TermsService extends BottomSheetDialogFragment {
 
     TextView textview;
+    VideoView videoView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_term_serv, container, false);
 textview = view.findViewById(R.id.textView40);
+videoView = view.findViewById(R.id.videoView3);
 
         String sourceString = "<h2><strong>Terms and Conditions</strong></h2>\n" +
                 "\n" +
@@ -144,7 +149,17 @@ textview = view.findViewById(R.id.textView40);
                 "\n" +
                 "<p>As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.</p>";
 
-        textview.setText(Html.fromHtml(sourceString));
+        textview.setText("");
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(false);
+            }
+        });
+        Uri uri = Uri.parse("android.resource://"+ getContext().getPackageName()+"/"+R.raw.intro);
+        videoView.setZOrderOnTop(true);
+        videoView.setVideoURI(uri);
+        videoView.start();
         return  view;
     }
 }

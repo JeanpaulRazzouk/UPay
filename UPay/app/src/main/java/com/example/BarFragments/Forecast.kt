@@ -124,7 +124,7 @@ class Forecast : AppCompatActivity() {
                     }
                     // Then get the month of the year from the Date based on specific locale.
                     val month_of_year = SimpleDateFormat("M", Locale.ENGLISH).format(d)
-                    Log.d("DEA", month_of_year)
+                    Log.d("TestingNowDEA", month_of_year)
                     try {
                         when (month_of_year) {
                             "1" -> m1 += amount!![i].toFloat()
@@ -140,6 +140,8 @@ class Forecast : AppCompatActivity() {
                             "11" -> m11 += amount!![i].toFloat()
                             "12" -> m12 += amount!![i].toFloat()
                         }
+                        Log.d("TestingNOW", ""+m1);
+                        Log.d("TestingNOW", ""+m9);
                     } catch (e: Exception) {
                     }
                 }

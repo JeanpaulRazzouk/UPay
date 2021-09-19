@@ -142,24 +142,24 @@ public class BottomSheetNFC extends BottomSheetDialogFragment {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-//                sendData();
-//                verified();
+                sendData();
+                verified();
                 ComponentName componentName;
                 if (mNfcAdapter == null) {
                     Toast.makeText(getContext(), "NFC is not available", Toast.LENGTH_LONG).show();
                 }
                 else {
-                     cardEmulation = CardEmulation.getInstance(mNfcAdapter);
-                    Toast.makeText(getContext(), "NFC availability : "+mNfcAdapter.isEnabled(), Toast.LENGTH_LONG).show();
-                    //
-                    componentName = new ComponentName(getContext(), MyHostApduService.class);
-                    boolean isDefault = cardEmulation.isDefaultServiceForCategory(componentName, CardEmulation.CATEGORY_PAYMENT);
-                    if (!isDefault) {
-                        Intent intent = new Intent(CardEmulation.ACTION_CHANGE_DEFAULT);
-                        intent.putExtra(CardEmulation.EXTRA_CATEGORY, CardEmulation.CATEGORY_PAYMENT);
-                        intent.putExtra(CardEmulation.EXTRA_SERVICE_COMPONENT, componentName);
-                        getActivity().startActivityForResult(intent, REQUEST_CODE_DEFAULT_PAYMENT_APP);
-                    }
+//                     cardEmulation = CardEmulation.getInstance(mNfcAdapter);
+//                    Toast.makeText(getContext(), "NFC availability : "+mNfcAdapter.isEnabled(), Toast.LENGTH_LONG).show();
+//                    //
+//                    componentName = new ComponentName(getContext(), MyHostApduService.class);
+//                    boolean isDefault = cardEmulation.isDefaultServiceForCategory(componentName, CardEmulation.CATEGORY_PAYMENT);
+//                    if (!isDefault) {
+//                        Intent intent = new Intent(CardEmulation.ACTION_CHANGE_DEFAULT);
+//                        intent.putExtra(CardEmulation.EXTRA_CATEGORY, CardEmulation.CATEGORY_PAYMENT);
+//                        intent.putExtra(CardEmulation.EXTRA_SERVICE_COMPONENT, componentName);
+//                        getActivity().startActivityForResult(intent, REQUEST_CODE_DEFAULT_PAYMENT_APP);
+//                    }
                 }
             }
 
