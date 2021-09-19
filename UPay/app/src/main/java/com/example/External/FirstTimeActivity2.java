@@ -1,6 +1,7 @@
 package com.example.External;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -23,8 +24,6 @@ public class FirstTimeActivity2 extends AppCompatActivity {
      getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         VideoView videoView = findViewById(R.id.videoView4);
-        ImageButton imageButton = findViewById(R.id.imageButton21);
-        imageButton.setVisibility(View.INVISIBLE);
         //
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -34,6 +33,7 @@ public class FirstTimeActivity2 extends AppCompatActivity {
         });
         Uri uri = Uri.parse("android.resource://"+ getPackageName()+"/"+R.raw.intro);
         videoView.setZOrderOnTop(true);
+        videoView.setBackgroundColor(Color.TRANSPARENT);
         videoView.setVideoURI(uri);
         videoView.start();
         //
@@ -41,14 +41,9 @@ public class FirstTimeActivity2 extends AppCompatActivity {
         {
             public void onCompletion(MediaPlayer mp)
             {
-                imageButton.setVisibility(View.VISIBLE);
-
+                Intent i = new Intent(getApplicationContext(), FirstTimeActivity.class);
+                startActivity(i);
             }
         });
-    }
-
-    public void Button_OnClick(View v){
-        Intent i = new Intent(getApplicationContext(), FirstTimeActivity.class);
-        startActivity(i);
     }
 }
