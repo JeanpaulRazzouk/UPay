@@ -220,7 +220,7 @@ public class OtherOptions extends Fragment {
         if (input == true){
             Notify.build(getContext())
                     .setTitle("UPay")
-                    .setContent("Purchase Notfication Activated")
+                    .setContent("Purchase Notification Activated")
                     .setSmallIcon(R.drawable.ic_payment)
                     .setColor(R.color.color4)
                     .largeCircularIcon()
@@ -239,7 +239,7 @@ public class OtherOptions extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         String mEmail = user.getEmail();
         String mSubject = "UPay";
-        String mMessage = "You have activated UPay Transaction Automated Email !";
+        String mMessage = "Hooray! You will receive an email about your committed transaction.";
 
         JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(), mEmail, mSubject, mMessage);
 
