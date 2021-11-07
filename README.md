@@ -1,9 +1,6 @@
 # UPay
 Universal Mobile Payment App that works anywhere with forecasting analysis using Machine Learning.
 
-### Note
-Google Cloud Platform must be activated in order for the app to work properly.
-
 ## Presentation
 ![1](https://user-images.githubusercontent.com/68122919/120073946-3832fd00-c0a3-11eb-8152-3d882723a693.jpg)
 ![2](https://user-images.githubusercontent.com/68122919/120073949-3bc68400-c0a3-11eb-8b56-d4d5ebe3bea5.jpg)
