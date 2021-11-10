@@ -20,6 +20,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
@@ -291,7 +292,14 @@ public class HomeFragment extends Fragment {
         bottomNavigationView = view.findViewById(R.id.bottom_navigation);
         //
         circularProgressBar = view.findViewById(R.id.pb_one);
-
+        //
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        //
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -73,10 +73,10 @@ class Forecast : AppCompatActivity() {
         // methods;
         LRegression()
         //
-        imageButton?.setOnClickListener(View.OnClickListener {
-            val bottomSheet = CutBottomSheet()
-            bottomSheet.show(supportFragmentManager, "TAG")
-        })
+//        imageButton?.setOnClickListener(View.OnClickListener {
+//            val bottomSheet = CutBottomSheet()
+//            bottomSheet.show(supportFragmentManager, "TAG")
+//        })
     }
 
     fun LRegression() {
@@ -253,7 +253,7 @@ class Forecast : AppCompatActivity() {
                             percent_value = `val` / income.toFloat() - ("" + predictForValue(month, DateX, AmountY) / income.toFloat()).toFloat()
                         }
                     }
-                    textView3!!.text = """Future spending to be cut by ${Math.round(percent_value * 100)}%"""
+                    textView3!!.text = """Lower spending by ${Math.round(percent_value * 100)}%"""
 
                     for (j in AmountY.indices) {
                         user = FirebaseAuth.getInstance().currentUser

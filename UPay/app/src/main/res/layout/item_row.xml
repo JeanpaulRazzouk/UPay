@@ -25,7 +25,7 @@
             android:id="@+id/txtName"
             android:layout_width="225dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="70dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="135dp"
             android:fontFamily="@font/sf_ui_display_black"
@@ -37,7 +37,7 @@
             android:id="@+id/txtAmount"
             android:layout_width="129dp"
             android:layout_height="56dp"
-            android:layout_marginStart="225dp"
+            android:layout_marginStart="215dp"
             android:layout_marginTop="27.5dp"
             android:fontFamily="@font/sf_ui_display_black"
             android:gravity="right"
@@ -49,7 +49,7 @@
             android:id="@+id/txtLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="70dp"
             android:layout_marginTop="35dp"
             android:fontFamily="@font/sf_ui_display_black"
             android:padding="1dp"
@@ -57,17 +57,17 @@
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="66dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="5dp"
-            android:background="@drawable/ic_loop"
-            android:layout_marginTop="10dp" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/fastforward"
+            android:layout_marginTop="25dp" />
 
         <TextView
             android:id="@+id/textView22"
             android:layout_width="84dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="70dp"
             android:layout_marginTop="60dp"
             android:text="" />
 
@@ -75,7 +75,7 @@
             android:id="@+id/imageView6"
             android:layout_width="17dp"
             android:layout_height="23dp"
-            android:layout_marginStart="355dp"
+            android:layout_marginStart="345dp"
             android:layout_marginTop="30dp"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/ic_right_arrow" />

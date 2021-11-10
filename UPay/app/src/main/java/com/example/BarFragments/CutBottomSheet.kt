@@ -27,7 +27,7 @@ class CutBottomSheet : BottomSheetDialogFragment() {
     var amount = ArrayList<String>()
     var Name = ArrayList<String>()
 
-
+// TODO() This Class is Currently not in use;
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view1 = inflater.inflate(R.layout.cut_bottom_sheet, container, false)
         //

@@ -24,15 +24,15 @@
             </ImageButton>
 
             <TextView
-                android:id="@+id/textView31"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15sp"
-                android:layout_marginTop="-305sp"
-                android:fontFamily="@font/sf_ui_display_black"
-                android:text="Change Profile Picture"
-                android:textColor="@color/defaultContentColor"
-                android:textSize="20sp" />
+                    android:id="@+id/textView31"
+                    android:layout_width="165dp"
+                    android:layout_height="66dp"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginTop="-300sp"
+                    android:fontFamily="@font/sf_ui_display_black"
+                    android:text="Change Profile Picture"
+                    android:textColor="@color/defaultContentColor"
+                    android:textSize="20sp"/>
 
             <ProgressBar
                 android:id="@+id/progressBar4"
@@ -138,6 +138,25 @@
                 android:text="New Password"
                 android:textColor="@color/white"
                 android:fontFamily="@font/sf_ui_display_black"/>
+            <ImageButton
+                    android:src="@drawable/red_fill__rounded_color"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:background="@null"
+                    android:layout_marginTop="-1750px"
+                    android:layout_marginStart="300px"
+                    android:layout_gravity="center"
+                    android:id="@+id/imageButton21"/>
+            <TextView
+                    android:text="Save"
+                    android:layout_width="131dp"
+                    android:layout_height="39dp"
+                    android:id="@+id/textView43"
+                    android:fontFamily="@font/sf_ui_display_black"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="660px"
+                    android:layout_marginTop="-110px"/>
 
         </LinearLayout>
     </ScrollView>

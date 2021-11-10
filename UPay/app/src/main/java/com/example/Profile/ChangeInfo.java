@@ -22,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.BarFragments.HomeFragment;
+import com.example.upay.HomePage;
 import com.example.upay.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.view.View.INVISIBLE;
 
 public class ChangeInfo extends Fragment {
-    ImageButton imageButton,imageButton2,imageButton3;
+    ImageButton imageButton,imageButton2,imageButton3,imageButton4;
     Uri link;
     public FirebaseUser user;
     private FirebaseStorage storage;
@@ -92,6 +94,16 @@ public class ChangeInfo extends Fragment {
                ChangeName();
             }
         });
+
+        imageButton4 = view.findViewById(R.id.imageButton21);
+        imageButton4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getContext(), HomePage.class);
+                startActivity(i);
+            }
+        });
+
 
         try {
             uploadImage();
